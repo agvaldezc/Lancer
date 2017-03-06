@@ -4,45 +4,52 @@ import ply.yacc as yacc
 
 from LancerLex import tokens
 
+# Lancer: Created by Alan Valdez & Rafael Manriquez
+
+import ply.yacc as yacc
+
+from LancerLex import tokens
+
 #Reglas gramaticales expresadas en funciones
 def p_expression_program(p):
-    'program : PROGRAM ID SEMICOLON s1 s2 BLOCK'
+    'program : PROGRAMA ID SEMICOLON prs1 prs2 block'
 
-def p_expression_program_s1(p):
-    's1 : VARS | empty'
+def p_expression_prs1(p):
+    '''prs1 : vars
+            | empty'''
 
-def p_expression_program_s2(p):
-    '''s2 : FUNCTION s2
-          | empty'''
+def p_expression_prs2(p):
+    '''prs2 : function prs2
+            | empty'''
 
 def p_expression_vars(p):
-    'vars : VAR s1 COLON type SEMICOLON s1'
+    'vars : VAR vas1 COLON type SEMICOLON vas1'
 
-def p_expression_vars_s1(p):
-    '''s1 : ID
-          | ID COMMA s1
-          | empty'''
+def p_expression_vas1(p):
+    '''vas1 : ID
+            | ID COMA vas1
+            | empty'''
 
 def p_expression_type(p):
-    '''type : INT
-            | FLOAT
-            | BOOL
-            | STRING
+    '''type : INT_TYPE
+            | FLOAT_TYPE
+            | BOOL_TYPE
+            | STRING_TYPE
             | array'''
 
 def p_expression_array(p):
-    '''array : INT s1
-             | FLOAT s1
-             | STRING s1'''
+    '''array : INT_TYPE ars1
+             | FLOAT_TYPE ars1
+             | STRING_TYPE ars1'''
 
-def p_expression_array_s1(p):
-    's1 : [ CTE-I ]'
+def p_expression_ars1(p):
+    'ars1 : LARRAY CTEI RARRAY'
 
 def p_expression_block(p):
-    'block : { s1 }'
+    'block : LBRACKET bls1 RBRACKET'
 
-def p_expression_block_s1(p):
-    '''s1 : statue s1
+def p_expression_bls1(p):
+    '''bls1 : statue bls1
           | empty'''
 
 def p_expression_statue(p):
@@ -57,61 +64,63 @@ def p_expression_statue(p):
 
 def p_expression_parameter(p):
     '''parameter : empty
-                 | s1'''
+                 | pas1'''
 
-def p_expression_parameter_s1(p):
-    '''s1 : type ID
-          | type ID COMMA s1'''
+def p_expression_pas1(p):
+    '''pas1 : type ID
+          | type ID COMA pas1'''
 
 def p_expression_return(p):
     'return : RETURN ssexpression SEMICOLON'
 
 def p_expression_assignment(p):
-    'assignment : ID s1 = s2'
+    'assignment : ID ass1 ASSIGN ass2'
 
-def p_expression_assignment_s1(p):
-    '''s1 : empty
-          | LBRACKET ssexpression RBRACKET'''
+def p_expression_ass1(p):
+    '''ass1 : empty
+          | LARRAY ssexpression RARRAY'''
 
-def p_expression_assignment_s2(p):
-    '''s2 : functioncall
+def p_expression_ass2(p):
+    '''ass2 : functioncall
           | ssexpression'''
 
 def p_expression_ssexpression(p):
     '''ssexpression : sexpression
-                    | !! sexpression'''
+                    | NOT sexpression'''
 
 def p_expression_sexpression(p):
-    'sexpression : expression s1'
+    'sexpression : expression ses1'
 
-def p_expression_sexpression_s1(p):
-    '''s1 : empty
-          | && sexpression
-          | || sexpression'''
+def p_expression_ses1(p):
+    '''ses1 : empty
+          | AND sexpression
+          | OR sexpression'''
 
 def p_expression_expression(p):
-    'expression : exp s1'
+    'expression : exp exs1'
 
-def p_expression_expression_s1(p):
-    '''s1 : empty
+def p_expression_exs1(p):
+    '''exs1 : empty
           | GT exp
           | LT exp
-          | ET exp
-          | NE exp'''
+          | GE exp
+          | LE exp
+          | EQUAL exp
+          | DIFFERENT exp'''
 
 def p_expression_term(p):
-    'term : factor s1'
+    'term : factor tes1'
 
-def p_expression_term_s1(p):
-    '''s1 : empty
+def p_expression_tes1(p):
+    '''tes1 : empty
           | TIMES term
           | DIVISION term'''
 
 def p_expression_exp(p):
-    'exp : term s1'
+    'exp : term exps1'
 
-def p_expression_exp_s1(p):
-    '''s1 : empty
+def p_expression_exps1(p):
+    '''exps1 : empty
           | PLUS term
           | MINUS term'''
 
@@ -123,28 +132,24 @@ def p_expression_predefined(p):
                   | drawpolygon
                   | drawcurve'''
 
-
-def p_expression_factor(p):
-    '''factor : '''
-
 def p_expression_condition(p):
-    'condition : IF s1 RPAREN block s3'
+    'condition : IF cos1 RPAREN block cos3'
 
-def p_expression_condition_s1(p):
-    '''s1 : LPAREN s2
-          | !! s2'''
+def p_expression_cos1(p):
+    '''cos1 : LPAREN cos2
+          | NOT cos2'''
 
-def p_expression_condition_s2(p):
-    '''s2 : ssexpression
+def p_expression_cos2(p):
+    '''cos2 : ssexpression
           | functioncall'''
 
-def p_expression_condition_s3(p):
-    '''s3 : empty
+def p_expression_cos3(p):
+    '''cos3 : empty
           | ELSE block
-          | s1'''
+          | ELSEIF cos1'''
 
 def p_expression_read(p):
-    'read : ID EQUAL INPUT SEMICOLON'
+    'read : ID ASSIGN INPUT SEMICOLON'
 
 def p_expression_write(p):
     '''write : PRINT LPAREN ssexpression RPAREN'''
@@ -161,22 +166,52 @@ def p_expression_cycle(p):
     'cycle : WHILE LPAREN ssexpression RPAREN block'
 
 def p_expression_function(p):
-    'function : FUNC s1 ID LPAREN parameter RPAREN block'
+    'function : FUNC fus1 ID LPAREN parameter RPAREN block'
 
-def p_expression_function_s1(p):
-    '''s1 : VOID
+def p_expression_fus1(p):
+    '''fus1 : VOID
           | type'''
 
 def p_expression_functioncall(p):
-    'functioncall : ID LPAREN s1 RPAREN SEMICOLON'
+    'functioncall : ID LPAREN fcs1 RPAREN SEMICOLON'
 
-def p_expression_functioncall_s1(p):
-    '''s1 : empty
+def p_expression_fcs1(p):
+    '''fcs1 : empty
           | ssexpression
-          | ssexpression COMMA s1'''
+          | ssexpression COMA fcs1'''
 
+def p_expression_drawline(p):
+    'drawline : DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON'
 
-''' FALTAN LAS DE DRAW '''
+def p_expression_drawsquare(p):
+    'drawsquare : DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON'
+
+def p_expression_drawcircle(p):
+    'drawcircle : DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON'
+
+def p_expression_drawtriangle(p):
+    'drawtriangle : DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON'
+
+def p_expression_drawcurve(p):
+    'drawcurve : DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON'
+
+def p_expression_drawpolygon(p):
+    'drawpolygon : DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON'
+
+def p_expression_factor(p):
+    '''factor : LPAREN ssexpression RPAREN
+              | PLUS fas1
+              | MINUS fas1'''
+
+def p_expression_fas1(p):
+    '''fas1 : ID fas2
+              | CTEI
+              | CTEF'''
+
+def p_expression_fas2(p):
+    '''fas2 : LARRAY exp RARRAY
+              | LPAREN exp RPAREN
+              | empty'''
 
 #Error de sintaxis
 def p_error(p):

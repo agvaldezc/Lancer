@@ -1,0 +1,11 @@
+Alan Valdez
+Rafael Manrriquez
+
+Ambos archivos compilan de manera correcta.
+Corrimos varios ejemplos de códigos para probar las reglas y los tokens, con lo que encontramos algunas situaciones que nos marca warnings pero no deja de funcionar. 
+
+Estamos al pendiente por diferentes errores o cuestiones que puedan llegar a ocurrir con la gramárica.
+
+Faltan test cases por probar y marca un warning de algun conflicto shift reduce, con lo que estamos revisando la gramática para ver cual puede ser.
+
+5 de Marzo de 2017
