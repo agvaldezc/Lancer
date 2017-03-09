@@ -144,9 +144,8 @@ def p_expression_cos2(p):
           | functioncall'''
 
 def p_expression_cos3(p):
-    '''cos3 : empty
-          | ELSE block
-          | ELSEIF cos1'''
+    '''cos3 : ELSE block
+            | empty'''
 
 def p_expression_read(p):
     'read : ID ASSIGN INPUT SEMICOLON'
@@ -226,7 +225,7 @@ def p_empty(p):
 parser = yacc.yacc(debug=1)
 
 #Escribir el nombre o ruta del archivo a leer
-print("Nombre o ruta dek archivo a analizar: ")
+print("Nombre o ruta del archivo a analizar: ")
 fileName = raw_input()
 
 #Abrir archivo
