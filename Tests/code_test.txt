@@ -1,0 +1,9 @@
+Program Main;
+
+Var x1 : Int;
+
+{
+    If (a) {
+
+    }
+}

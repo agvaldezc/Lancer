@@ -1,0 +1,4162 @@
+Created by PLY version 3.9 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    CONST
+    TRUE
+    DOT
+    STRING
+    ELSEIF
+    FALSE
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> PROGRAMA MAIN SEMICOLON prs1 prs2 block
+Rule 2     prs1 -> vars
+Rule 3     prs1 -> empty
+Rule 4     prs2 -> function prs2
+Rule 5     prs2 -> empty
+Rule 6     vars -> VAR vas1 COLON type SEMICOLON vas1
+Rule 7     vas1 -> ID
+Rule 8     vas1 -> ID COMA vas1
+Rule 9     vas1 -> empty
+Rule 10    type -> INT_TYPE
+Rule 11    type -> FLOAT_TYPE
+Rule 12    type -> BOOL_TYPE
+Rule 13    type -> STRING_TYPE
+Rule 14    type -> array
+Rule 15    array -> INT_TYPE ars1
+Rule 16    array -> FLOAT_TYPE ars1
+Rule 17    array -> STRING_TYPE ars1
+Rule 18    ars1 -> LARRAY CTEI RARRAY
+Rule 19    block -> LBRACKET bls1 RBRACKET
+Rule 20    bls1 -> statue bls1
+Rule 21    bls1 -> empty
+Rule 22    statue -> assignment
+Rule 23    statue -> condition
+Rule 24    statue -> read
+Rule 25    statue -> write
+Rule 26    statue -> cycle
+Rule 27    statue -> functioncall
+Rule 28    statue -> predefined
+Rule 29    statue -> return
+Rule 30    parameter -> empty
+Rule 31    parameter -> pas1
+Rule 32    pas1 -> type ID
+Rule 33    pas1 -> type ID COMA pas1
+Rule 34    return -> RETURN ssexpression SEMICOLON
+Rule 35    assignment -> ID ass1 ASSIGN ass2 SEMICOLON
+Rule 36    ass1 -> empty
+Rule 37    ass1 -> LARRAY ssexpression RARRAY
+Rule 38    ass2 -> functioncall
+Rule 39    ass2 -> ssexpression
+Rule 40    ssexpression -> sexpression
+Rule 41    ssexpression -> NOT sexpression
+Rule 42    sexpression -> expression ses1
+Rule 43    ses1 -> empty
+Rule 44    ses1 -> AND sexpression
+Rule 45    ses1 -> OR sexpression
+Rule 46    expression -> exp exs1
+Rule 47    exs1 -> empty
+Rule 48    exs1 -> GT exp
+Rule 49    exs1 -> LT exp
+Rule 50    exs1 -> GE exp
+Rule 51    exs1 -> LE exp
+Rule 52    exs1 -> EQUAL exp
+Rule 53    exs1 -> DIFFERENT exp
+Rule 54    term -> factor tes1
+Rule 55    tes1 -> empty
+Rule 56    tes1 -> TIMES factor tes1
+Rule 57    tes1 -> DIVISION factor tes1
+Rule 58    exp -> term exps1
+Rule 59    exps1 -> empty
+Rule 60    exps1 -> PLUS term exps1
+Rule 61    exps1 -> MINUS term exps1
+Rule 62    predefined -> drawcircle
+Rule 63    predefined -> drawsquare
+Rule 64    predefined -> drawtriangle
+Rule 65    predefined -> drawline
+Rule 66    predefined -> drawpolygon
+Rule 67    predefined -> drawcurve
+Rule 68    condition -> IF cos1 RPAREN block cos3
+Rule 69    cos1 -> LPAREN cos2
+Rule 70    cos1 -> NOT cos2
+Rule 71    cos2 -> ssexpression
+Rule 72    cos2 -> functioncall
+Rule 73    cos3 -> ELSE block
+Rule 74    cos3 -> empty
+Rule 75    read -> ID ASSIGN INPUT SEMICOLON
+Rule 76    write -> PRINT LPAREN ssexpression RPAREN SEMICOLON
+Rule 77    color -> RED
+Rule 78    color -> GREEN
+Rule 79    color -> BLUE
+Rule 80    color -> YELLOW
+Rule 81    color -> BROWN
+Rule 82    color -> BLACK
+Rule 83    cycle -> WHILE LPAREN ssexpression RPAREN block
+Rule 84    function -> FUNC fus1 ID LPAREN parameter RPAREN block
+Rule 85    fus1 -> VOID
+Rule 86    fus1 -> type
+Rule 87    functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON
+Rule 88    fcs1 -> empty
+Rule 89    fcs1 -> ssexpression
+Rule 90    fcs1 -> ssexpression COMA fcs1
+Rule 91    drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+Rule 92    drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+Rule 93    drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+Rule 94    drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+Rule 95    drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON
+Rule 96    drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+Rule 97    factor -> fact
+Rule 98    fact -> LPAREN ssexpression RPAREN
+Rule 99    fact -> sign constant
+Rule 100   sign -> PLUS
+Rule 101   sign -> MINUS
+Rule 102   sign -> empty
+Rule 103   constant -> ID const
+Rule 104   constant -> CTEI
+Rule 105   constant -> CTEF
+Rule 106   const -> LARRAY ssexpression RARRAY
+Rule 107   const -> LPAREN ssexpression RPAREN
+Rule 108   const -> empty
+Rule 109   fas1 -> ID fas2
+Rule 110   fas1 -> CTEI
+Rule 111   fas1 -> CTEF
+Rule 112   fas2 -> LARRAY exp RARRAY
+Rule 113   fas2 -> LPAREN exp RPAREN
+Rule 114   fas2 -> empty
+Rule 115   empty -> <empty>
+
+Terminals, with rules where they appear
+
+AND                  : 44
+ASSIGN               : 35 75
+BLACK                : 82
+BLUE                 : 79
+BOOL_TYPE            : 12
+BROWN                : 81
+COLON                : 6
+COMA                 : 8 33 90 91 91 91 91 92 92 93 93 94 94 95 96 96
+CONST                : 
+CTEF                 : 105 111
+CTEI                 : 18 104 110
+DIFFERENT            : 53
+DIVISION             : 57
+DOT                  : 
+DRAWCIRCLE           : 93
+DRAWCURVE            : 95
+DRAWLINE             : 91
+DRAWPOLYGON          : 96
+DRAWSQUARE           : 92
+DRAWTRIANGLE         : 94
+ELSE                 : 73
+ELSEIF               : 
+EQUAL                : 52
+FALSE                : 
+FLOAT_TYPE           : 11 16
+FUNC                 : 84
+GE                   : 50
+GREEN                : 78
+GT                   : 48
+ID                   : 7 8 32 33 35 75 84 87 103 109
+IF                   : 68
+INPUT                : 75
+INT_TYPE             : 10 15
+LARRAY               : 18 37 106 112
+LBRACKET             : 19
+LE                   : 51
+LPAREN               : 69 76 83 84 87 91 92 93 94 95 96 98 107 113
+LT                   : 49
+MAIN                 : 1
+MINUS                : 61 101
+NOT                  : 41 70
+OR                   : 45
+PLUS                 : 60 100
+PRINT                : 76
+PROGRAMA             : 1
+RARRAY               : 18 37 106 112
+RBRACKET             : 19
+RED                  : 77
+RETURN               : 34
+RPAREN               : 68 76 83 84 87 91 92 93 94 95 96 98 107 113
+SEMICOLON            : 1 6 34 35 75 76 87 91 92 93 94 95 96
+STRING               : 
+STRING_TYPE          : 13 17
+TIMES                : 56
+TRUE                 : 
+VAR                  : 6
+VOID                 : 85
+WHILE                : 83
+YELLOW               : 80
+error                : 
+
+Nonterminals, with rules where they appear
+
+array                : 14
+ars1                 : 15 16 17
+ass1                 : 35
+ass2                 : 35
+assignment           : 22
+block                : 1 68 73 83 84
+bls1                 : 19 20
+color                : 91 92 93 94 95 96
+condition            : 23
+const                : 103
+constant             : 99
+cos1                 : 68
+cos2                 : 69 70
+cos3                 : 68
+cycle                : 26
+drawcircle           : 62
+drawcurve            : 67
+drawline             : 65
+drawpolygon          : 66
+drawsquare           : 63
+drawtriangle         : 64
+empty                : 3 5 9 21 30 36 43 47 55 59 74 88 102 108 114
+exp                  : 46 48 49 50 51 52 53 112 113
+expression           : 42
+exps1                : 58 60 61
+exs1                 : 46
+fact                 : 97
+factor               : 54 56 57
+fas1                 : 
+fas2                 : 109
+fcs1                 : 87 90
+function             : 4
+functioncall         : 27 38 72
+fus1                 : 84
+parameter            : 84
+pas1                 : 31 33
+predefined           : 28
+program              : 0
+prs1                 : 1
+prs2                 : 1 4
+read                 : 24
+return               : 29
+ses1                 : 42
+sexpression          : 40 41 44 45
+sign                 : 99
+ssexpression         : 34 37 39 71 76 83 89 90 91 91 91 91 92 92 93 93 94 94 95 96 96 98 106 107
+statue               : 20
+term                 : 58 60 61
+tes1                 : 54 56 57
+type                 : 6 32 33 86
+vars                 : 2
+vas1                 : 6 6 8
+write                : 25
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . PROGRAMA MAIN SEMICOLON prs1 prs2 block
+
+    PROGRAMA        shift and go to state 2
+
+    program                        shift and go to state 1
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> PROGRAMA . MAIN SEMICOLON prs1 prs2 block
+
+    MAIN            shift and go to state 3
+
+
+state 3
+
+    (1) program -> PROGRAMA MAIN . SEMICOLON prs1 prs2 block
+
+    SEMICOLON       shift and go to state 4
+
+
+state 4
+
+    (1) program -> PROGRAMA MAIN SEMICOLON . prs1 prs2 block
+    (2) prs1 -> . vars
+    (3) prs1 -> . empty
+    (6) vars -> . VAR vas1 COLON type SEMICOLON vas1
+    (115) empty -> .
+
+    VAR             shift and go to state 8
+    FUNC            reduce using rule 115 (empty -> .)
+    LBRACKET        reduce using rule 115 (empty -> .)
+
+    vars                           shift and go to state 5
+    prs1                           shift and go to state 6
+    empty                          shift and go to state 7
+
+state 5
+
+    (2) prs1 -> vars .
+
+    FUNC            reduce using rule 2 (prs1 -> vars .)
+    LBRACKET        reduce using rule 2 (prs1 -> vars .)
+
+
+state 6
+
+    (1) program -> PROGRAMA MAIN SEMICOLON prs1 . prs2 block
+    (4) prs2 -> . function prs2
+    (5) prs2 -> . empty
+    (84) function -> . FUNC fus1 ID LPAREN parameter RPAREN block
+    (115) empty -> .
+
+    FUNC            shift and go to state 12
+    LBRACKET        reduce using rule 115 (empty -> .)
+
+    function                       shift and go to state 9
+    prs2                           shift and go to state 10
+    empty                          shift and go to state 11
+
+state 7
+
+    (3) prs1 -> empty .
+
+    FUNC            reduce using rule 3 (prs1 -> empty .)
+    LBRACKET        reduce using rule 3 (prs1 -> empty .)
+
+
+state 8
+
+    (6) vars -> VAR . vas1 COLON type SEMICOLON vas1
+    (7) vas1 -> . ID
+    (8) vas1 -> . ID COMA vas1
+    (9) vas1 -> . empty
+    (115) empty -> .
+
+    ID              shift and go to state 14
+    COLON           reduce using rule 115 (empty -> .)
+
+    vas1                           shift and go to state 13
+    empty                          shift and go to state 15
+
+state 9
+
+    (4) prs2 -> function . prs2
+    (4) prs2 -> . function prs2
+    (5) prs2 -> . empty
+    (84) function -> . FUNC fus1 ID LPAREN parameter RPAREN block
+    (115) empty -> .
+
+    FUNC            shift and go to state 12
+    LBRACKET        reduce using rule 115 (empty -> .)
+
+    function                       shift and go to state 9
+    prs2                           shift and go to state 16
+    empty                          shift and go to state 11
+
+state 10
+
+    (1) program -> PROGRAMA MAIN SEMICOLON prs1 prs2 . block
+    (19) block -> . LBRACKET bls1 RBRACKET
+
+    LBRACKET        shift and go to state 17
+
+    block                          shift and go to state 18
+
+state 11
+
+    (5) prs2 -> empty .
+
+    LBRACKET        reduce using rule 5 (prs2 -> empty .)
+
+
+state 12
+
+    (84) function -> FUNC . fus1 ID LPAREN parameter RPAREN block
+    (85) fus1 -> . VOID
+    (86) fus1 -> . type
+    (10) type -> . INT_TYPE
+    (11) type -> . FLOAT_TYPE
+    (12) type -> . BOOL_TYPE
+    (13) type -> . STRING_TYPE
+    (14) type -> . array
+    (15) array -> . INT_TYPE ars1
+    (16) array -> . FLOAT_TYPE ars1
+    (17) array -> . STRING_TYPE ars1
+
+    VOID            shift and go to state 21
+    INT_TYPE        shift and go to state 25
+    FLOAT_TYPE      shift and go to state 22
+    BOOL_TYPE       shift and go to state 24
+    STRING_TYPE     shift and go to state 23
+
+    fus1                           shift and go to state 19
+    array                          shift and go to state 26
+    type                           shift and go to state 20
+
+state 13
+
+    (6) vars -> VAR vas1 . COLON type SEMICOLON vas1
+
+    COLON           shift and go to state 27
+
+
+state 14
+
+    (7) vas1 -> ID .
+    (8) vas1 -> ID . COMA vas1
+
+    COLON           reduce using rule 7 (vas1 -> ID .)
+    FUNC            reduce using rule 7 (vas1 -> ID .)
+    LBRACKET        reduce using rule 7 (vas1 -> ID .)
+    COMA            shift and go to state 28
+
+
+state 15
+
+    (9) vas1 -> empty .
+
+    COLON           reduce using rule 9 (vas1 -> empty .)
+    FUNC            reduce using rule 9 (vas1 -> empty .)
+    LBRACKET        reduce using rule 9 (vas1 -> empty .)
+
+
+state 16
+
+    (4) prs2 -> function prs2 .
+
+    LBRACKET        reduce using rule 4 (prs2 -> function prs2 .)
+
+
+state 17
+
+    (19) block -> LBRACKET . bls1 RBRACKET
+    (20) bls1 -> . statue bls1
+    (21) bls1 -> . empty
+    (22) statue -> . assignment
+    (23) statue -> . condition
+    (24) statue -> . read
+    (25) statue -> . write
+    (26) statue -> . cycle
+    (27) statue -> . functioncall
+    (28) statue -> . predefined
+    (29) statue -> . return
+    (115) empty -> .
+    (35) assignment -> . ID ass1 ASSIGN ass2 SEMICOLON
+    (68) condition -> . IF cos1 RPAREN block cos3
+    (75) read -> . ID ASSIGN INPUT SEMICOLON
+    (76) write -> . PRINT LPAREN ssexpression RPAREN SEMICOLON
+    (83) cycle -> . WHILE LPAREN ssexpression RPAREN block
+    (87) functioncall -> . ID LPAREN fcs1 RPAREN SEMICOLON
+    (62) predefined -> . drawcircle
+    (63) predefined -> . drawsquare
+    (64) predefined -> . drawtriangle
+    (65) predefined -> . drawline
+    (66) predefined -> . drawpolygon
+    (67) predefined -> . drawcurve
+    (34) return -> . RETURN ssexpression SEMICOLON
+    (93) drawcircle -> . DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (92) drawsquare -> . DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (94) drawtriangle -> . DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (91) drawline -> . DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (96) drawpolygon -> . DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (95) drawcurve -> . DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON
+
+    RBRACKET        reduce using rule 115 (empty -> .)
+    ID              shift and go to state 49
+    IF              shift and go to state 51
+    PRINT           shift and go to state 35
+    WHILE           shift and go to state 34
+    RETURN          shift and go to state 30
+    DRAWCIRCLE      shift and go to state 37
+    DRAWSQUARE      shift and go to state 40
+    DRAWTRIANGLE    shift and go to state 32
+    DRAWLINE        shift and go to state 48
+    DRAWPOLYGON     shift and go to state 52
+    DRAWCURVE       shift and go to state 53
+
+    drawtriangle                   shift and go to state 29
+    statue                         shift and go to state 31
+    drawcurve                      shift and go to state 33
+    predefined                     shift and go to state 36
+    drawline                       shift and go to state 38
+    write                          shift and go to state 39
+    functioncall                   shift and go to state 56
+    empty                          shift and go to state 43
+    return                         shift and go to state 44
+    drawpolygon                    shift and go to state 45
+    read                           shift and go to state 46
+    assignment                     shift and go to state 47
+    condition                      shift and go to state 50
+    cycle                          shift and go to state 42
+    drawsquare                     shift and go to state 54
+    bls1                           shift and go to state 55
+    drawcircle                     shift and go to state 41
+
+state 18
+
+    (1) program -> PROGRAMA MAIN SEMICOLON prs1 prs2 block .
+
+    $end            reduce using rule 1 (program -> PROGRAMA MAIN SEMICOLON prs1 prs2 block .)
+
+
+state 19
+
+    (84) function -> FUNC fus1 . ID LPAREN parameter RPAREN block
+
+    ID              shift and go to state 57
+
+
+state 20
+
+    (86) fus1 -> type .
+
+    ID              reduce using rule 86 (fus1 -> type .)
+
+
+state 21
+
+    (85) fus1 -> VOID .
+
+    ID              reduce using rule 85 (fus1 -> VOID .)
+
+
+state 22
+
+    (11) type -> FLOAT_TYPE .
+    (16) array -> FLOAT_TYPE . ars1
+    (18) ars1 -> . LARRAY CTEI RARRAY
+
+    SEMICOLON       reduce using rule 11 (type -> FLOAT_TYPE .)
+    ID              reduce using rule 11 (type -> FLOAT_TYPE .)
+    LARRAY          shift and go to state 58
+
+    ars1                           shift and go to state 59
+
+state 23
+
+    (13) type -> STRING_TYPE .
+    (17) array -> STRING_TYPE . ars1
+    (18) ars1 -> . LARRAY CTEI RARRAY
+
+    SEMICOLON       reduce using rule 13 (type -> STRING_TYPE .)
+    ID              reduce using rule 13 (type -> STRING_TYPE .)
+    LARRAY          shift and go to state 58
+
+    ars1                           shift and go to state 60
+
+state 24
+
+    (12) type -> BOOL_TYPE .
+
+    SEMICOLON       reduce using rule 12 (type -> BOOL_TYPE .)
+    ID              reduce using rule 12 (type -> BOOL_TYPE .)
+
+
+state 25
+
+    (10) type -> INT_TYPE .
+    (15) array -> INT_TYPE . ars1
+    (18) ars1 -> . LARRAY CTEI RARRAY
+
+    SEMICOLON       reduce using rule 10 (type -> INT_TYPE .)
+    ID              reduce using rule 10 (type -> INT_TYPE .)
+    LARRAY          shift and go to state 58
+
+    ars1                           shift and go to state 61
+
+state 26
+
+    (14) type -> array .
+
+    SEMICOLON       reduce using rule 14 (type -> array .)
+    ID              reduce using rule 14 (type -> array .)
+
+
+state 27
+
+    (6) vars -> VAR vas1 COLON . type SEMICOLON vas1
+    (10) type -> . INT_TYPE
+    (11) type -> . FLOAT_TYPE
+    (12) type -> . BOOL_TYPE
+    (13) type -> . STRING_TYPE
+    (14) type -> . array
+    (15) array -> . INT_TYPE ars1
+    (16) array -> . FLOAT_TYPE ars1
+    (17) array -> . STRING_TYPE ars1
+
+    INT_TYPE        shift and go to state 25
+    FLOAT_TYPE      shift and go to state 22
+    BOOL_TYPE       shift and go to state 24
+    STRING_TYPE     shift and go to state 23
+
+    array                          shift and go to state 26
+    type                           shift and go to state 62
+
+state 28
+
+    (8) vas1 -> ID COMA . vas1
+    (7) vas1 -> . ID
+    (8) vas1 -> . ID COMA vas1
+    (9) vas1 -> . empty
+    (115) empty -> .
+
+    ID              shift and go to state 14
+    COLON           reduce using rule 115 (empty -> .)
+    FUNC            reduce using rule 115 (empty -> .)
+    LBRACKET        reduce using rule 115 (empty -> .)
+
+    vas1                           shift and go to state 63
+    empty                          shift and go to state 15
+
+state 29
+
+    (64) predefined -> drawtriangle .
+
+    ID              reduce using rule 64 (predefined -> drawtriangle .)
+    IF              reduce using rule 64 (predefined -> drawtriangle .)
+    PRINT           reduce using rule 64 (predefined -> drawtriangle .)
+    WHILE           reduce using rule 64 (predefined -> drawtriangle .)
+    RETURN          reduce using rule 64 (predefined -> drawtriangle .)
+    DRAWCIRCLE      reduce using rule 64 (predefined -> drawtriangle .)
+    DRAWSQUARE      reduce using rule 64 (predefined -> drawtriangle .)
+    DRAWTRIANGLE    reduce using rule 64 (predefined -> drawtriangle .)
+    DRAWLINE        reduce using rule 64 (predefined -> drawtriangle .)
+    DRAWPOLYGON     reduce using rule 64 (predefined -> drawtriangle .)
+    DRAWCURVE       reduce using rule 64 (predefined -> drawtriangle .)
+    RBRACKET        reduce using rule 64 (predefined -> drawtriangle .)
+
+
+state 30
+
+    (34) return -> RETURN . ssexpression SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 74
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 31
+
+    (20) bls1 -> statue . bls1
+    (20) bls1 -> . statue bls1
+    (21) bls1 -> . empty
+    (22) statue -> . assignment
+    (23) statue -> . condition
+    (24) statue -> . read
+    (25) statue -> . write
+    (26) statue -> . cycle
+    (27) statue -> . functioncall
+    (28) statue -> . predefined
+    (29) statue -> . return
+    (115) empty -> .
+    (35) assignment -> . ID ass1 ASSIGN ass2 SEMICOLON
+    (68) condition -> . IF cos1 RPAREN block cos3
+    (75) read -> . ID ASSIGN INPUT SEMICOLON
+    (76) write -> . PRINT LPAREN ssexpression RPAREN SEMICOLON
+    (83) cycle -> . WHILE LPAREN ssexpression RPAREN block
+    (87) functioncall -> . ID LPAREN fcs1 RPAREN SEMICOLON
+    (62) predefined -> . drawcircle
+    (63) predefined -> . drawsquare
+    (64) predefined -> . drawtriangle
+    (65) predefined -> . drawline
+    (66) predefined -> . drawpolygon
+    (67) predefined -> . drawcurve
+    (34) return -> . RETURN ssexpression SEMICOLON
+    (93) drawcircle -> . DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (92) drawsquare -> . DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (94) drawtriangle -> . DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (91) drawline -> . DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (96) drawpolygon -> . DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (95) drawcurve -> . DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON
+
+    RBRACKET        reduce using rule 115 (empty -> .)
+    ID              shift and go to state 49
+    IF              shift and go to state 51
+    PRINT           shift and go to state 35
+    WHILE           shift and go to state 34
+    RETURN          shift and go to state 30
+    DRAWCIRCLE      shift and go to state 37
+    DRAWSQUARE      shift and go to state 40
+    DRAWTRIANGLE    shift and go to state 32
+    DRAWLINE        shift and go to state 48
+    DRAWPOLYGON     shift and go to state 52
+    DRAWCURVE       shift and go to state 53
+
+    drawtriangle                   shift and go to state 29
+    statue                         shift and go to state 31
+    drawcurve                      shift and go to state 33
+    predefined                     shift and go to state 36
+    drawline                       shift and go to state 38
+    write                          shift and go to state 39
+    functioncall                   shift and go to state 56
+    empty                          shift and go to state 43
+    return                         shift and go to state 44
+    drawpolygon                    shift and go to state 45
+    read                           shift and go to state 46
+    assignment                     shift and go to state 47
+    condition                      shift and go to state 50
+    cycle                          shift and go to state 42
+    drawsquare                     shift and go to state 54
+    bls1                           shift and go to state 77
+    drawcircle                     shift and go to state 41
+
+state 32
+
+    (94) drawtriangle -> DRAWTRIANGLE . LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+
+    LPAREN          shift and go to state 78
+
+
+state 33
+
+    (67) predefined -> drawcurve .
+
+    ID              reduce using rule 67 (predefined -> drawcurve .)
+    IF              reduce using rule 67 (predefined -> drawcurve .)
+    PRINT           reduce using rule 67 (predefined -> drawcurve .)
+    WHILE           reduce using rule 67 (predefined -> drawcurve .)
+    RETURN          reduce using rule 67 (predefined -> drawcurve .)
+    DRAWCIRCLE      reduce using rule 67 (predefined -> drawcurve .)
+    DRAWSQUARE      reduce using rule 67 (predefined -> drawcurve .)
+    DRAWTRIANGLE    reduce using rule 67 (predefined -> drawcurve .)
+    DRAWLINE        reduce using rule 67 (predefined -> drawcurve .)
+    DRAWPOLYGON     reduce using rule 67 (predefined -> drawcurve .)
+    DRAWCURVE       reduce using rule 67 (predefined -> drawcurve .)
+    RBRACKET        reduce using rule 67 (predefined -> drawcurve .)
+
+
+state 34
+
+    (83) cycle -> WHILE . LPAREN ssexpression RPAREN block
+
+    LPAREN          shift and go to state 79
+
+
+state 35
+
+    (76) write -> PRINT . LPAREN ssexpression RPAREN SEMICOLON
+
+    LPAREN          shift and go to state 80
+
+
+state 36
+
+    (28) statue -> predefined .
+
+    ID              reduce using rule 28 (statue -> predefined .)
+    IF              reduce using rule 28 (statue -> predefined .)
+    PRINT           reduce using rule 28 (statue -> predefined .)
+    WHILE           reduce using rule 28 (statue -> predefined .)
+    RETURN          reduce using rule 28 (statue -> predefined .)
+    DRAWCIRCLE      reduce using rule 28 (statue -> predefined .)
+    DRAWSQUARE      reduce using rule 28 (statue -> predefined .)
+    DRAWTRIANGLE    reduce using rule 28 (statue -> predefined .)
+    DRAWLINE        reduce using rule 28 (statue -> predefined .)
+    DRAWPOLYGON     reduce using rule 28 (statue -> predefined .)
+    DRAWCURVE       reduce using rule 28 (statue -> predefined .)
+    RBRACKET        reduce using rule 28 (statue -> predefined .)
+
+
+state 37
+
+    (93) drawcircle -> DRAWCIRCLE . LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+
+    LPAREN          shift and go to state 81
+
+
+state 38
+
+    (65) predefined -> drawline .
+
+    ID              reduce using rule 65 (predefined -> drawline .)
+    IF              reduce using rule 65 (predefined -> drawline .)
+    PRINT           reduce using rule 65 (predefined -> drawline .)
+    WHILE           reduce using rule 65 (predefined -> drawline .)
+    RETURN          reduce using rule 65 (predefined -> drawline .)
+    DRAWCIRCLE      reduce using rule 65 (predefined -> drawline .)
+    DRAWSQUARE      reduce using rule 65 (predefined -> drawline .)
+    DRAWTRIANGLE    reduce using rule 65 (predefined -> drawline .)
+    DRAWLINE        reduce using rule 65 (predefined -> drawline .)
+    DRAWPOLYGON     reduce using rule 65 (predefined -> drawline .)
+    DRAWCURVE       reduce using rule 65 (predefined -> drawline .)
+    RBRACKET        reduce using rule 65 (predefined -> drawline .)
+
+
+state 39
+
+    (25) statue -> write .
+
+    ID              reduce using rule 25 (statue -> write .)
+    IF              reduce using rule 25 (statue -> write .)
+    PRINT           reduce using rule 25 (statue -> write .)
+    WHILE           reduce using rule 25 (statue -> write .)
+    RETURN          reduce using rule 25 (statue -> write .)
+    DRAWCIRCLE      reduce using rule 25 (statue -> write .)
+    DRAWSQUARE      reduce using rule 25 (statue -> write .)
+    DRAWTRIANGLE    reduce using rule 25 (statue -> write .)
+    DRAWLINE        reduce using rule 25 (statue -> write .)
+    DRAWPOLYGON     reduce using rule 25 (statue -> write .)
+    DRAWCURVE       reduce using rule 25 (statue -> write .)
+    RBRACKET        reduce using rule 25 (statue -> write .)
+
+
+state 40
+
+    (92) drawsquare -> DRAWSQUARE . LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+
+    LPAREN          shift and go to state 82
+
+
+state 41
+
+    (62) predefined -> drawcircle .
+
+    ID              reduce using rule 62 (predefined -> drawcircle .)
+    IF              reduce using rule 62 (predefined -> drawcircle .)
+    PRINT           reduce using rule 62 (predefined -> drawcircle .)
+    WHILE           reduce using rule 62 (predefined -> drawcircle .)
+    RETURN          reduce using rule 62 (predefined -> drawcircle .)
+    DRAWCIRCLE      reduce using rule 62 (predefined -> drawcircle .)
+    DRAWSQUARE      reduce using rule 62 (predefined -> drawcircle .)
+    DRAWTRIANGLE    reduce using rule 62 (predefined -> drawcircle .)
+    DRAWLINE        reduce using rule 62 (predefined -> drawcircle .)
+    DRAWPOLYGON     reduce using rule 62 (predefined -> drawcircle .)
+    DRAWCURVE       reduce using rule 62 (predefined -> drawcircle .)
+    RBRACKET        reduce using rule 62 (predefined -> drawcircle .)
+
+
+state 42
+
+    (26) statue -> cycle .
+
+    ID              reduce using rule 26 (statue -> cycle .)
+    IF              reduce using rule 26 (statue -> cycle .)
+    PRINT           reduce using rule 26 (statue -> cycle .)
+    WHILE           reduce using rule 26 (statue -> cycle .)
+    RETURN          reduce using rule 26 (statue -> cycle .)
+    DRAWCIRCLE      reduce using rule 26 (statue -> cycle .)
+    DRAWSQUARE      reduce using rule 26 (statue -> cycle .)
+    DRAWTRIANGLE    reduce using rule 26 (statue -> cycle .)
+    DRAWLINE        reduce using rule 26 (statue -> cycle .)
+    DRAWPOLYGON     reduce using rule 26 (statue -> cycle .)
+    DRAWCURVE       reduce using rule 26 (statue -> cycle .)
+    RBRACKET        reduce using rule 26 (statue -> cycle .)
+
+
+state 43
+
+    (21) bls1 -> empty .
+
+    RBRACKET        reduce using rule 21 (bls1 -> empty .)
+
+
+state 44
+
+    (29) statue -> return .
+
+    ID              reduce using rule 29 (statue -> return .)
+    IF              reduce using rule 29 (statue -> return .)
+    PRINT           reduce using rule 29 (statue -> return .)
+    WHILE           reduce using rule 29 (statue -> return .)
+    RETURN          reduce using rule 29 (statue -> return .)
+    DRAWCIRCLE      reduce using rule 29 (statue -> return .)
+    DRAWSQUARE      reduce using rule 29 (statue -> return .)
+    DRAWTRIANGLE    reduce using rule 29 (statue -> return .)
+    DRAWLINE        reduce using rule 29 (statue -> return .)
+    DRAWPOLYGON     reduce using rule 29 (statue -> return .)
+    DRAWCURVE       reduce using rule 29 (statue -> return .)
+    RBRACKET        reduce using rule 29 (statue -> return .)
+
+
+state 45
+
+    (66) predefined -> drawpolygon .
+
+    ID              reduce using rule 66 (predefined -> drawpolygon .)
+    IF              reduce using rule 66 (predefined -> drawpolygon .)
+    PRINT           reduce using rule 66 (predefined -> drawpolygon .)
+    WHILE           reduce using rule 66 (predefined -> drawpolygon .)
+    RETURN          reduce using rule 66 (predefined -> drawpolygon .)
+    DRAWCIRCLE      reduce using rule 66 (predefined -> drawpolygon .)
+    DRAWSQUARE      reduce using rule 66 (predefined -> drawpolygon .)
+    DRAWTRIANGLE    reduce using rule 66 (predefined -> drawpolygon .)
+    DRAWLINE        reduce using rule 66 (predefined -> drawpolygon .)
+    DRAWPOLYGON     reduce using rule 66 (predefined -> drawpolygon .)
+    DRAWCURVE       reduce using rule 66 (predefined -> drawpolygon .)
+    RBRACKET        reduce using rule 66 (predefined -> drawpolygon .)
+
+
+state 46
+
+    (24) statue -> read .
+
+    ID              reduce using rule 24 (statue -> read .)
+    IF              reduce using rule 24 (statue -> read .)
+    PRINT           reduce using rule 24 (statue -> read .)
+    WHILE           reduce using rule 24 (statue -> read .)
+    RETURN          reduce using rule 24 (statue -> read .)
+    DRAWCIRCLE      reduce using rule 24 (statue -> read .)
+    DRAWSQUARE      reduce using rule 24 (statue -> read .)
+    DRAWTRIANGLE    reduce using rule 24 (statue -> read .)
+    DRAWLINE        reduce using rule 24 (statue -> read .)
+    DRAWPOLYGON     reduce using rule 24 (statue -> read .)
+    DRAWCURVE       reduce using rule 24 (statue -> read .)
+    RBRACKET        reduce using rule 24 (statue -> read .)
+
+
+state 47
+
+    (22) statue -> assignment .
+
+    ID              reduce using rule 22 (statue -> assignment .)
+    IF              reduce using rule 22 (statue -> assignment .)
+    PRINT           reduce using rule 22 (statue -> assignment .)
+    WHILE           reduce using rule 22 (statue -> assignment .)
+    RETURN          reduce using rule 22 (statue -> assignment .)
+    DRAWCIRCLE      reduce using rule 22 (statue -> assignment .)
+    DRAWSQUARE      reduce using rule 22 (statue -> assignment .)
+    DRAWTRIANGLE    reduce using rule 22 (statue -> assignment .)
+    DRAWLINE        reduce using rule 22 (statue -> assignment .)
+    DRAWPOLYGON     reduce using rule 22 (statue -> assignment .)
+    DRAWCURVE       reduce using rule 22 (statue -> assignment .)
+    RBRACKET        reduce using rule 22 (statue -> assignment .)
+
+
+state 48
+
+    (91) drawline -> DRAWLINE . LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+
+    LPAREN          shift and go to state 83
+
+
+state 49
+
+    (35) assignment -> ID . ass1 ASSIGN ass2 SEMICOLON
+    (75) read -> ID . ASSIGN INPUT SEMICOLON
+    (87) functioncall -> ID . LPAREN fcs1 RPAREN SEMICOLON
+    (36) ass1 -> . empty
+    (37) ass1 -> . LARRAY ssexpression RARRAY
+    (115) empty -> .
+
+  ! shift/reduce conflict for ASSIGN resolved as shift
+    ASSIGN          shift and go to state 84
+    LPAREN          shift and go to state 86
+    LARRAY          shift and go to state 85
+
+  ! ASSIGN          [ reduce using rule 115 (empty -> .) ]
+
+    ass1                           shift and go to state 87
+    empty                          shift and go to state 88
+
+state 50
+
+    (23) statue -> condition .
+
+    ID              reduce using rule 23 (statue -> condition .)
+    IF              reduce using rule 23 (statue -> condition .)
+    PRINT           reduce using rule 23 (statue -> condition .)
+    WHILE           reduce using rule 23 (statue -> condition .)
+    RETURN          reduce using rule 23 (statue -> condition .)
+    DRAWCIRCLE      reduce using rule 23 (statue -> condition .)
+    DRAWSQUARE      reduce using rule 23 (statue -> condition .)
+    DRAWTRIANGLE    reduce using rule 23 (statue -> condition .)
+    DRAWLINE        reduce using rule 23 (statue -> condition .)
+    DRAWPOLYGON     reduce using rule 23 (statue -> condition .)
+    DRAWCURVE       reduce using rule 23 (statue -> condition .)
+    RBRACKET        reduce using rule 23 (statue -> condition .)
+
+
+state 51
+
+    (68) condition -> IF . cos1 RPAREN block cos3
+    (69) cos1 -> . LPAREN cos2
+    (70) cos1 -> . NOT cos2
+
+    LPAREN          shift and go to state 90
+    NOT             shift and go to state 91
+
+    cos1                           shift and go to state 89
+
+state 52
+
+    (96) drawpolygon -> DRAWPOLYGON . LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+
+    LPAREN          shift and go to state 92
+
+
+state 53
+
+    (95) drawcurve -> DRAWCURVE . LPAREN ssexpression COMA color RPAREN SEMICOLON
+
+    LPAREN          shift and go to state 93
+
+
+state 54
+
+    (63) predefined -> drawsquare .
+
+    ID              reduce using rule 63 (predefined -> drawsquare .)
+    IF              reduce using rule 63 (predefined -> drawsquare .)
+    PRINT           reduce using rule 63 (predefined -> drawsquare .)
+    WHILE           reduce using rule 63 (predefined -> drawsquare .)
+    RETURN          reduce using rule 63 (predefined -> drawsquare .)
+    DRAWCIRCLE      reduce using rule 63 (predefined -> drawsquare .)
+    DRAWSQUARE      reduce using rule 63 (predefined -> drawsquare .)
+    DRAWTRIANGLE    reduce using rule 63 (predefined -> drawsquare .)
+    DRAWLINE        reduce using rule 63 (predefined -> drawsquare .)
+    DRAWPOLYGON     reduce using rule 63 (predefined -> drawsquare .)
+    DRAWCURVE       reduce using rule 63 (predefined -> drawsquare .)
+    RBRACKET        reduce using rule 63 (predefined -> drawsquare .)
+
+
+state 55
+
+    (19) block -> LBRACKET bls1 . RBRACKET
+
+    RBRACKET        shift and go to state 94
+
+
+state 56
+
+    (27) statue -> functioncall .
+
+    ID              reduce using rule 27 (statue -> functioncall .)
+    IF              reduce using rule 27 (statue -> functioncall .)
+    PRINT           reduce using rule 27 (statue -> functioncall .)
+    WHILE           reduce using rule 27 (statue -> functioncall .)
+    RETURN          reduce using rule 27 (statue -> functioncall .)
+    DRAWCIRCLE      reduce using rule 27 (statue -> functioncall .)
+    DRAWSQUARE      reduce using rule 27 (statue -> functioncall .)
+    DRAWTRIANGLE    reduce using rule 27 (statue -> functioncall .)
+    DRAWLINE        reduce using rule 27 (statue -> functioncall .)
+    DRAWPOLYGON     reduce using rule 27 (statue -> functioncall .)
+    DRAWCURVE       reduce using rule 27 (statue -> functioncall .)
+    RBRACKET        reduce using rule 27 (statue -> functioncall .)
+
+
+state 57
+
+    (84) function -> FUNC fus1 ID . LPAREN parameter RPAREN block
+
+    LPAREN          shift and go to state 95
+
+
+state 58
+
+    (18) ars1 -> LARRAY . CTEI RARRAY
+
+    CTEI            shift and go to state 96
+
+
+state 59
+
+    (16) array -> FLOAT_TYPE ars1 .
+
+    SEMICOLON       reduce using rule 16 (array -> FLOAT_TYPE ars1 .)
+    ID              reduce using rule 16 (array -> FLOAT_TYPE ars1 .)
+
+
+state 60
+
+    (17) array -> STRING_TYPE ars1 .
+
+    SEMICOLON       reduce using rule 17 (array -> STRING_TYPE ars1 .)
+    ID              reduce using rule 17 (array -> STRING_TYPE ars1 .)
+
+
+state 61
+
+    (15) array -> INT_TYPE ars1 .
+
+    SEMICOLON       reduce using rule 15 (array -> INT_TYPE ars1 .)
+    ID              reduce using rule 15 (array -> INT_TYPE ars1 .)
+
+
+state 62
+
+    (6) vars -> VAR vas1 COLON type . SEMICOLON vas1
+
+    SEMICOLON       shift and go to state 97
+
+
+state 63
+
+    (8) vas1 -> ID COMA vas1 .
+
+    COLON           reduce using rule 8 (vas1 -> ID COMA vas1 .)
+    FUNC            reduce using rule 8 (vas1 -> ID COMA vas1 .)
+    LBRACKET        reduce using rule 8 (vas1 -> ID COMA vas1 .)
+
+
+state 64
+
+    (58) exp -> term . exps1
+    (59) exps1 -> . empty
+    (60) exps1 -> . PLUS term exps1
+    (61) exps1 -> . MINUS term exps1
+    (115) empty -> .
+
+    PLUS            shift and go to state 99
+    MINUS           shift and go to state 100
+    GT              reduce using rule 115 (empty -> .)
+    LT              reduce using rule 115 (empty -> .)
+    GE              reduce using rule 115 (empty -> .)
+    LE              reduce using rule 115 (empty -> .)
+    EQUAL           reduce using rule 115 (empty -> .)
+    DIFFERENT       reduce using rule 115 (empty -> .)
+    AND             reduce using rule 115 (empty -> .)
+    OR              reduce using rule 115 (empty -> .)
+    SEMICOLON       reduce using rule 115 (empty -> .)
+    RPAREN          reduce using rule 115 (empty -> .)
+    COMA            reduce using rule 115 (empty -> .)
+    RARRAY          reduce using rule 115 (empty -> .)
+
+    exps1                          shift and go to state 98
+    empty                          shift and go to state 101
+
+state 65
+
+    (98) fact -> LPAREN . ssexpression RPAREN
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 102
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 66
+
+    (101) sign -> MINUS .
+
+    ID              reduce using rule 101 (sign -> MINUS .)
+    CTEI            reduce using rule 101 (sign -> MINUS .)
+    CTEF            reduce using rule 101 (sign -> MINUS .)
+
+
+state 67
+
+    (54) term -> factor . tes1
+    (55) tes1 -> . empty
+    (56) tes1 -> . TIMES factor tes1
+    (57) tes1 -> . DIVISION factor tes1
+    (115) empty -> .
+
+    TIMES           shift and go to state 104
+    DIVISION        shift and go to state 103
+    PLUS            reduce using rule 115 (empty -> .)
+    MINUS           reduce using rule 115 (empty -> .)
+    GT              reduce using rule 115 (empty -> .)
+    LT              reduce using rule 115 (empty -> .)
+    GE              reduce using rule 115 (empty -> .)
+    LE              reduce using rule 115 (empty -> .)
+    EQUAL           reduce using rule 115 (empty -> .)
+    DIFFERENT       reduce using rule 115 (empty -> .)
+    AND             reduce using rule 115 (empty -> .)
+    OR              reduce using rule 115 (empty -> .)
+    SEMICOLON       reduce using rule 115 (empty -> .)
+    RPAREN          reduce using rule 115 (empty -> .)
+    COMA            reduce using rule 115 (empty -> .)
+    RARRAY          reduce using rule 115 (empty -> .)
+
+    tes1                           shift and go to state 105
+    empty                          shift and go to state 106
+
+state 68
+
+    (40) ssexpression -> sexpression .
+
+    COMA            reduce using rule 40 (ssexpression -> sexpression .)
+    RARRAY          reduce using rule 40 (ssexpression -> sexpression .)
+    SEMICOLON       reduce using rule 40 (ssexpression -> sexpression .)
+    RPAREN          reduce using rule 40 (ssexpression -> sexpression .)
+
+
+state 69
+
+    (99) fact -> sign . constant
+    (103) constant -> . ID const
+    (104) constant -> . CTEI
+    (105) constant -> . CTEF
+
+    ID              shift and go to state 110
+    CTEI            shift and go to state 109
+    CTEF            shift and go to state 107
+
+    constant                       shift and go to state 108
+
+state 70
+
+    (41) ssexpression -> NOT . sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 111
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 71
+
+    (100) sign -> PLUS .
+
+    ID              reduce using rule 100 (sign -> PLUS .)
+    CTEI            reduce using rule 100 (sign -> PLUS .)
+    CTEF            reduce using rule 100 (sign -> PLUS .)
+
+
+state 72
+
+    (102) sign -> empty .
+
+    ID              reduce using rule 102 (sign -> empty .)
+    CTEI            reduce using rule 102 (sign -> empty .)
+    CTEF            reduce using rule 102 (sign -> empty .)
+
+
+state 73
+
+    (46) expression -> exp . exs1
+    (47) exs1 -> . empty
+    (48) exs1 -> . GT exp
+    (49) exs1 -> . LT exp
+    (50) exs1 -> . GE exp
+    (51) exs1 -> . LE exp
+    (52) exs1 -> . EQUAL exp
+    (53) exs1 -> . DIFFERENT exp
+    (115) empty -> .
+
+    GT              shift and go to state 113
+    LT              shift and go to state 116
+    GE              shift and go to state 114
+    LE              shift and go to state 117
+    EQUAL           shift and go to state 115
+    DIFFERENT       shift and go to state 112
+    AND             reduce using rule 115 (empty -> .)
+    OR              reduce using rule 115 (empty -> .)
+    SEMICOLON       reduce using rule 115 (empty -> .)
+    RPAREN          reduce using rule 115 (empty -> .)
+    COMA            reduce using rule 115 (empty -> .)
+    RARRAY          reduce using rule 115 (empty -> .)
+
+    empty                          shift and go to state 119
+    exs1                           shift and go to state 118
+
+state 74
+
+    (34) return -> RETURN ssexpression . SEMICOLON
+
+    SEMICOLON       shift and go to state 120
+
+
+state 75
+
+    (42) sexpression -> expression . ses1
+    (43) ses1 -> . empty
+    (44) ses1 -> . AND sexpression
+    (45) ses1 -> . OR sexpression
+    (115) empty -> .
+
+    AND             shift and go to state 122
+    OR              shift and go to state 123
+    SEMICOLON       reduce using rule 115 (empty -> .)
+    RPAREN          reduce using rule 115 (empty -> .)
+    COMA            reduce using rule 115 (empty -> .)
+    RARRAY          reduce using rule 115 (empty -> .)
+
+    ses1                           shift and go to state 121
+    empty                          shift and go to state 124
+
+state 76
+
+    (97) factor -> fact .
+
+    TIMES           reduce using rule 97 (factor -> fact .)
+    DIVISION        reduce using rule 97 (factor -> fact .)
+    PLUS            reduce using rule 97 (factor -> fact .)
+    MINUS           reduce using rule 97 (factor -> fact .)
+    GT              reduce using rule 97 (factor -> fact .)
+    LT              reduce using rule 97 (factor -> fact .)
+    GE              reduce using rule 97 (factor -> fact .)
+    LE              reduce using rule 97 (factor -> fact .)
+    EQUAL           reduce using rule 97 (factor -> fact .)
+    DIFFERENT       reduce using rule 97 (factor -> fact .)
+    AND             reduce using rule 97 (factor -> fact .)
+    OR              reduce using rule 97 (factor -> fact .)
+    COMA            reduce using rule 97 (factor -> fact .)
+    RPAREN          reduce using rule 97 (factor -> fact .)
+    SEMICOLON       reduce using rule 97 (factor -> fact .)
+    RARRAY          reduce using rule 97 (factor -> fact .)
+
+
+state 77
+
+    (20) bls1 -> statue bls1 .
+
+    RBRACKET        reduce using rule 20 (bls1 -> statue bls1 .)
+
+
+state 78
+
+    (94) drawtriangle -> DRAWTRIANGLE LPAREN . ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 125
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 79
+
+    (83) cycle -> WHILE LPAREN . ssexpression RPAREN block
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    fact                           shift and go to state 76
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 126
+    expression                     shift and go to state 75
+
+state 80
+
+    (76) write -> PRINT LPAREN . ssexpression RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 127
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 81
+
+    (93) drawcircle -> DRAWCIRCLE LPAREN . ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 128
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 82
+
+    (92) drawsquare -> DRAWSQUARE LPAREN . ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 129
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 83
+
+    (91) drawline -> DRAWLINE LPAREN . ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 130
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 84
+
+    (75) read -> ID ASSIGN . INPUT SEMICOLON
+
+    INPUT           shift and go to state 131
+
+
+state 85
+
+    (37) ass1 -> LARRAY . ssexpression RARRAY
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 132
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 86
+
+    (87) functioncall -> ID LPAREN . fcs1 RPAREN SEMICOLON
+    (88) fcs1 -> . empty
+    (89) fcs1 -> . ssexpression
+    (90) fcs1 -> . ssexpression COMA fcs1
+    (115) empty -> .
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+
+    RPAREN          reduce using rule 115 (empty -> .)
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+
+    term                           shift and go to state 64
+    fact                           shift and go to state 76
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    fcs1                           shift and go to state 135
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 134
+    expression                     shift and go to state 75
+    empty                          shift and go to state 133
+
+state 87
+
+    (35) assignment -> ID ass1 . ASSIGN ass2 SEMICOLON
+
+    ASSIGN          shift and go to state 136
+
+
+state 88
+
+    (36) ass1 -> empty .
+
+    ASSIGN          reduce using rule 36 (ass1 -> empty .)
+
+
+state 89
+
+    (68) condition -> IF cos1 . RPAREN block cos3
+
+    RPAREN          shift and go to state 137
+
+
+state 90
+
+    (69) cos1 -> LPAREN . cos2
+    (71) cos2 -> . ssexpression
+    (72) cos2 -> . functioncall
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (87) functioncall -> . ID LPAREN fcs1 RPAREN SEMICOLON
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+  ! shift/reduce conflict for ID resolved as shift
+    NOT             shift and go to state 70
+    ID              shift and go to state 140
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+  ! ID              [ reduce using rule 115 (empty -> .) ]
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    functioncall                   shift and go to state 141
+    cos2                           shift and go to state 139
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 138
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 91
+
+    (70) cos1 -> NOT . cos2
+    (71) cos2 -> . ssexpression
+    (72) cos2 -> . functioncall
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (87) functioncall -> . ID LPAREN fcs1 RPAREN SEMICOLON
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+  ! shift/reduce conflict for ID resolved as shift
+    NOT             shift and go to state 70
+    ID              shift and go to state 140
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+  ! ID              [ reduce using rule 115 (empty -> .) ]
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    functioncall                   shift and go to state 141
+    cos2                           shift and go to state 142
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 138
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 92
+
+    (96) drawpolygon -> DRAWPOLYGON LPAREN . ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 143
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 93
+
+    (95) drawcurve -> DRAWCURVE LPAREN . ssexpression COMA color RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 144
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 94
+
+    (19) block -> LBRACKET bls1 RBRACKET .
+
+    ELSE            reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    ID              reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    IF              reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    PRINT           reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    WHILE           reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    RETURN          reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    DRAWCIRCLE      reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    DRAWSQUARE      reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    DRAWTRIANGLE    reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    DRAWLINE        reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    DRAWPOLYGON     reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    DRAWCURVE       reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    RBRACKET        reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    FUNC            reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    LBRACKET        reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+    $end            reduce using rule 19 (block -> LBRACKET bls1 RBRACKET .)
+
+
+state 95
+
+    (84) function -> FUNC fus1 ID LPAREN . parameter RPAREN block
+    (30) parameter -> . empty
+    (31) parameter -> . pas1
+    (115) empty -> .
+    (32) pas1 -> . type ID
+    (33) pas1 -> . type ID COMA pas1
+    (10) type -> . INT_TYPE
+    (11) type -> . FLOAT_TYPE
+    (12) type -> . BOOL_TYPE
+    (13) type -> . STRING_TYPE
+    (14) type -> . array
+    (15) array -> . INT_TYPE ars1
+    (16) array -> . FLOAT_TYPE ars1
+    (17) array -> . STRING_TYPE ars1
+
+    RPAREN          reduce using rule 115 (empty -> .)
+    INT_TYPE        shift and go to state 25
+    FLOAT_TYPE      shift and go to state 22
+    BOOL_TYPE       shift and go to state 24
+    STRING_TYPE     shift and go to state 23
+
+    parameter                      shift and go to state 147
+    pas1                           shift and go to state 148
+    array                          shift and go to state 26
+    type                           shift and go to state 145
+    empty                          shift and go to state 146
+
+state 96
+
+    (18) ars1 -> LARRAY CTEI . RARRAY
+
+    RARRAY          shift and go to state 149
+
+
+state 97
+
+    (6) vars -> VAR vas1 COLON type SEMICOLON . vas1
+    (7) vas1 -> . ID
+    (8) vas1 -> . ID COMA vas1
+    (9) vas1 -> . empty
+    (115) empty -> .
+
+    ID              shift and go to state 14
+    FUNC            reduce using rule 115 (empty -> .)
+    LBRACKET        reduce using rule 115 (empty -> .)
+
+    vas1                           shift and go to state 150
+    empty                          shift and go to state 15
+
+state 98
+
+    (58) exp -> term exps1 .
+
+    GT              reduce using rule 58 (exp -> term exps1 .)
+    LT              reduce using rule 58 (exp -> term exps1 .)
+    GE              reduce using rule 58 (exp -> term exps1 .)
+    LE              reduce using rule 58 (exp -> term exps1 .)
+    EQUAL           reduce using rule 58 (exp -> term exps1 .)
+    DIFFERENT       reduce using rule 58 (exp -> term exps1 .)
+    AND             reduce using rule 58 (exp -> term exps1 .)
+    OR              reduce using rule 58 (exp -> term exps1 .)
+    COMA            reduce using rule 58 (exp -> term exps1 .)
+    RPAREN          reduce using rule 58 (exp -> term exps1 .)
+    SEMICOLON       reduce using rule 58 (exp -> term exps1 .)
+    RARRAY          reduce using rule 58 (exp -> term exps1 .)
+
+
+state 99
+
+    (60) exps1 -> PLUS . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 151
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    factor                         shift and go to state 67
+    fact                           shift and go to state 76
+
+state 100
+
+    (61) exps1 -> MINUS . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 152
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    factor                         shift and go to state 67
+    fact                           shift and go to state 76
+
+state 101
+
+    (59) exps1 -> empty .
+
+    GT              reduce using rule 59 (exps1 -> empty .)
+    LT              reduce using rule 59 (exps1 -> empty .)
+    GE              reduce using rule 59 (exps1 -> empty .)
+    LE              reduce using rule 59 (exps1 -> empty .)
+    EQUAL           reduce using rule 59 (exps1 -> empty .)
+    DIFFERENT       reduce using rule 59 (exps1 -> empty .)
+    AND             reduce using rule 59 (exps1 -> empty .)
+    OR              reduce using rule 59 (exps1 -> empty .)
+    SEMICOLON       reduce using rule 59 (exps1 -> empty .)
+    RPAREN          reduce using rule 59 (exps1 -> empty .)
+    COMA            reduce using rule 59 (exps1 -> empty .)
+    RARRAY          reduce using rule 59 (exps1 -> empty .)
+
+
+state 102
+
+    (98) fact -> LPAREN ssexpression . RPAREN
+
+    RPAREN          shift and go to state 153
+
+
+state 103
+
+    (57) tes1 -> DIVISION . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    factor                         shift and go to state 154
+    fact                           shift and go to state 76
+
+state 104
+
+    (56) tes1 -> TIMES . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    factor                         shift and go to state 155
+    fact                           shift and go to state 76
+
+state 105
+
+    (54) term -> factor tes1 .
+
+    PLUS            reduce using rule 54 (term -> factor tes1 .)
+    MINUS           reduce using rule 54 (term -> factor tes1 .)
+    GT              reduce using rule 54 (term -> factor tes1 .)
+    LT              reduce using rule 54 (term -> factor tes1 .)
+    GE              reduce using rule 54 (term -> factor tes1 .)
+    LE              reduce using rule 54 (term -> factor tes1 .)
+    EQUAL           reduce using rule 54 (term -> factor tes1 .)
+    DIFFERENT       reduce using rule 54 (term -> factor tes1 .)
+    AND             reduce using rule 54 (term -> factor tes1 .)
+    OR              reduce using rule 54 (term -> factor tes1 .)
+    RARRAY          reduce using rule 54 (term -> factor tes1 .)
+    SEMICOLON       reduce using rule 54 (term -> factor tes1 .)
+    RPAREN          reduce using rule 54 (term -> factor tes1 .)
+    COMA            reduce using rule 54 (term -> factor tes1 .)
+
+
+state 106
+
+    (55) tes1 -> empty .
+
+    PLUS            reduce using rule 55 (tes1 -> empty .)
+    MINUS           reduce using rule 55 (tes1 -> empty .)
+    GT              reduce using rule 55 (tes1 -> empty .)
+    LT              reduce using rule 55 (tes1 -> empty .)
+    GE              reduce using rule 55 (tes1 -> empty .)
+    LE              reduce using rule 55 (tes1 -> empty .)
+    EQUAL           reduce using rule 55 (tes1 -> empty .)
+    DIFFERENT       reduce using rule 55 (tes1 -> empty .)
+    AND             reduce using rule 55 (tes1 -> empty .)
+    OR              reduce using rule 55 (tes1 -> empty .)
+    SEMICOLON       reduce using rule 55 (tes1 -> empty .)
+    RPAREN          reduce using rule 55 (tes1 -> empty .)
+    COMA            reduce using rule 55 (tes1 -> empty .)
+    RARRAY          reduce using rule 55 (tes1 -> empty .)
+
+
+state 107
+
+    (105) constant -> CTEF .
+
+    TIMES           reduce using rule 105 (constant -> CTEF .)
+    DIVISION        reduce using rule 105 (constant -> CTEF .)
+    PLUS            reduce using rule 105 (constant -> CTEF .)
+    MINUS           reduce using rule 105 (constant -> CTEF .)
+    GT              reduce using rule 105 (constant -> CTEF .)
+    LT              reduce using rule 105 (constant -> CTEF .)
+    GE              reduce using rule 105 (constant -> CTEF .)
+    LE              reduce using rule 105 (constant -> CTEF .)
+    EQUAL           reduce using rule 105 (constant -> CTEF .)
+    DIFFERENT       reduce using rule 105 (constant -> CTEF .)
+    AND             reduce using rule 105 (constant -> CTEF .)
+    OR              reduce using rule 105 (constant -> CTEF .)
+    SEMICOLON       reduce using rule 105 (constant -> CTEF .)
+    RPAREN          reduce using rule 105 (constant -> CTEF .)
+    COMA            reduce using rule 105 (constant -> CTEF .)
+    RARRAY          reduce using rule 105 (constant -> CTEF .)
+
+
+state 108
+
+    (99) fact -> sign constant .
+
+    TIMES           reduce using rule 99 (fact -> sign constant .)
+    DIVISION        reduce using rule 99 (fact -> sign constant .)
+    PLUS            reduce using rule 99 (fact -> sign constant .)
+    MINUS           reduce using rule 99 (fact -> sign constant .)
+    GT              reduce using rule 99 (fact -> sign constant .)
+    LT              reduce using rule 99 (fact -> sign constant .)
+    GE              reduce using rule 99 (fact -> sign constant .)
+    LE              reduce using rule 99 (fact -> sign constant .)
+    EQUAL           reduce using rule 99 (fact -> sign constant .)
+    DIFFERENT       reduce using rule 99 (fact -> sign constant .)
+    AND             reduce using rule 99 (fact -> sign constant .)
+    OR              reduce using rule 99 (fact -> sign constant .)
+    SEMICOLON       reduce using rule 99 (fact -> sign constant .)
+    COMA            reduce using rule 99 (fact -> sign constant .)
+    RPAREN          reduce using rule 99 (fact -> sign constant .)
+    RARRAY          reduce using rule 99 (fact -> sign constant .)
+
+
+state 109
+
+    (104) constant -> CTEI .
+
+    TIMES           reduce using rule 104 (constant -> CTEI .)
+    DIVISION        reduce using rule 104 (constant -> CTEI .)
+    PLUS            reduce using rule 104 (constant -> CTEI .)
+    MINUS           reduce using rule 104 (constant -> CTEI .)
+    GT              reduce using rule 104 (constant -> CTEI .)
+    LT              reduce using rule 104 (constant -> CTEI .)
+    GE              reduce using rule 104 (constant -> CTEI .)
+    LE              reduce using rule 104 (constant -> CTEI .)
+    EQUAL           reduce using rule 104 (constant -> CTEI .)
+    DIFFERENT       reduce using rule 104 (constant -> CTEI .)
+    AND             reduce using rule 104 (constant -> CTEI .)
+    OR              reduce using rule 104 (constant -> CTEI .)
+    SEMICOLON       reduce using rule 104 (constant -> CTEI .)
+    RPAREN          reduce using rule 104 (constant -> CTEI .)
+    COMA            reduce using rule 104 (constant -> CTEI .)
+    RARRAY          reduce using rule 104 (constant -> CTEI .)
+
+
+state 110
+
+    (103) constant -> ID . const
+    (106) const -> . LARRAY ssexpression RARRAY
+    (107) const -> . LPAREN ssexpression RPAREN
+    (108) const -> . empty
+    (115) empty -> .
+
+    LARRAY          shift and go to state 157
+    LPAREN          shift and go to state 158
+    TIMES           reduce using rule 115 (empty -> .)
+    DIVISION        reduce using rule 115 (empty -> .)
+    PLUS            reduce using rule 115 (empty -> .)
+    MINUS           reduce using rule 115 (empty -> .)
+    GT              reduce using rule 115 (empty -> .)
+    LT              reduce using rule 115 (empty -> .)
+    GE              reduce using rule 115 (empty -> .)
+    LE              reduce using rule 115 (empty -> .)
+    EQUAL           reduce using rule 115 (empty -> .)
+    DIFFERENT       reduce using rule 115 (empty -> .)
+    AND             reduce using rule 115 (empty -> .)
+    OR              reduce using rule 115 (empty -> .)
+    SEMICOLON       reduce using rule 115 (empty -> .)
+    RPAREN          reduce using rule 115 (empty -> .)
+    COMA            reduce using rule 115 (empty -> .)
+    RARRAY          reduce using rule 115 (empty -> .)
+
+    const                          shift and go to state 156
+    empty                          shift and go to state 159
+
+state 111
+
+    (41) ssexpression -> NOT sexpression .
+
+    COMA            reduce using rule 41 (ssexpression -> NOT sexpression .)
+    RARRAY          reduce using rule 41 (ssexpression -> NOT sexpression .)
+    SEMICOLON       reduce using rule 41 (ssexpression -> NOT sexpression .)
+    RPAREN          reduce using rule 41 (ssexpression -> NOT sexpression .)
+
+
+state 112
+
+    (53) exs1 -> DIFFERENT . exp
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 160
+    factor                         shift and go to state 67
+    fact                           shift and go to state 76
+
+state 113
+
+    (48) exs1 -> GT . exp
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 161
+    factor                         shift and go to state 67
+    fact                           shift and go to state 76
+
+state 114
+
+    (50) exs1 -> GE . exp
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 162
+    factor                         shift and go to state 67
+    fact                           shift and go to state 76
+
+state 115
+
+    (52) exs1 -> EQUAL . exp
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 163
+    factor                         shift and go to state 67
+    fact                           shift and go to state 76
+
+state 116
+
+    (49) exs1 -> LT . exp
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 164
+    factor                         shift and go to state 67
+    fact                           shift and go to state 76
+
+state 117
+
+    (51) exs1 -> LE . exp
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 165
+    factor                         shift and go to state 67
+    fact                           shift and go to state 76
+
+state 118
+
+    (46) expression -> exp exs1 .
+
+    AND             reduce using rule 46 (expression -> exp exs1 .)
+    OR              reduce using rule 46 (expression -> exp exs1 .)
+    COMA            reduce using rule 46 (expression -> exp exs1 .)
+    SEMICOLON       reduce using rule 46 (expression -> exp exs1 .)
+    RPAREN          reduce using rule 46 (expression -> exp exs1 .)
+    RARRAY          reduce using rule 46 (expression -> exp exs1 .)
+
+
+state 119
+
+    (47) exs1 -> empty .
+
+    AND             reduce using rule 47 (exs1 -> empty .)
+    OR              reduce using rule 47 (exs1 -> empty .)
+    SEMICOLON       reduce using rule 47 (exs1 -> empty .)
+    RPAREN          reduce using rule 47 (exs1 -> empty .)
+    COMA            reduce using rule 47 (exs1 -> empty .)
+    RARRAY          reduce using rule 47 (exs1 -> empty .)
+
+
+state 120
+
+    (34) return -> RETURN ssexpression SEMICOLON .
+
+    ID              reduce using rule 34 (return -> RETURN ssexpression SEMICOLON .)
+    IF              reduce using rule 34 (return -> RETURN ssexpression SEMICOLON .)
+    PRINT           reduce using rule 34 (return -> RETURN ssexpression SEMICOLON .)
+    WHILE           reduce using rule 34 (return -> RETURN ssexpression SEMICOLON .)
+    RETURN          reduce using rule 34 (return -> RETURN ssexpression SEMICOLON .)
+    DRAWCIRCLE      reduce using rule 34 (return -> RETURN ssexpression SEMICOLON .)
+    DRAWSQUARE      reduce using rule 34 (return -> RETURN ssexpression SEMICOLON .)
+    DRAWTRIANGLE    reduce using rule 34 (return -> RETURN ssexpression SEMICOLON .)
+    DRAWLINE        reduce using rule 34 (return -> RETURN ssexpression SEMICOLON .)
+    DRAWPOLYGON     reduce using rule 34 (return -> RETURN ssexpression SEMICOLON .)
+    DRAWCURVE       reduce using rule 34 (return -> RETURN ssexpression SEMICOLON .)
+    RBRACKET        reduce using rule 34 (return -> RETURN ssexpression SEMICOLON .)
+
+
+state 121
+
+    (42) sexpression -> expression ses1 .
+
+    COMA            reduce using rule 42 (sexpression -> expression ses1 .)
+    SEMICOLON       reduce using rule 42 (sexpression -> expression ses1 .)
+    RPAREN          reduce using rule 42 (sexpression -> expression ses1 .)
+    RARRAY          reduce using rule 42 (sexpression -> expression ses1 .)
+
+
+state 122
+
+    (44) ses1 -> AND . sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 166
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 123
+
+    (45) ses1 -> OR . sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 167
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 124
+
+    (43) ses1 -> empty .
+
+    SEMICOLON       reduce using rule 43 (ses1 -> empty .)
+    RPAREN          reduce using rule 43 (ses1 -> empty .)
+    COMA            reduce using rule 43 (ses1 -> empty .)
+    RARRAY          reduce using rule 43 (ses1 -> empty .)
+
+
+state 125
+
+    (94) drawtriangle -> DRAWTRIANGLE LPAREN ssexpression . COMA ssexpression COMA color RPAREN SEMICOLON
+
+    COMA            shift and go to state 168
+
+
+state 126
+
+    (83) cycle -> WHILE LPAREN ssexpression . RPAREN block
+
+    RPAREN          shift and go to state 169
+
+
+state 127
+
+    (76) write -> PRINT LPAREN ssexpression . RPAREN SEMICOLON
+
+    RPAREN          shift and go to state 170
+
+
+state 128
+
+    (93) drawcircle -> DRAWCIRCLE LPAREN ssexpression . COMA ssexpression COMA color RPAREN SEMICOLON
+
+    COMA            shift and go to state 171
+
+
+state 129
+
+    (92) drawsquare -> DRAWSQUARE LPAREN ssexpression . COMA ssexpression COMA color RPAREN SEMICOLON
+
+    COMA            shift and go to state 172
+
+
+state 130
+
+    (91) drawline -> DRAWLINE LPAREN ssexpression . COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+
+    COMA            shift and go to state 173
+
+
+state 131
+
+    (75) read -> ID ASSIGN INPUT . SEMICOLON
+
+    SEMICOLON       shift and go to state 174
+
+
+state 132
+
+    (37) ass1 -> LARRAY ssexpression . RARRAY
+
+    RARRAY          shift and go to state 175
+
+
+state 133
+
+    (88) fcs1 -> empty .
+    (102) sign -> empty .
+
+    RPAREN          reduce using rule 88 (fcs1 -> empty .)
+    ID              reduce using rule 102 (sign -> empty .)
+    CTEI            reduce using rule 102 (sign -> empty .)
+    CTEF            reduce using rule 102 (sign -> empty .)
+
+
+state 134
+
+    (89) fcs1 -> ssexpression .
+    (90) fcs1 -> ssexpression . COMA fcs1
+
+    RPAREN          reduce using rule 89 (fcs1 -> ssexpression .)
+    COMA            shift and go to state 176
+
+
+state 135
+
+    (87) functioncall -> ID LPAREN fcs1 . RPAREN SEMICOLON
+
+    RPAREN          shift and go to state 177
+
+
+state 136
+
+    (35) assignment -> ID ass1 ASSIGN . ass2 SEMICOLON
+    (38) ass2 -> . functioncall
+    (39) ass2 -> . ssexpression
+    (87) functioncall -> . ID LPAREN fcs1 RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+  ! shift/reduce conflict for ID resolved as shift
+    ID              shift and go to state 140
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+  ! ID              [ reduce using rule 115 (empty -> .) ]
+
+    term                           shift and go to state 64
+    expression                     shift and go to state 75
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    functioncall                   shift and go to state 180
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 179
+    fact                           shift and go to state 76
+    ass2                           shift and go to state 178
+
+state 137
+
+    (68) condition -> IF cos1 RPAREN . block cos3
+    (19) block -> . LBRACKET bls1 RBRACKET
+
+    LBRACKET        shift and go to state 17
+
+    block                          shift and go to state 181
+
+state 138
+
+    (71) cos2 -> ssexpression .
+
+    RPAREN          reduce using rule 71 (cos2 -> ssexpression .)
+
+
+state 139
+
+    (69) cos1 -> LPAREN cos2 .
+
+    RPAREN          reduce using rule 69 (cos1 -> LPAREN cos2 .)
+
+
+state 140
+
+    (87) functioncall -> ID . LPAREN fcs1 RPAREN SEMICOLON
+
+    LPAREN          shift and go to state 86
+
+
+state 141
+
+    (72) cos2 -> functioncall .
+
+    RPAREN          reduce using rule 72 (cos2 -> functioncall .)
+
+
+state 142
+
+    (70) cos1 -> NOT cos2 .
+
+    RPAREN          reduce using rule 70 (cos1 -> NOT cos2 .)
+
+
+state 143
+
+    (96) drawpolygon -> DRAWPOLYGON LPAREN ssexpression . COMA ssexpression COMA color RPAREN SEMICOLON
+
+    COMA            shift and go to state 182
+
+
+state 144
+
+    (95) drawcurve -> DRAWCURVE LPAREN ssexpression . COMA color RPAREN SEMICOLON
+
+    COMA            shift and go to state 183
+
+
+state 145
+
+    (32) pas1 -> type . ID
+    (33) pas1 -> type . ID COMA pas1
+
+    ID              shift and go to state 184
+
+
+state 146
+
+    (30) parameter -> empty .
+
+    RPAREN          reduce using rule 30 (parameter -> empty .)
+
+
+state 147
+
+    (84) function -> FUNC fus1 ID LPAREN parameter . RPAREN block
+
+    RPAREN          shift and go to state 185
+
+
+state 148
+
+    (31) parameter -> pas1 .
+
+    RPAREN          reduce using rule 31 (parameter -> pas1 .)
+
+
+state 149
+
+    (18) ars1 -> LARRAY CTEI RARRAY .
+
+    ID              reduce using rule 18 (ars1 -> LARRAY CTEI RARRAY .)
+    SEMICOLON       reduce using rule 18 (ars1 -> LARRAY CTEI RARRAY .)
+
+
+state 150
+
+    (6) vars -> VAR vas1 COLON type SEMICOLON vas1 .
+
+    FUNC            reduce using rule 6 (vars -> VAR vas1 COLON type SEMICOLON vas1 .)
+    LBRACKET        reduce using rule 6 (vars -> VAR vas1 COLON type SEMICOLON vas1 .)
+
+
+state 151
+
+    (60) exps1 -> PLUS term . exps1
+    (59) exps1 -> . empty
+    (60) exps1 -> . PLUS term exps1
+    (61) exps1 -> . MINUS term exps1
+    (115) empty -> .
+
+    PLUS            shift and go to state 99
+    MINUS           shift and go to state 100
+    GT              reduce using rule 115 (empty -> .)
+    LT              reduce using rule 115 (empty -> .)
+    GE              reduce using rule 115 (empty -> .)
+    LE              reduce using rule 115 (empty -> .)
+    EQUAL           reduce using rule 115 (empty -> .)
+    DIFFERENT       reduce using rule 115 (empty -> .)
+    AND             reduce using rule 115 (empty -> .)
+    OR              reduce using rule 115 (empty -> .)
+    SEMICOLON       reduce using rule 115 (empty -> .)
+    RPAREN          reduce using rule 115 (empty -> .)
+    COMA            reduce using rule 115 (empty -> .)
+    RARRAY          reduce using rule 115 (empty -> .)
+
+    exps1                          shift and go to state 186
+    empty                          shift and go to state 101
+
+state 152
+
+    (61) exps1 -> MINUS term . exps1
+    (59) exps1 -> . empty
+    (60) exps1 -> . PLUS term exps1
+    (61) exps1 -> . MINUS term exps1
+    (115) empty -> .
+
+    PLUS            shift and go to state 99
+    MINUS           shift and go to state 100
+    GT              reduce using rule 115 (empty -> .)
+    LT              reduce using rule 115 (empty -> .)
+    GE              reduce using rule 115 (empty -> .)
+    LE              reduce using rule 115 (empty -> .)
+    EQUAL           reduce using rule 115 (empty -> .)
+    DIFFERENT       reduce using rule 115 (empty -> .)
+    AND             reduce using rule 115 (empty -> .)
+    OR              reduce using rule 115 (empty -> .)
+    SEMICOLON       reduce using rule 115 (empty -> .)
+    RPAREN          reduce using rule 115 (empty -> .)
+    COMA            reduce using rule 115 (empty -> .)
+    RARRAY          reduce using rule 115 (empty -> .)
+
+    exps1                          shift and go to state 187
+    empty                          shift and go to state 101
+
+state 153
+
+    (98) fact -> LPAREN ssexpression RPAREN .
+
+    TIMES           reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    DIVISION        reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    PLUS            reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    MINUS           reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    GT              reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    LT              reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    GE              reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    LE              reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    EQUAL           reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    DIFFERENT       reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    AND             reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    OR              reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    SEMICOLON       reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    COMA            reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    RPAREN          reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+    RARRAY          reduce using rule 98 (fact -> LPAREN ssexpression RPAREN .)
+
+
+state 154
+
+    (57) tes1 -> DIVISION factor . tes1
+    (55) tes1 -> . empty
+    (56) tes1 -> . TIMES factor tes1
+    (57) tes1 -> . DIVISION factor tes1
+    (115) empty -> .
+
+    TIMES           shift and go to state 104
+    DIVISION        shift and go to state 103
+    PLUS            reduce using rule 115 (empty -> .)
+    MINUS           reduce using rule 115 (empty -> .)
+    GT              reduce using rule 115 (empty -> .)
+    LT              reduce using rule 115 (empty -> .)
+    GE              reduce using rule 115 (empty -> .)
+    LE              reduce using rule 115 (empty -> .)
+    EQUAL           reduce using rule 115 (empty -> .)
+    DIFFERENT       reduce using rule 115 (empty -> .)
+    AND             reduce using rule 115 (empty -> .)
+    OR              reduce using rule 115 (empty -> .)
+    SEMICOLON       reduce using rule 115 (empty -> .)
+    RPAREN          reduce using rule 115 (empty -> .)
+    COMA            reduce using rule 115 (empty -> .)
+    RARRAY          reduce using rule 115 (empty -> .)
+
+    tes1                           shift and go to state 188
+    empty                          shift and go to state 106
+
+state 155
+
+    (56) tes1 -> TIMES factor . tes1
+    (55) tes1 -> . empty
+    (56) tes1 -> . TIMES factor tes1
+    (57) tes1 -> . DIVISION factor tes1
+    (115) empty -> .
+
+    TIMES           shift and go to state 104
+    DIVISION        shift and go to state 103
+    PLUS            reduce using rule 115 (empty -> .)
+    MINUS           reduce using rule 115 (empty -> .)
+    GT              reduce using rule 115 (empty -> .)
+    LT              reduce using rule 115 (empty -> .)
+    GE              reduce using rule 115 (empty -> .)
+    LE              reduce using rule 115 (empty -> .)
+    EQUAL           reduce using rule 115 (empty -> .)
+    DIFFERENT       reduce using rule 115 (empty -> .)
+    AND             reduce using rule 115 (empty -> .)
+    OR              reduce using rule 115 (empty -> .)
+    SEMICOLON       reduce using rule 115 (empty -> .)
+    RPAREN          reduce using rule 115 (empty -> .)
+    COMA            reduce using rule 115 (empty -> .)
+    RARRAY          reduce using rule 115 (empty -> .)
+
+    tes1                           shift and go to state 189
+    empty                          shift and go to state 106
+
+state 156
+
+    (103) constant -> ID const .
+
+    TIMES           reduce using rule 103 (constant -> ID const .)
+    DIVISION        reduce using rule 103 (constant -> ID const .)
+    PLUS            reduce using rule 103 (constant -> ID const .)
+    MINUS           reduce using rule 103 (constant -> ID const .)
+    GT              reduce using rule 103 (constant -> ID const .)
+    LT              reduce using rule 103 (constant -> ID const .)
+    GE              reduce using rule 103 (constant -> ID const .)
+    LE              reduce using rule 103 (constant -> ID const .)
+    EQUAL           reduce using rule 103 (constant -> ID const .)
+    DIFFERENT       reduce using rule 103 (constant -> ID const .)
+    AND             reduce using rule 103 (constant -> ID const .)
+    OR              reduce using rule 103 (constant -> ID const .)
+    SEMICOLON       reduce using rule 103 (constant -> ID const .)
+    RPAREN          reduce using rule 103 (constant -> ID const .)
+    COMA            reduce using rule 103 (constant -> ID const .)
+    RARRAY          reduce using rule 103 (constant -> ID const .)
+
+
+state 157
+
+    (106) const -> LARRAY . ssexpression RARRAY
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 190
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 158
+
+    (107) const -> LPAREN . ssexpression RPAREN
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 191
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 159
+
+    (108) const -> empty .
+
+    TIMES           reduce using rule 108 (const -> empty .)
+    DIVISION        reduce using rule 108 (const -> empty .)
+    PLUS            reduce using rule 108 (const -> empty .)
+    MINUS           reduce using rule 108 (const -> empty .)
+    GT              reduce using rule 108 (const -> empty .)
+    LT              reduce using rule 108 (const -> empty .)
+    GE              reduce using rule 108 (const -> empty .)
+    LE              reduce using rule 108 (const -> empty .)
+    EQUAL           reduce using rule 108 (const -> empty .)
+    DIFFERENT       reduce using rule 108 (const -> empty .)
+    AND             reduce using rule 108 (const -> empty .)
+    OR              reduce using rule 108 (const -> empty .)
+    SEMICOLON       reduce using rule 108 (const -> empty .)
+    RPAREN          reduce using rule 108 (const -> empty .)
+    COMA            reduce using rule 108 (const -> empty .)
+    RARRAY          reduce using rule 108 (const -> empty .)
+
+
+state 160
+
+    (53) exs1 -> DIFFERENT exp .
+
+    AND             reduce using rule 53 (exs1 -> DIFFERENT exp .)
+    OR              reduce using rule 53 (exs1 -> DIFFERENT exp .)
+    SEMICOLON       reduce using rule 53 (exs1 -> DIFFERENT exp .)
+    RPAREN          reduce using rule 53 (exs1 -> DIFFERENT exp .)
+    COMA            reduce using rule 53 (exs1 -> DIFFERENT exp .)
+    RARRAY          reduce using rule 53 (exs1 -> DIFFERENT exp .)
+
+
+state 161
+
+    (48) exs1 -> GT exp .
+
+    AND             reduce using rule 48 (exs1 -> GT exp .)
+    OR              reduce using rule 48 (exs1 -> GT exp .)
+    SEMICOLON       reduce using rule 48 (exs1 -> GT exp .)
+    RPAREN          reduce using rule 48 (exs1 -> GT exp .)
+    COMA            reduce using rule 48 (exs1 -> GT exp .)
+    RARRAY          reduce using rule 48 (exs1 -> GT exp .)
+
+
+state 162
+
+    (50) exs1 -> GE exp .
+
+    AND             reduce using rule 50 (exs1 -> GE exp .)
+    OR              reduce using rule 50 (exs1 -> GE exp .)
+    SEMICOLON       reduce using rule 50 (exs1 -> GE exp .)
+    RPAREN          reduce using rule 50 (exs1 -> GE exp .)
+    COMA            reduce using rule 50 (exs1 -> GE exp .)
+    RARRAY          reduce using rule 50 (exs1 -> GE exp .)
+
+
+state 163
+
+    (52) exs1 -> EQUAL exp .
+
+    AND             reduce using rule 52 (exs1 -> EQUAL exp .)
+    OR              reduce using rule 52 (exs1 -> EQUAL exp .)
+    SEMICOLON       reduce using rule 52 (exs1 -> EQUAL exp .)
+    RPAREN          reduce using rule 52 (exs1 -> EQUAL exp .)
+    COMA            reduce using rule 52 (exs1 -> EQUAL exp .)
+    RARRAY          reduce using rule 52 (exs1 -> EQUAL exp .)
+
+
+state 164
+
+    (49) exs1 -> LT exp .
+
+    AND             reduce using rule 49 (exs1 -> LT exp .)
+    OR              reduce using rule 49 (exs1 -> LT exp .)
+    SEMICOLON       reduce using rule 49 (exs1 -> LT exp .)
+    RPAREN          reduce using rule 49 (exs1 -> LT exp .)
+    COMA            reduce using rule 49 (exs1 -> LT exp .)
+    RARRAY          reduce using rule 49 (exs1 -> LT exp .)
+
+
+state 165
+
+    (51) exs1 -> LE exp .
+
+    AND             reduce using rule 51 (exs1 -> LE exp .)
+    OR              reduce using rule 51 (exs1 -> LE exp .)
+    SEMICOLON       reduce using rule 51 (exs1 -> LE exp .)
+    RPAREN          reduce using rule 51 (exs1 -> LE exp .)
+    COMA            reduce using rule 51 (exs1 -> LE exp .)
+    RARRAY          reduce using rule 51 (exs1 -> LE exp .)
+
+
+state 166
+
+    (44) ses1 -> AND sexpression .
+
+    SEMICOLON       reduce using rule 44 (ses1 -> AND sexpression .)
+    RPAREN          reduce using rule 44 (ses1 -> AND sexpression .)
+    COMA            reduce using rule 44 (ses1 -> AND sexpression .)
+    RARRAY          reduce using rule 44 (ses1 -> AND sexpression .)
+
+
+state 167
+
+    (45) ses1 -> OR sexpression .
+
+    SEMICOLON       reduce using rule 45 (ses1 -> OR sexpression .)
+    RPAREN          reduce using rule 45 (ses1 -> OR sexpression .)
+    COMA            reduce using rule 45 (ses1 -> OR sexpression .)
+    RARRAY          reduce using rule 45 (ses1 -> OR sexpression .)
+
+
+state 168
+
+    (94) drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA . ssexpression COMA color RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 192
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 169
+
+    (83) cycle -> WHILE LPAREN ssexpression RPAREN . block
+    (19) block -> . LBRACKET bls1 RBRACKET
+
+    LBRACKET        shift and go to state 17
+
+    block                          shift and go to state 193
+
+state 170
+
+    (76) write -> PRINT LPAREN ssexpression RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 194
+
+
+state 171
+
+    (93) drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA . ssexpression COMA color RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 195
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 172
+
+    (92) drawsquare -> DRAWSQUARE LPAREN ssexpression COMA . ssexpression COMA color RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 196
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 173
+
+    (91) drawline -> DRAWLINE LPAREN ssexpression COMA . ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 197
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 174
+
+    (75) read -> ID ASSIGN INPUT SEMICOLON .
+
+    ID              reduce using rule 75 (read -> ID ASSIGN INPUT SEMICOLON .)
+    IF              reduce using rule 75 (read -> ID ASSIGN INPUT SEMICOLON .)
+    PRINT           reduce using rule 75 (read -> ID ASSIGN INPUT SEMICOLON .)
+    WHILE           reduce using rule 75 (read -> ID ASSIGN INPUT SEMICOLON .)
+    RETURN          reduce using rule 75 (read -> ID ASSIGN INPUT SEMICOLON .)
+    DRAWCIRCLE      reduce using rule 75 (read -> ID ASSIGN INPUT SEMICOLON .)
+    DRAWSQUARE      reduce using rule 75 (read -> ID ASSIGN INPUT SEMICOLON .)
+    DRAWTRIANGLE    reduce using rule 75 (read -> ID ASSIGN INPUT SEMICOLON .)
+    DRAWLINE        reduce using rule 75 (read -> ID ASSIGN INPUT SEMICOLON .)
+    DRAWPOLYGON     reduce using rule 75 (read -> ID ASSIGN INPUT SEMICOLON .)
+    DRAWCURVE       reduce using rule 75 (read -> ID ASSIGN INPUT SEMICOLON .)
+    RBRACKET        reduce using rule 75 (read -> ID ASSIGN INPUT SEMICOLON .)
+
+
+state 175
+
+    (37) ass1 -> LARRAY ssexpression RARRAY .
+
+    ASSIGN          reduce using rule 37 (ass1 -> LARRAY ssexpression RARRAY .)
+
+
+state 176
+
+    (90) fcs1 -> ssexpression COMA . fcs1
+    (88) fcs1 -> . empty
+    (89) fcs1 -> . ssexpression
+    (90) fcs1 -> . ssexpression COMA fcs1
+    (115) empty -> .
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+
+    RPAREN          reduce using rule 115 (empty -> .)
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+
+    term                           shift and go to state 64
+    fact                           shift and go to state 76
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    fcs1                           shift and go to state 198
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 134
+    expression                     shift and go to state 75
+    empty                          shift and go to state 133
+
+state 177
+
+    (87) functioncall -> ID LPAREN fcs1 RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 199
+
+
+state 178
+
+    (35) assignment -> ID ass1 ASSIGN ass2 . SEMICOLON
+
+    SEMICOLON       shift and go to state 200
+
+
+state 179
+
+    (39) ass2 -> ssexpression .
+
+    SEMICOLON       reduce using rule 39 (ass2 -> ssexpression .)
+
+
+state 180
+
+    (38) ass2 -> functioncall .
+
+    SEMICOLON       reduce using rule 38 (ass2 -> functioncall .)
+
+
+state 181
+
+    (68) condition -> IF cos1 RPAREN block . cos3
+    (73) cos3 -> . ELSE block
+    (74) cos3 -> . empty
+    (115) empty -> .
+
+    ELSE            shift and go to state 201
+    ID              reduce using rule 115 (empty -> .)
+    IF              reduce using rule 115 (empty -> .)
+    PRINT           reduce using rule 115 (empty -> .)
+    WHILE           reduce using rule 115 (empty -> .)
+    RETURN          reduce using rule 115 (empty -> .)
+    DRAWCIRCLE      reduce using rule 115 (empty -> .)
+    DRAWSQUARE      reduce using rule 115 (empty -> .)
+    DRAWTRIANGLE    reduce using rule 115 (empty -> .)
+    DRAWLINE        reduce using rule 115 (empty -> .)
+    DRAWPOLYGON     reduce using rule 115 (empty -> .)
+    DRAWCURVE       reduce using rule 115 (empty -> .)
+    RBRACKET        reduce using rule 115 (empty -> .)
+
+    empty                          shift and go to state 203
+    cos3                           shift and go to state 202
+
+state 182
+
+    (96) drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA . ssexpression COMA color RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 204
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 183
+
+    (95) drawcurve -> DRAWCURVE LPAREN ssexpression COMA . color RPAREN SEMICOLON
+    (77) color -> . RED
+    (78) color -> . GREEN
+    (79) color -> . BLUE
+    (80) color -> . YELLOW
+    (81) color -> . BROWN
+    (82) color -> . BLACK
+
+    RED             shift and go to state 211
+    GREEN           shift and go to state 208
+    BLUE            shift and go to state 205
+    YELLOW          shift and go to state 209
+    BROWN           shift and go to state 206
+    BLACK           shift and go to state 210
+
+    color                          shift and go to state 207
+
+state 184
+
+    (32) pas1 -> type ID .
+    (33) pas1 -> type ID . COMA pas1
+
+    RPAREN          reduce using rule 32 (pas1 -> type ID .)
+    COMA            shift and go to state 212
+
+
+state 185
+
+    (84) function -> FUNC fus1 ID LPAREN parameter RPAREN . block
+    (19) block -> . LBRACKET bls1 RBRACKET
+
+    LBRACKET        shift and go to state 17
+
+    block                          shift and go to state 213
+
+state 186
+
+    (60) exps1 -> PLUS term exps1 .
+
+    GT              reduce using rule 60 (exps1 -> PLUS term exps1 .)
+    LT              reduce using rule 60 (exps1 -> PLUS term exps1 .)
+    GE              reduce using rule 60 (exps1 -> PLUS term exps1 .)
+    LE              reduce using rule 60 (exps1 -> PLUS term exps1 .)
+    EQUAL           reduce using rule 60 (exps1 -> PLUS term exps1 .)
+    DIFFERENT       reduce using rule 60 (exps1 -> PLUS term exps1 .)
+    AND             reduce using rule 60 (exps1 -> PLUS term exps1 .)
+    OR              reduce using rule 60 (exps1 -> PLUS term exps1 .)
+    SEMICOLON       reduce using rule 60 (exps1 -> PLUS term exps1 .)
+    RPAREN          reduce using rule 60 (exps1 -> PLUS term exps1 .)
+    COMA            reduce using rule 60 (exps1 -> PLUS term exps1 .)
+    RARRAY          reduce using rule 60 (exps1 -> PLUS term exps1 .)
+
+
+state 187
+
+    (61) exps1 -> MINUS term exps1 .
+
+    GT              reduce using rule 61 (exps1 -> MINUS term exps1 .)
+    LT              reduce using rule 61 (exps1 -> MINUS term exps1 .)
+    GE              reduce using rule 61 (exps1 -> MINUS term exps1 .)
+    LE              reduce using rule 61 (exps1 -> MINUS term exps1 .)
+    EQUAL           reduce using rule 61 (exps1 -> MINUS term exps1 .)
+    DIFFERENT       reduce using rule 61 (exps1 -> MINUS term exps1 .)
+    AND             reduce using rule 61 (exps1 -> MINUS term exps1 .)
+    OR              reduce using rule 61 (exps1 -> MINUS term exps1 .)
+    SEMICOLON       reduce using rule 61 (exps1 -> MINUS term exps1 .)
+    RPAREN          reduce using rule 61 (exps1 -> MINUS term exps1 .)
+    COMA            reduce using rule 61 (exps1 -> MINUS term exps1 .)
+    RARRAY          reduce using rule 61 (exps1 -> MINUS term exps1 .)
+
+
+state 188
+
+    (57) tes1 -> DIVISION factor tes1 .
+
+    PLUS            reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+    MINUS           reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+    GT              reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+    LT              reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+    GE              reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+    LE              reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+    EQUAL           reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+    DIFFERENT       reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+    AND             reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+    OR              reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+    SEMICOLON       reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+    RPAREN          reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+    COMA            reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+    RARRAY          reduce using rule 57 (tes1 -> DIVISION factor tes1 .)
+
+
+state 189
+
+    (56) tes1 -> TIMES factor tes1 .
+
+    PLUS            reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+    MINUS           reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+    GT              reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+    LT              reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+    GE              reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+    LE              reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+    EQUAL           reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+    DIFFERENT       reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+    AND             reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+    OR              reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+    SEMICOLON       reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+    RPAREN          reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+    COMA            reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+    RARRAY          reduce using rule 56 (tes1 -> TIMES factor tes1 .)
+
+
+state 190
+
+    (106) const -> LARRAY ssexpression . RARRAY
+
+    RARRAY          shift and go to state 214
+
+
+state 191
+
+    (107) const -> LPAREN ssexpression . RPAREN
+
+    RPAREN          shift and go to state 215
+
+
+state 192
+
+    (94) drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression . COMA color RPAREN SEMICOLON
+
+    COMA            shift and go to state 216
+
+
+state 193
+
+    (83) cycle -> WHILE LPAREN ssexpression RPAREN block .
+
+    ID              reduce using rule 83 (cycle -> WHILE LPAREN ssexpression RPAREN block .)
+    IF              reduce using rule 83 (cycle -> WHILE LPAREN ssexpression RPAREN block .)
+    PRINT           reduce using rule 83 (cycle -> WHILE LPAREN ssexpression RPAREN block .)
+    WHILE           reduce using rule 83 (cycle -> WHILE LPAREN ssexpression RPAREN block .)
+    RETURN          reduce using rule 83 (cycle -> WHILE LPAREN ssexpression RPAREN block .)
+    DRAWCIRCLE      reduce using rule 83 (cycle -> WHILE LPAREN ssexpression RPAREN block .)
+    DRAWSQUARE      reduce using rule 83 (cycle -> WHILE LPAREN ssexpression RPAREN block .)
+    DRAWTRIANGLE    reduce using rule 83 (cycle -> WHILE LPAREN ssexpression RPAREN block .)
+    DRAWLINE        reduce using rule 83 (cycle -> WHILE LPAREN ssexpression RPAREN block .)
+    DRAWPOLYGON     reduce using rule 83 (cycle -> WHILE LPAREN ssexpression RPAREN block .)
+    DRAWCURVE       reduce using rule 83 (cycle -> WHILE LPAREN ssexpression RPAREN block .)
+    RBRACKET        reduce using rule 83 (cycle -> WHILE LPAREN ssexpression RPAREN block .)
+
+
+state 194
+
+    (76) write -> PRINT LPAREN ssexpression RPAREN SEMICOLON .
+
+    ID              reduce using rule 76 (write -> PRINT LPAREN ssexpression RPAREN SEMICOLON .)
+    IF              reduce using rule 76 (write -> PRINT LPAREN ssexpression RPAREN SEMICOLON .)
+    PRINT           reduce using rule 76 (write -> PRINT LPAREN ssexpression RPAREN SEMICOLON .)
+    WHILE           reduce using rule 76 (write -> PRINT LPAREN ssexpression RPAREN SEMICOLON .)
+    RETURN          reduce using rule 76 (write -> PRINT LPAREN ssexpression RPAREN SEMICOLON .)
+    DRAWCIRCLE      reduce using rule 76 (write -> PRINT LPAREN ssexpression RPAREN SEMICOLON .)
+    DRAWSQUARE      reduce using rule 76 (write -> PRINT LPAREN ssexpression RPAREN SEMICOLON .)
+    DRAWTRIANGLE    reduce using rule 76 (write -> PRINT LPAREN ssexpression RPAREN SEMICOLON .)
+    DRAWLINE        reduce using rule 76 (write -> PRINT LPAREN ssexpression RPAREN SEMICOLON .)
+    DRAWPOLYGON     reduce using rule 76 (write -> PRINT LPAREN ssexpression RPAREN SEMICOLON .)
+    DRAWCURVE       reduce using rule 76 (write -> PRINT LPAREN ssexpression RPAREN SEMICOLON .)
+    RBRACKET        reduce using rule 76 (write -> PRINT LPAREN ssexpression RPAREN SEMICOLON .)
+
+
+state 195
+
+    (93) drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression . COMA color RPAREN SEMICOLON
+
+    COMA            shift and go to state 217
+
+
+state 196
+
+    (92) drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression . COMA color RPAREN SEMICOLON
+
+    COMA            shift and go to state 218
+
+
+state 197
+
+    (91) drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression . COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+
+    COMA            shift and go to state 219
+
+
+state 198
+
+    (90) fcs1 -> ssexpression COMA fcs1 .
+
+    RPAREN          reduce using rule 90 (fcs1 -> ssexpression COMA fcs1 .)
+
+
+state 199
+
+    (87) functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .
+
+    RPAREN          reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+    SEMICOLON       reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+    ID              reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+    IF              reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+    PRINT           reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+    WHILE           reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+    RETURN          reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+    DRAWCIRCLE      reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+    DRAWSQUARE      reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+    DRAWTRIANGLE    reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+    DRAWLINE        reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+    DRAWPOLYGON     reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+    DRAWCURVE       reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+    RBRACKET        reduce using rule 87 (functioncall -> ID LPAREN fcs1 RPAREN SEMICOLON .)
+
+
+state 200
+
+    (35) assignment -> ID ass1 ASSIGN ass2 SEMICOLON .
+
+    ID              reduce using rule 35 (assignment -> ID ass1 ASSIGN ass2 SEMICOLON .)
+    IF              reduce using rule 35 (assignment -> ID ass1 ASSIGN ass2 SEMICOLON .)
+    PRINT           reduce using rule 35 (assignment -> ID ass1 ASSIGN ass2 SEMICOLON .)
+    WHILE           reduce using rule 35 (assignment -> ID ass1 ASSIGN ass2 SEMICOLON .)
+    RETURN          reduce using rule 35 (assignment -> ID ass1 ASSIGN ass2 SEMICOLON .)
+    DRAWCIRCLE      reduce using rule 35 (assignment -> ID ass1 ASSIGN ass2 SEMICOLON .)
+    DRAWSQUARE      reduce using rule 35 (assignment -> ID ass1 ASSIGN ass2 SEMICOLON .)
+    DRAWTRIANGLE    reduce using rule 35 (assignment -> ID ass1 ASSIGN ass2 SEMICOLON .)
+    DRAWLINE        reduce using rule 35 (assignment -> ID ass1 ASSIGN ass2 SEMICOLON .)
+    DRAWPOLYGON     reduce using rule 35 (assignment -> ID ass1 ASSIGN ass2 SEMICOLON .)
+    DRAWCURVE       reduce using rule 35 (assignment -> ID ass1 ASSIGN ass2 SEMICOLON .)
+    RBRACKET        reduce using rule 35 (assignment -> ID ass1 ASSIGN ass2 SEMICOLON .)
+
+
+state 201
+
+    (73) cos3 -> ELSE . block
+    (19) block -> . LBRACKET bls1 RBRACKET
+
+    LBRACKET        shift and go to state 17
+
+    block                          shift and go to state 220
+
+state 202
+
+    (68) condition -> IF cos1 RPAREN block cos3 .
+
+    ID              reduce using rule 68 (condition -> IF cos1 RPAREN block cos3 .)
+    IF              reduce using rule 68 (condition -> IF cos1 RPAREN block cos3 .)
+    PRINT           reduce using rule 68 (condition -> IF cos1 RPAREN block cos3 .)
+    WHILE           reduce using rule 68 (condition -> IF cos1 RPAREN block cos3 .)
+    RETURN          reduce using rule 68 (condition -> IF cos1 RPAREN block cos3 .)
+    DRAWCIRCLE      reduce using rule 68 (condition -> IF cos1 RPAREN block cos3 .)
+    DRAWSQUARE      reduce using rule 68 (condition -> IF cos1 RPAREN block cos3 .)
+    DRAWTRIANGLE    reduce using rule 68 (condition -> IF cos1 RPAREN block cos3 .)
+    DRAWLINE        reduce using rule 68 (condition -> IF cos1 RPAREN block cos3 .)
+    DRAWPOLYGON     reduce using rule 68 (condition -> IF cos1 RPAREN block cos3 .)
+    DRAWCURVE       reduce using rule 68 (condition -> IF cos1 RPAREN block cos3 .)
+    RBRACKET        reduce using rule 68 (condition -> IF cos1 RPAREN block cos3 .)
+
+
+state 203
+
+    (74) cos3 -> empty .
+
+    ID              reduce using rule 74 (cos3 -> empty .)
+    IF              reduce using rule 74 (cos3 -> empty .)
+    PRINT           reduce using rule 74 (cos3 -> empty .)
+    WHILE           reduce using rule 74 (cos3 -> empty .)
+    RETURN          reduce using rule 74 (cos3 -> empty .)
+    DRAWCIRCLE      reduce using rule 74 (cos3 -> empty .)
+    DRAWSQUARE      reduce using rule 74 (cos3 -> empty .)
+    DRAWTRIANGLE    reduce using rule 74 (cos3 -> empty .)
+    DRAWLINE        reduce using rule 74 (cos3 -> empty .)
+    DRAWPOLYGON     reduce using rule 74 (cos3 -> empty .)
+    DRAWCURVE       reduce using rule 74 (cos3 -> empty .)
+    RBRACKET        reduce using rule 74 (cos3 -> empty .)
+
+
+state 204
+
+    (96) drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression . COMA color RPAREN SEMICOLON
+
+    COMA            shift and go to state 221
+
+
+state 205
+
+    (79) color -> BLUE .
+
+    RPAREN          reduce using rule 79 (color -> BLUE .)
+
+
+state 206
+
+    (81) color -> BROWN .
+
+    RPAREN          reduce using rule 81 (color -> BROWN .)
+
+
+state 207
+
+    (95) drawcurve -> DRAWCURVE LPAREN ssexpression COMA color . RPAREN SEMICOLON
+
+    RPAREN          shift and go to state 222
+
+
+state 208
+
+    (78) color -> GREEN .
+
+    RPAREN          reduce using rule 78 (color -> GREEN .)
+
+
+state 209
+
+    (80) color -> YELLOW .
+
+    RPAREN          reduce using rule 80 (color -> YELLOW .)
+
+
+state 210
+
+    (82) color -> BLACK .
+
+    RPAREN          reduce using rule 82 (color -> BLACK .)
+
+
+state 211
+
+    (77) color -> RED .
+
+    RPAREN          reduce using rule 77 (color -> RED .)
+
+
+state 212
+
+    (33) pas1 -> type ID COMA . pas1
+    (32) pas1 -> . type ID
+    (33) pas1 -> . type ID COMA pas1
+    (10) type -> . INT_TYPE
+    (11) type -> . FLOAT_TYPE
+    (12) type -> . BOOL_TYPE
+    (13) type -> . STRING_TYPE
+    (14) type -> . array
+    (15) array -> . INT_TYPE ars1
+    (16) array -> . FLOAT_TYPE ars1
+    (17) array -> . STRING_TYPE ars1
+
+    INT_TYPE        shift and go to state 25
+    FLOAT_TYPE      shift and go to state 22
+    BOOL_TYPE       shift and go to state 24
+    STRING_TYPE     shift and go to state 23
+
+    array                          shift and go to state 26
+    type                           shift and go to state 145
+    pas1                           shift and go to state 223
+
+state 213
+
+    (84) function -> FUNC fus1 ID LPAREN parameter RPAREN block .
+
+    FUNC            reduce using rule 84 (function -> FUNC fus1 ID LPAREN parameter RPAREN block .)
+    LBRACKET        reduce using rule 84 (function -> FUNC fus1 ID LPAREN parameter RPAREN block .)
+
+
+state 214
+
+    (106) const -> LARRAY ssexpression RARRAY .
+
+    TIMES           reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    DIVISION        reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    PLUS            reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    MINUS           reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    GT              reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    LT              reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    GE              reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    LE              reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    EQUAL           reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    DIFFERENT       reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    AND             reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    OR              reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    SEMICOLON       reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    RPAREN          reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    COMA            reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+    RARRAY          reduce using rule 106 (const -> LARRAY ssexpression RARRAY .)
+
+
+state 215
+
+    (107) const -> LPAREN ssexpression RPAREN .
+
+    TIMES           reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    DIVISION        reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    PLUS            reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    MINUS           reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    GT              reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    LT              reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    GE              reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    LE              reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    EQUAL           reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    DIFFERENT       reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    AND             reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    OR              reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    SEMICOLON       reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    RPAREN          reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    COMA            reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+    RARRAY          reduce using rule 107 (const -> LPAREN ssexpression RPAREN .)
+
+
+state 216
+
+    (94) drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA . color RPAREN SEMICOLON
+    (77) color -> . RED
+    (78) color -> . GREEN
+    (79) color -> . BLUE
+    (80) color -> . YELLOW
+    (81) color -> . BROWN
+    (82) color -> . BLACK
+
+    RED             shift and go to state 211
+    GREEN           shift and go to state 208
+    BLUE            shift and go to state 205
+    YELLOW          shift and go to state 209
+    BROWN           shift and go to state 206
+    BLACK           shift and go to state 210
+
+    color                          shift and go to state 224
+
+state 217
+
+    (93) drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA . color RPAREN SEMICOLON
+    (77) color -> . RED
+    (78) color -> . GREEN
+    (79) color -> . BLUE
+    (80) color -> . YELLOW
+    (81) color -> . BROWN
+    (82) color -> . BLACK
+
+    RED             shift and go to state 211
+    GREEN           shift and go to state 208
+    BLUE            shift and go to state 205
+    YELLOW          shift and go to state 209
+    BROWN           shift and go to state 206
+    BLACK           shift and go to state 210
+
+    color                          shift and go to state 225
+
+state 218
+
+    (92) drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA . color RPAREN SEMICOLON
+    (77) color -> . RED
+    (78) color -> . GREEN
+    (79) color -> . BLUE
+    (80) color -> . YELLOW
+    (81) color -> . BROWN
+    (82) color -> . BLACK
+
+    RED             shift and go to state 211
+    GREEN           shift and go to state 208
+    BLUE            shift and go to state 205
+    YELLOW          shift and go to state 209
+    BROWN           shift and go to state 206
+    BLACK           shift and go to state 210
+
+    color                          shift and go to state 226
+
+state 219
+
+    (91) drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA . ssexpression COMA ssexpression COMA color RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 227
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 220
+
+    (73) cos3 -> ELSE block .
+
+    ID              reduce using rule 73 (cos3 -> ELSE block .)
+    IF              reduce using rule 73 (cos3 -> ELSE block .)
+    PRINT           reduce using rule 73 (cos3 -> ELSE block .)
+    WHILE           reduce using rule 73 (cos3 -> ELSE block .)
+    RETURN          reduce using rule 73 (cos3 -> ELSE block .)
+    DRAWCIRCLE      reduce using rule 73 (cos3 -> ELSE block .)
+    DRAWSQUARE      reduce using rule 73 (cos3 -> ELSE block .)
+    DRAWTRIANGLE    reduce using rule 73 (cos3 -> ELSE block .)
+    DRAWLINE        reduce using rule 73 (cos3 -> ELSE block .)
+    DRAWPOLYGON     reduce using rule 73 (cos3 -> ELSE block .)
+    DRAWCURVE       reduce using rule 73 (cos3 -> ELSE block .)
+    RBRACKET        reduce using rule 73 (cos3 -> ELSE block .)
+
+
+state 221
+
+    (96) drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA . color RPAREN SEMICOLON
+    (77) color -> . RED
+    (78) color -> . GREEN
+    (79) color -> . BLUE
+    (80) color -> . YELLOW
+    (81) color -> . BROWN
+    (82) color -> . BLACK
+
+    RED             shift and go to state 211
+    GREEN           shift and go to state 208
+    BLUE            shift and go to state 205
+    YELLOW          shift and go to state 209
+    BROWN           shift and go to state 206
+    BLACK           shift and go to state 210
+
+    color                          shift and go to state 228
+
+state 222
+
+    (95) drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 229
+
+
+state 223
+
+    (33) pas1 -> type ID COMA pas1 .
+
+    RPAREN          reduce using rule 33 (pas1 -> type ID COMA pas1 .)
+
+
+state 224
+
+    (94) drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color . RPAREN SEMICOLON
+
+    RPAREN          shift and go to state 230
+
+
+state 225
+
+    (93) drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color . RPAREN SEMICOLON
+
+    RPAREN          shift and go to state 231
+
+
+state 226
+
+    (92) drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color . RPAREN SEMICOLON
+
+    RPAREN          shift and go to state 232
+
+
+state 227
+
+    (91) drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression . COMA ssexpression COMA color RPAREN SEMICOLON
+
+    COMA            shift and go to state 233
+
+
+state 228
+
+    (96) drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color . RPAREN SEMICOLON
+
+    RPAREN          shift and go to state 234
+
+
+state 229
+
+    (95) drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON .
+
+    ID              reduce using rule 95 (drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON .)
+    IF              reduce using rule 95 (drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON .)
+    PRINT           reduce using rule 95 (drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON .)
+    WHILE           reduce using rule 95 (drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON .)
+    RETURN          reduce using rule 95 (drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWCIRCLE      reduce using rule 95 (drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWSQUARE      reduce using rule 95 (drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWTRIANGLE    reduce using rule 95 (drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWLINE        reduce using rule 95 (drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWPOLYGON     reduce using rule 95 (drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWCURVE       reduce using rule 95 (drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON .)
+    RBRACKET        reduce using rule 95 (drawcurve -> DRAWCURVE LPAREN ssexpression COMA color RPAREN SEMICOLON .)
+
+
+state 230
+
+    (94) drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 235
+
+
+state 231
+
+    (93) drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 236
+
+
+state 232
+
+    (92) drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 237
+
+
+state 233
+
+    (91) drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA . ssexpression COMA color RPAREN SEMICOLON
+    (40) ssexpression -> . sexpression
+    (41) ssexpression -> . NOT sexpression
+    (42) sexpression -> . expression ses1
+    (46) expression -> . exp exs1
+    (58) exp -> . term exps1
+    (54) term -> . factor tes1
+    (97) factor -> . fact
+    (98) fact -> . LPAREN ssexpression RPAREN
+    (99) fact -> . sign constant
+    (100) sign -> . PLUS
+    (101) sign -> . MINUS
+    (102) sign -> . empty
+    (115) empty -> .
+
+    NOT             shift and go to state 70
+    LPAREN          shift and go to state 65
+    PLUS            shift and go to state 71
+    MINUS           shift and go to state 66
+    ID              reduce using rule 115 (empty -> .)
+    CTEI            reduce using rule 115 (empty -> .)
+    CTEF            reduce using rule 115 (empty -> .)
+
+    term                           shift and go to state 64
+    factor                         shift and go to state 67
+    sexpression                    shift and go to state 68
+    sign                           shift and go to state 69
+    empty                          shift and go to state 72
+    exp                            shift and go to state 73
+    ssexpression                   shift and go to state 238
+    expression                     shift and go to state 75
+    fact                           shift and go to state 76
+
+state 234
+
+    (96) drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 239
+
+
+state 235
+
+    (94) drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .
+
+    ID              reduce using rule 94 (drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    IF              reduce using rule 94 (drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    PRINT           reduce using rule 94 (drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    WHILE           reduce using rule 94 (drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    RETURN          reduce using rule 94 (drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWCIRCLE      reduce using rule 94 (drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWSQUARE      reduce using rule 94 (drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWTRIANGLE    reduce using rule 94 (drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWLINE        reduce using rule 94 (drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWPOLYGON     reduce using rule 94 (drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWCURVE       reduce using rule 94 (drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    RBRACKET        reduce using rule 94 (drawtriangle -> DRAWTRIANGLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+
+
+state 236
+
+    (93) drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .
+
+    ID              reduce using rule 93 (drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    IF              reduce using rule 93 (drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    PRINT           reduce using rule 93 (drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    WHILE           reduce using rule 93 (drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    RETURN          reduce using rule 93 (drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWCIRCLE      reduce using rule 93 (drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWSQUARE      reduce using rule 93 (drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWTRIANGLE    reduce using rule 93 (drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWLINE        reduce using rule 93 (drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWPOLYGON     reduce using rule 93 (drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWCURVE       reduce using rule 93 (drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    RBRACKET        reduce using rule 93 (drawcircle -> DRAWCIRCLE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+
+
+state 237
+
+    (92) drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .
+
+    ID              reduce using rule 92 (drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    IF              reduce using rule 92 (drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    PRINT           reduce using rule 92 (drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    WHILE           reduce using rule 92 (drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    RETURN          reduce using rule 92 (drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWCIRCLE      reduce using rule 92 (drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWSQUARE      reduce using rule 92 (drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWTRIANGLE    reduce using rule 92 (drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWLINE        reduce using rule 92 (drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWPOLYGON     reduce using rule 92 (drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWCURVE       reduce using rule 92 (drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    RBRACKET        reduce using rule 92 (drawsquare -> DRAWSQUARE LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+
+
+state 238
+
+    (91) drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression . COMA color RPAREN SEMICOLON
+
+    COMA            shift and go to state 240
+
+
+state 239
+
+    (96) drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .
+
+    ID              reduce using rule 96 (drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    IF              reduce using rule 96 (drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    PRINT           reduce using rule 96 (drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    WHILE           reduce using rule 96 (drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    RETURN          reduce using rule 96 (drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWCIRCLE      reduce using rule 96 (drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWSQUARE      reduce using rule 96 (drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWTRIANGLE    reduce using rule 96 (drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWLINE        reduce using rule 96 (drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWPOLYGON     reduce using rule 96 (drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWCURVE       reduce using rule 96 (drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    RBRACKET        reduce using rule 96 (drawpolygon -> DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+
+
+state 240
+
+    (91) drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA . color RPAREN SEMICOLON
+    (77) color -> . RED
+    (78) color -> . GREEN
+    (79) color -> . BLUE
+    (80) color -> . YELLOW
+    (81) color -> . BROWN
+    (82) color -> . BLACK
+
+    RED             shift and go to state 211
+    GREEN           shift and go to state 208
+    BLUE            shift and go to state 205
+    YELLOW          shift and go to state 209
+    BROWN           shift and go to state 206
+    BLACK           shift and go to state 210
+
+    color                          shift and go to state 241
+
+state 241
+
+    (91) drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color . RPAREN SEMICOLON
+
+    RPAREN          shift and go to state 242
+
+
+state 242
+
+    (91) drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 243
+
+
+state 243
+
+    (91) drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .
+
+    ID              reduce using rule 91 (drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    IF              reduce using rule 91 (drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    PRINT           reduce using rule 91 (drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    WHILE           reduce using rule 91 (drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    RETURN          reduce using rule 91 (drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWCIRCLE      reduce using rule 91 (drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWSQUARE      reduce using rule 91 (drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWTRIANGLE    reduce using rule 91 (drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWLINE        reduce using rule 91 (drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWPOLYGON     reduce using rule 91 (drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    DRAWCURVE       reduce using rule 91 (drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+    RBRACKET        reduce using rule 91 (drawline -> DRAWLINE LPAREN ssexpression COMA ssexpression COMA ssexpression COMA ssexpression COMA color RPAREN SEMICOLON .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for ASSIGN in state 49 resolved as shift
+WARNING: shift/reduce conflict for ID in state 90 resolved as shift
+WARNING: shift/reduce conflict for ID in state 91 resolved as shift
+WARNING: shift/reduce conflict for ID in state 136 resolved as shift

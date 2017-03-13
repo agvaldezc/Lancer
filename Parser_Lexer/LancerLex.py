@@ -6,9 +6,9 @@ import ply.lex as lex
 
 #Diccionario de palabras reservadas {palabra : TOKEN}
 reserved = {
-    'program': 'PROGRAMA',
+    'Program': 'PROGRAMA',
     'If': 'IF',
-    'var': 'VAR',
+    'Var': 'VAR',
     'Else': 'ELSE',
     'Int': 'INT_TYPE',
     'Float': 'FLOAT_TYPE',
@@ -134,7 +134,7 @@ def t_error(t):
 lexer = lex.lex()
 
 #Datos para probar el analizador lexico
-data = 'Int'
+data = 'function();'
 
 #Datos como input del analizador lexico
 lexer.input(data)

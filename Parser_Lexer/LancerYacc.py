@@ -1,18 +1,14 @@
 # Lancer: Created by Alan Valdez & Rafael Manriquez
 
-import ply.yacc as yacc
-
 from LancerLex import tokens
-
-# Lancer: Created by Alan Valdez & Rafael Manriquez
-
 import ply.yacc as yacc
-
-from LancerLex import tokens
+import sys
 
 #Reglas gramaticales expresadas en funciones
 def p_expression_program(p):
-    'program : PROGRAMA ID SEMICOLON prs1 prs2 block'
+    'program : PROGRAMA MAIN SEMICOLON prs1 prs2 block'
+    print("Correct Sintax.")
+
 
 def p_expression_prs1(p):
     '''prs1 : vars
@@ -29,6 +25,19 @@ def p_expression_vas1(p):
     '''vas1 : ID
             | ID COMA vas1
             | empty'''
+
+#def p_expression_(p):
+#	'''to_var_table :'''
+	#print p[-1]
+#	varid = p[-1]
+	#print varid
+#	if varid not in varTable['global'] and varid not in varTable[scope[len(scope)-1]]:
+#		ids.add(varid)
+#		varTable[scope[len(scope)-1]][varid]  = p[-3]
+#	else:
+#		print('Variable "%s" already registered' % (varid))
+#		sys.exit()
+#print dirProcedures[scope[len(scope)-1]]
 
 def p_expression_type(p):
     '''type : INT_TYPE
@@ -74,7 +83,7 @@ def p_expression_return(p):
     'return : RETURN ssexpression SEMICOLON'
 
 def p_expression_assignment(p):
-    'assignment : ID ass1 ASSIGN ass2'
+    'assignment : ID ass1 ASSIGN ass2 SEMICOLON'
 
 def p_expression_ass1(p):
     '''ass1 : empty
@@ -113,16 +122,16 @@ def p_expression_term(p):
 
 def p_expression_tes1(p):
     '''tes1 : empty
-          | TIMES term
-          | DIVISION term'''
+          | TIMES factor tes1
+          | DIVISION factor tes1'''
 
 def p_expression_exp(p):
     'exp : term exps1'
 
 def p_expression_exps1(p):
     '''exps1 : empty
-          | PLUS term
-          | MINUS term'''
+          | PLUS term exps1
+          | MINUS term exps1'''
 
 def p_expression_predefined(p):
     '''predefined : drawcircle
@@ -144,15 +153,14 @@ def p_expression_cos2(p):
           | functioncall'''
 
 def p_expression_cos3(p):
-    '''cos3 : empty
-          | ELSE block
-          | ELSEIF cos1'''
+    '''cos3 : ELSE block
+            | empty'''
 
 def p_expression_read(p):
     'read : ID ASSIGN INPUT SEMICOLON'
 
 def p_expression_write(p):
-    '''write : PRINT LPAREN ssexpression RPAREN'''
+    '''write : PRINT LPAREN ssexpression RPAREN SEMICOLON'''
 
 def p_expression_color(p):
     '''color : RED
@@ -199,9 +207,26 @@ def p_expression_drawpolygon(p):
     'drawpolygon : DRAWPOLYGON LPAREN ssexpression COMA ssexpression COMA color RPAREN SEMICOLON'
 
 def p_expression_factor(p):
-    '''factor : LPAREN ssexpression RPAREN
-              | PLUS fas1
-              | MINUS fas1'''
+    '''factor : fact'''
+
+def p_expression_fact(p):
+    '''fact : LPAREN ssexpression RPAREN
+            | sign constant'''
+
+def p_expression_sign(p):
+    '''sign : PLUS
+            | MINUS
+            | empty'''
+
+def p_expression_constant(p):
+    '''constant : ID const
+                 | CTEI
+                 | CTEF'''
+
+def p_expression_const(p):
+    '''const : LARRAY ssexpression RARRAY
+             | LPAREN ssexpression RPAREN
+             | empty'''
 
 def p_expression_fas1(p):
     '''fas1 : ID fas2
@@ -226,7 +251,7 @@ def p_empty(p):
 parser = yacc.yacc(debug=1)
 
 #Escribir el nombre o ruta del archivo a leer
-print("Nombre o ruta dek archivo a analizar: ")
+print("Nombre o ruta del archivo a analizar: ")
 fileName = raw_input()
 
 #Abrir archivo
