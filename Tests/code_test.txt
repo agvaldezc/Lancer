@@ -1,0 +1,80 @@
+program agvaldezc;
+
+var x[20] : bool; z : string; y : int; w : float;
+
+func int funcion1(int a[30], int b, bool c, string d) {
+    alan = alex + be;
+
+    x = input;
+
+    if ((alan == 1234) || (!!(x <> y))) {
+        print("esto es un string");
+        al = d+n;
+    }
+
+    a = uno(asdf, asdf, (1+3*32/1234)) / dos[(123+123)];
+
+    variable1 = variable2 / variable3 + (variable4 * variable5);
+}
+
+func int funcion2() {
+      if (alan <> andres) {
+        print    ("esto es un string");
+        al = d+n;
+    } else {
+        print("otro string pero en else");
+    }
+}
+
+func bool funcion3() {
+
+    while (alan <> 7136987613 && alexis == "alexis") {
+         if ((alan == 1234) || (!!(x <> y))) {
+        print("esto es un string");
+        al = d+n;
+    }
+
+        if (alan <> andres) {
+            print    ("esto es un string");
+            al = d+n;
+        } else {
+            print("otro string pero en else");
+        }
+    }
+}
+
+{
+    alan = alex + be;
+
+    x = input;
+
+    if ((alan == 1234) || (!!(x <> y))) {
+        print("esto es un string");
+        al = d+n;
+    }
+
+    if (alan <> andres) {
+        print    ("esto es un string");
+        al = d+n;
+    } else {
+        print("otro string pero en else");
+    }
+
+    while (alan <> 7136987613 && alexis == "alexis") {
+         if ((alan == 1234) || (!!(x <> y))) {
+        print("esto es un string");
+        al = d+n;
+    }
+
+        if (alan <> andres) {
+            print    ("esto es un string");
+            al = d+n;
+        } else {
+            print("otro string pero en else");
+        }
+    }
+
+   a[(213+a/cd)] = uno(asdf, asdf, (1+3*32/1234), dos[(123+123)]) / dos[(123+123)];
+
+    variable1 = variable2 / variable3 + (variable4 * variable5);
+}

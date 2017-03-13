@@ -1,1 +1,4 @@
 .idea
+*/__init__.py
+Parser_Lexer/parser.out
+Parser_Lexer/parsetab.py
