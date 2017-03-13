@@ -9,7 +9,6 @@ def p_expression_program(p):
     'program : PROGRAMA MAIN SEMICOLON prs1 prs2 block'
     print("Correct Sintax.")
 
-
 def p_expression_prs1(p):
     '''prs1 : vars
             | empty'''
@@ -25,19 +24,6 @@ def p_expression_vas1(p):
     '''vas1 : ID
             | ID COMA vas1
             | empty'''
-
-#def p_expression_(p):
-#	'''to_var_table :'''
-	#print p[-1]
-#	varid = p[-1]
-	#print varid
-#	if varid not in varTable['global'] and varid not in varTable[scope[len(scope)-1]]:
-#		ids.add(varid)
-#		varTable[scope[len(scope)-1]][varid]  = p[-3]
-#	else:
-#		print('Variable "%s" already registered' % (varid))
-#		sys.exit()
-#print dirProcedures[scope[len(scope)-1]]
 
 def p_expression_type(p):
     '''type : INT_TYPE
