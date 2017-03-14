@@ -1,20 +1,46 @@
 #Alan Gustavo Valdez Cascajares A01336955
+#Rafael Manrriquez Valdez
 
 import ply.yacc as yacc
+import sys as sys
 from LancerLex import tokens
+from Directories.FunctionDirectory import FunctionDirectory
+
+funcDir = FunctionDirectory()
+currentScope = ""
 
 #Reglas gramaticales expresadas en funciones
 def p_expression_programa(p):
     'prog : PROGRAMA ID create_func_dir SEMICOLON vars function bloque'
+    print('Correct Syntax.')
 
 def p_expression_create_func_dir(p):
     'create_func_dir : '
-    print (p[-1])
+
+    #Save current function name (scope)
+    global currentScope
+    currentScope = p[-1]
+
+    #Create function directory variable
+    funcDir.addFunction(currentScope, 'void')
 
 
 def p_expression_vars(p):
-    '''vars : VAR ID array COLON type SEMICOLON masvars
+    '''vars : VAR ID array COLON type add_var SEMICOLON masvars
             | empty'''
+
+def p_expression_add_var(p):
+    'add_var : '
+
+    global currentScope
+
+    varName = p[-4]
+    varType = p[-1]
+
+    if funcDir.addFunctionVariable(currentScope, varName, varType):
+        funcDir.addParameterTypes(currentScope, [varType])
+    else:
+        sys.exit(-1)
 
 def p_expression_type(p):
     '''type : INT_TYPE
@@ -22,30 +48,69 @@ def p_expression_type(p):
             | STRING_TYPE
             | BOOL_TYPE
             | array'''
+    p[0] = p[1]
 
 def p_expression_array(p):
     '''array : LARRAY ss_expression RARRAY
              | empty'''
 
 def p_expression_masvars(p):
-    '''masvars : ID COLON type SEMICOLON masvars
+    '''masvars : ID COLON type add_masvars SEMICOLON masvars
                 | empty'''
 
+def p_expression_add_masvars(p):
+    'add_masvars : '
+    global currentScope
+
+    varName = p[-3]
+    varType = p[-1]
+
+    if funcDir.addFunctionVariable(currentScope, varName, varType):
+        funcDir.addParameterTypes(currentScope, [varType])
+    else:
+        sys.exit(-1)
+
 def p_expression_function(p):
-    '''function : FUNC func_type ID LPAREN parameters RPAREN bloque function
+    '''function : FUNC func_type ID add_to_func_dir LPAREN parameters RPAREN bloque function
                 | empty'''
 
 def p_expression_func_type(p):
     '''func_type : VOID
                  | type'''
+    p[0] = p[1]
+
+def p_expression_add_to_func_dir(p):
+    'add_to_func_dir : '
+
+    global currentScope
+
+    funcName = p[-1]
+    funcType = p[-2]
+
+    if not funcDir.functionExists(funcName):
+        currentScope = funcName
+        funcDir.addFunction(funcName, funcType)
+    else:
+        sys.exit(-1)
 
 def p_expression_parameters(p):
-    '''parameters : type ID array more_params
+    '''parameters : type ID add_params array more_params
                   | empty'''
 
 def p_expression_more_params(p):
-    '''more_params : COMA type ID more_params
+    '''more_params : COMA type ID add_params more_params
                    | empty'''
+
+def p_expression_add_params(p):
+    'add_params : '
+
+    global currentScope
+
+    paramName = p[-1]
+    paramType = p[-2]
+
+    if funcDir.addFunctionVariable(currentScope, paramName, paramType):
+        funcDir.addParameterTypes(currentScope, [paramType])
 
 def p_expression_bloque(p):
     'bloque : LBRACKET est RBRACKET'
@@ -223,6 +288,13 @@ print (code)
 
 #Parsear el codigo leido del archivo
 parser.parse(code)
+
+print(funcDir.functions)
+
+for function in funcDir.functions:
+    func = funcDir.functions[function]
+    print(func)
+
 # while True:
 #    try:
 #        s = raw_input()
