@@ -294,6 +294,8 @@ print(funcDir.functions)
 for function in funcDir.functions:
     func = funcDir.functions[function]
     print(func)
+    print(func['variables'].variables)
+
 
 # while True:
 #    try:
