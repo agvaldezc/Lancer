@@ -11,5 +11,11 @@ class VarTable:
         else:
             return False
 
+    def getVariable(self, variableName):
+        if self.variables.has_key(variableName):
+            return (variableName, self.variables[variableName])
+        else:
+            return None
+
 
 

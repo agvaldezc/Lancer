@@ -253,6 +253,3 @@ class SemanticCube:
 
     def getSemanticType(self, type1, type2, operator):
         return self.cube[self.TYPE_CODE[type1], self.TYPE_CODE[type2], self.OPERATOR_CODE[operator]]
-
-cube = SemanticCube()
-print(cube.getSemanticType('int', 'bool', '+'))

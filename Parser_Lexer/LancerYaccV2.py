@@ -1,24 +1,48 @@
 #Alan Gustavo Valdez Cascajares A01336955
-#Rafael Manrriquez Valdez
+#Rafael Manriquez Valdez
 
 import ply.yacc as yacc
 import sys as sys
 from LancerLex import tokens
 from Directories.FunctionDirectory import FunctionDirectory
+from Directories.Stack import Stack
+from Semantic_Cubes.SemanticCubeDict import SemanticCubeDict
+from Quadruples.Quadruple import Quadruple
 
 funcDir = FunctionDirectory()
 currentScope = ""
+globalScope = ""
+OperandStack = []
+OperatorStack = []
+TypeStack = []
+semanticCube = SemanticCubeDict()
+quadruples = []
+tempCont = 0
+
+ERROR_CODES = {'func_already_declared': -5, 'variable_already_declared': -6, 'func_not_declared': -7,
+               'variable_not_declared': -8, 'type_mismatch': -9, 'syntax_error': -10}
 
 #Reglas gramaticales expresadas en funciones
 def p_expression_programa(p):
-    'prog : PROGRAMA ID create_func_dir SEMICOLON vars function bloque'
+    'prog : PROGRAMA ID create_func_dir SEMICOLON vars function MAIN switch_global_scope bloque'
     print('Correct Syntax.')
+
+def p_expression_switch_global_scope(p):
+    'switch_global_scope : '
+
+    global globalScope
+    global currentScope
+
+    currentScope = globalScope
 
 def p_expression_create_func_dir(p):
     'create_func_dir : '
 
     #Save current function name (scope)
     global currentScope
+    global globalScope
+
+    globalScope = p[-1]
     currentScope = p[-1]
 
     #Create function directory variable
@@ -40,7 +64,8 @@ def p_expression_add_var(p):
     if funcDir.addFunctionVariable(currentScope, varName, varType):
         funcDir.addParameterTypes(currentScope, [varType])
     else:
-        sys.exit(-1)
+        print('Error: Variable already declared.')
+        sys.exit(ERROR_CODES['variable_already_declared'])
 
 def p_expression_type(p):
     '''type : INT_TYPE
@@ -68,7 +93,8 @@ def p_expression_add_masvars(p):
     if funcDir.addFunctionVariable(currentScope, varName, varType):
         funcDir.addParameterTypes(currentScope, [varType])
     else:
-        sys.exit(-1)
+        print('Error: Variable already declared.')
+        sys.exit(ERROR_CODES['variable_already_declared'])
 
 def p_expression_function(p):
     '''function : FUNC func_type ID add_to_func_dir LPAREN parameters RPAREN bloque function
@@ -91,7 +117,8 @@ def p_expression_add_to_func_dir(p):
         currentScope = funcName
         funcDir.addFunction(funcName, funcType)
     else:
-        sys.exit(-1)
+        print('Error: Function already declared.')
+        sys.exit(ERROR_CODES['func_already_declared'])
 
 def p_expression_parameters(p):
     '''parameters : type ID add_params array more_params
@@ -185,24 +212,24 @@ def p_expression_ciclo(p):
     '''ciclo : WHILE LPAREN ss_expression RPAREN bloque'''
 
 def p_exxpression_lectura(p):
-    'lectura : ID array ASSIGN INPUT SEMICOLON'
+    'lectura : ID push_id_operand array ASSIGN push_operator INPUT SEMICOLON'
 
 def p_expression_asignacion(p):
-    'asignacion : ID array ASSIGN ss_expression SEMICOLON'
+    'asignacion : ID push_id_operand array ASSIGN push_operator ss_expression SEMICOLON'
 
 def p_expression_ss_expression(p):
     '''ss_expression : ss_not s_expression'''
 
 def p_expression_ss_not(p):
-    '''ss_not : NOT
+    '''ss_not : NOT push_operator
               | empty'''
 
 def p_expression_s_expression(p):
     's_expression : expresion s_and_or'
 
 def p_expression_s_and_or(p):
-    '''s_and_or : AND s_expression
-                | OR s_expression
+    '''s_and_or : AND push_operator s_expression
+                | OR push_operator s_expression
                 | empty'''
 
 def p_expression_expresion(p):
@@ -213,45 +240,130 @@ def p_expression_expr(p):
 
 def p_expression_exp(p):
     '''exp : empty
-          | GT expr
-          | LT expr
-          | GE expr
-          | LE expr
-          | EQUAL expr
-          | DIFFERENT expr'''
+          | GT push_operator expr solve_pending_relational
+          | LT push_operator expr solve_pending_relational
+          | GE push_operator expr solve_pending_relational
+          | LE push_operator expr solve_pending_relational
+          | EQUAL push_operator expr solve_pending_relational
+          | DIFFERENT push_operator expr solve_pending_relational'''
+
+def p_expression_solve_pending_relational(p):
+    'solve_pending_relational : '
+
+    relOps = {'<', '>', '==', '>=', '<=', '<>'}
+
+    if OperatorStack[len(OperatorStack) - 1] in relOps:
+        solvePendingOperations(p)
 
 def p_exppression_termino(p):
     'termino : factor fact'
 
 def p_expression_term(p):
-    '''term : PLUS termino term
-        | MINUS termino term
+    '''term : PLUS push_operator termino solve_pending_term term
+        | MINUS push_operator termino solve_pending_term term
         | empty'''
+
+def p_expression_solve_pending_term(p):
+    'solve_pending_term : '
+
+    if OperatorStack[len(OperatorStack) - 1] == '+' or OperatorStack[len(OperatorStack) - 1] == '-':
+        solvePendingOperations(p)
 
 def p_expression_factor(p):
-    '''factor : LPAREN ss_expression RPAREN
+    '''factor : LPAREN create_false_bottom ss_expression RPAREN delete_false_bottom
               | signo constante'''
 
+def p_expression_create_false_bottom(p):
+    'create_false_bottom : '
+
+    OperatorStack.append('(')
+
+def p_expression_delete_false_bottom(p):
+    'delete_false_bottom : '
+
+    OperatorStack.pop()
+
 def p_expression_fact(p):
-    '''fact : TIMES factor fact
-        | DIVISION factor fact
+    '''fact : TIMES push_operator factor solve_pending_factor fact
+        | DIVISION push_operator factor solve_pending_factor fact
         | empty'''
 
+def p_expression_solve_pending_factor(p):
+    'solve_pending_factor : '
+
+    if OperatorStack[len(OperatorStack) - 1] == '*' or OperatorStack[len(OperatorStack) - 1] == '/':
+        solvePendingOperations(p)
+
 def p_expression_signo(p):
-    '''signo : PLUS
-            | MINUS
+    '''signo : PLUS push_operator
+            | MINUS push_operator
             | empty'''
 
 def p_expression_constante(p):
-    '''constante : ID id_func_array
-                 | CTEI
-                 | CTEF
-                 | CTES'''
+    '''constante : ID push_id_operand id_func_array
+                 | CTEI push_int_operand
+                 | CTEF push_float_operand
+                 | CTES push_string_operand'''
 
 def p_expression_id_func_array(p):
     '''id_func_array : LARRAY expr RARRAY
                      | LPAREN call_params RPAREN
                      | empty'''
+
+def p_expression_push_id_operand(p):
+    '''push_id_operand : '''
+
+    global currentScope
+
+    variable = funcDir.getVariable(currentScope, p[-1])
+
+    if variable is None:
+        variable = funcDir.getVariable(globalScope, p[-1])
+
+        if variable is None:
+            print('Error: variable {0} not declared in line {1}'.format(p[-1], p.lexer.lineno))
+            sys.exit(-2)
+        else:
+            OperandStack.append(variable[0])
+            TypeStack.append(variable[1])
+            print(variable)
+    else:
+        OperandStack.append(variable[0])
+        TypeStack.append(variable[1])
+        print(variable)
+
+
+def p_expression_push_int_operand(p):
+    '''push_int_operand : '''
+
+    global OperandStack
+    global OperatorStack
+
+    OperandStack.append(p[-1])
+    TypeStack.append('int')
+
+def p_expression_push_float_operand(p):
+    '''push_float_operand : '''
+
+    global OperandStack
+    global OperatorStack
+
+    OperandStack.append(p[-1])
+    TypeStack.append('float')
+
+def p_expression_push_string_operand(p):
+    '''push_string_operand : '''
+
+    global OperandStack
+    global OperatorStack
+
+    OperandStack.append(p[-1])
+    TypeStack.append('string')
+
+def p_expression_push_operator(p):
+    'push_operator : '
+
+    OperatorStack.append(p[-1])
 
 def p_expression_escritura(p):
     'escritura : PRINT LPAREN ss_expression RPAREN SEMICOLON'
@@ -265,12 +377,50 @@ def p_expression_else(p):
 
 #Error de sintaxis
 def p_error(p):
-    print("Syntax error in input!")
+    print('Syntax error in input in line {0}'.format(p.lexer.lineno))
+    sys.exit(ERROR_CODES['syntax_error'])
 
 #Definicion de espacio vacio
 def p_empty(p):
     'empty :'
     pass
+
+def solvePendingOperations(p):
+    right_operand = OperandStack.pop()
+    right_type = TypeStack.pop()
+    left_operand = OperandStack.pop()
+    left_type = TypeStack.pop()
+    operator = OperatorStack.pop()
+
+    global semanticCube
+    global tempCont
+
+    semanticResult = semanticCube.getSemanticType(left_type, right_type, operator)
+
+    if semanticResult != 'error':
+        quad = Quadruple(operator, left_operand, right_operand, tempCont)
+        quadruples.append(quad)
+
+        tempCont += 1
+
+        #int
+        if semanticResult == 0:
+            OperandStack.append('1')
+        #float
+        if semanticResult == 1:
+            OperandStack.append('1.0')
+        #bool
+        if semanticResult == 2:
+            OperandStack.append('true')
+        #string
+        if semanticResult == 3:
+            OperandStack.append('hello')
+
+        TypeStack.append(semanticResult)
+    else:
+        print('ERROR: type mismatch in line {0}'.format(p.lexer.lineno))
+        sys.exit(ERROR_CODES['type_mismatch'])
+
 
 #Construir el parser
 parser = yacc.yacc(debug=1)
@@ -296,6 +446,14 @@ for function in funcDir.functions:
     print(func)
     print(func['variables'].variables)
 
+print(OperandStack)
+print(TypeStack)
+print(OperatorStack)
+
+for quad in quadruples:
+    quad.printQuad()
+
+print('current scope: {0}, global scope: {1}'.format(currentScope, globalScope))
 
 # while True:
 #    try:

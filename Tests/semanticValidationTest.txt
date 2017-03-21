@@ -1,0 +1,11 @@
+program agvaldezc;
+
+var x : float; z : float; y : int; w : float;
+
+func int funcion1(int a, int b, int c, string d) {
+    a = b + c;
+}
+
+main {
+    x = (z * (y - w));
+}
