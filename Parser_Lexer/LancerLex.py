@@ -70,7 +70,6 @@ tokens = [
              'DIFFERENT',
              'DOT',
              'ASSIGN',
-             'STRING',
              'CTEI',
              'CTEF',
              'CTES',
@@ -96,14 +95,13 @@ t_NOT = r'\!!'
 t_EQUAL = r'\=='
 t_COLON = r'\:'
 t_SEMICOLON = r'\;'
-t_STRING = r'\".*\"'
 t_COMA = r'\,'
 t_AND = r'\&&'
 t_OR = r'\|\|'
 t_DIFFERENT = r'\<>'
 t_DOT = r'\.'
 t_ASSIGN = r'\='
-t_CTES = r'\".*\"'
+t_CTES = r'\".*\" | \'.*\''
 
 # t_BINARY = r'[01]+[bB]'
 # t_INTEGER = r'[0-9]+'

@@ -15,9 +15,11 @@ globalScope = ""
 OperandStack = []
 OperatorStack = []
 TypeStack = []
+JumpStack = []
 semanticCube = SemanticCubeDict()
 quadruples = []
 tempCont = 0
+quadCont = 1
 
 ERROR_CODES = {'func_already_declared': -5, 'variable_already_declared': -6, 'func_not_declared': -7,
                'variable_not_declared': -8, 'type_mismatch': -9, 'syntax_error': -10}
@@ -209,13 +211,27 @@ def p_expression_more_call_params(p):
                         | empty'''
 
 def p_expression_ciclo(p):
-    '''ciclo : WHILE LPAREN ss_expression RPAREN bloque'''
+    '''ciclo : WHILE create_while_quad LPAREN ss_expression RPAREN while_expression_evaluation bloque while_end'''
 
-def p_exxpression_lectura(p):
+def p_exxpression_create_while_quad(p):
+    'create_while_quad : '
+    whileConditionQuads(p)
+
+def p_expression_while_expression_evaluation(p):
+    'while_expression_evaluation : '
+    whileEvaluationQuad(p)
+
+def p_expression_while_end(p):
+    'while_end : '
+    whileEndQuad(p)
+
+def p_expression_lectura(p):
     'lectura : ID push_id_operand array ASSIGN push_operator INPUT SEMICOLON'
+    inputAssignment(p)
 
 def p_expression_asignacion(p):
     'asignacion : ID push_id_operand array ASSIGN push_operator ss_expression SEMICOLON'
+    assignQuad(p)
 
 def p_expression_ss_expression(p):
     '''ss_expression : ss_not s_expression'''
@@ -303,7 +319,13 @@ def p_expression_constante(p):
     '''constante : ID push_id_operand id_func_array
                  | CTEI push_int_operand
                  | CTEF push_float_operand
-                 | CTES push_string_operand'''
+                 | CTES push_string_operand
+                 | cteb push_bool_operand'''
+
+def p_expression_cteb(p):
+    '''cteb : TRUE
+            | FALSE'''
+    p[0] = p[1]
 
 def p_expression_id_func_array(p):
     '''id_func_array : LARRAY expr RARRAY
@@ -360,6 +382,15 @@ def p_expression_push_string_operand(p):
     OperandStack.append(p[-1])
     TypeStack.append('string')
 
+def p_expression_push_bool_operand(p):
+    'push_bool_operand : '
+
+    global OperandStack
+    global OperatorStack
+
+    OperandStack.append(p[-1])
+    TypeStack.append('bool')
+
 def p_expression_push_operator(p):
     'push_operator : '
 
@@ -369,11 +400,20 @@ def p_expression_escritura(p):
     'escritura : PRINT LPAREN ss_expression RPAREN SEMICOLON'
 
 def p_expression_condicion(p):
-    'condicion : IF LPAREN ss_expression RPAREN bloque else'
+    'condicion : IF LPAREN ss_expression RPAREN create_condition_quad bloque else'
+    endConditionQuads(p)
+
+def p_expression_create_condition_quad(p):
+    'create_condition_quad : '
+    conditionQuads(p)
 
 def p_expression_else(p):
-    '''else : ELSE bloque
+    '''else : ELSE else_condition_quad bloque
             | empty'''
+
+def p_expression_else_condition_quad(p):
+    'else_condition_quad : '
+    elseConditionQuad(p)
 
 #Error de sintaxis
 def p_error(p):
@@ -391,36 +431,142 @@ def solvePendingOperations(p):
     left_operand = OperandStack.pop()
     left_type = TypeStack.pop()
     operator = OperatorStack.pop()
+    tempVarString = "t"
 
     global semanticCube
     global tempCont
+    global quadCont
 
     semanticResult = semanticCube.getSemanticType(left_type, right_type, operator)
 
     if semanticResult != 'error':
-        quad = Quadruple(operator, left_operand, right_operand, tempCont)
+        tempVarString = tempVarString + str(tempCont)
+        quad = Quadruple(quadCont, operator, left_operand, right_operand, tempVarString)
         quadruples.append(quad)
 
+        quadCont += 1
         tempCont += 1
 
-        #int
-        if semanticResult == 0:
-            OperandStack.append('1')
-        #float
-        if semanticResult == 1:
-            OperandStack.append('1.0')
-        #bool
-        if semanticResult == 2:
-            OperandStack.append('true')
-        #string
-        if semanticResult == 3:
-            OperandStack.append('hello')
+        OperandStack.append(tempVarString)
 
         TypeStack.append(semanticResult)
     else:
-        print('ERROR: type mismatch in line {0}'.format(p.lexer.lineno))
+        print('ERROR: operation type mismatch in line {0}'.format(p.lexer.lineno))
         sys.exit(ERROR_CODES['type_mismatch'])
 
+def assignQuad(p):
+    right_operand = OperandStack.pop()
+    right_type = TypeStack.pop()
+    left_operand = OperandStack.pop()
+    left_type = TypeStack.pop()
+    operator = OperatorStack.pop()
+
+    global semanticCube
+    global tempCont
+    global quadCont
+
+    semanticResult = semanticCube.getSemanticType(left_type, right_type, operator)
+
+    if semanticResult != 'error':
+        quad = Quadruple(quadCont, operator, right_operand, None, left_operand)
+        quadruples.append(quad)
+
+        quadCont += 1
+    else:
+        print('ERROR: assignment type mismatch in line {0}'.format(p.lexer.lineno))
+        sys.exit(ERROR_CODES['type_mismatch'])
+
+def inputAssignment(p):
+    global tempCont
+    global quadCont
+
+    tempVar = 't' + str(tempCont)
+
+    inputQuad = Quadruple(quadCont, 'input', None, None, tempVar)
+    quadruples.append(inputQuad)
+
+    quadCont += 1
+
+    OperandStack.append(tempVar)
+    TypeStack.append('InputType')
+
+    right_operand = OperandStack.pop()
+    right_type = TypeStack.pop()
+    left_operand = OperandStack.pop()
+    left_type = TypeStack.pop()
+    operator = OperatorStack.pop()
+
+    tempCont = tempCont + 1
+
+    assignInputQuad = Quadruple(quadCont, operator, right_operand, None, left_operand)
+    quadruples.append(assignInputQuad)
+
+    quadCont += 1
+
+def conditionQuads(p):
+    expressionType = TypeStack.pop()
+
+    if expressionType != 'bool':
+        print('ERROR: operation type mismatch in line {0}'.format(p.lexer.lineno))
+        sys.exit(ERROR_CODES['type_mismatch'])
+    else:
+        global quadCont
+
+        expressionResult = OperandStack.pop()
+        quad = Quadruple(quadCont, 'GoToF', expressionResult, None, None)
+        quadruples.append(quad)
+
+        JumpStack.append(quadCont - 1)
+        quadCont += 1
+
+def elseConditionQuad(p):
+    global quadCont
+
+    quad = Quadruple(quadCont, 'GoTo', None, None, None)
+    quadruples.append(quad)
+
+    false = JumpStack.pop()
+
+    JumpStack.append(quadCont - 1)
+    quadCont += 1
+
+    quad = quadruples[false]
+
+    quad.fillJumpQuad(quadCont)
+
+def endConditionQuads(p):
+    end = JumpStack.pop()
+    quad = quadruples[end]
+
+    quad.fillJumpQuad(quadCont)
+
+def whileConditionQuads(p):
+    JumpStack.append(quadCont)
+
+def whileEvaluationQuad(p):
+    expressionType = TypeStack.pop()
+
+    if expressionType != 'bool':
+        print('ERROR: operation type mismatch in line {0}'.format(p.lexer.lineno))
+        sys.exit(ERROR_CODES['type_mismatch'])
+    else:
+        global quadCont
+
+        expressionResult = OperandStack.pop()
+        quad = Quadruple(quadCont, 'GoToF', expressionResult, None, None)
+        quadruples.append(quad)
+
+        JumpStack.append(quadCont - 1)
+        quadCont += 1
+
+def whileEndQuad(p):
+    end = JumpStack.pop()
+    ret = JumpStack.pop()
+
+    endQuad = quadruples[end]
+    quad = Quadruple(quadCont, 'GoTo', None, None, ret)
+
+    endQuad.fillJumpQuad(quadCont)
 
 #Construir el parser
 parser = yacc.yacc(debug=1)
@@ -439,21 +585,22 @@ print (code)
 #Parsear el codigo leido del archivo
 parser.parse(code)
 
-print(funcDir.functions)
+#print(funcDir.functions)
 
-for function in funcDir.functions:
-    func = funcDir.functions[function]
-    print(func)
-    print(func['variables'].variables)
+#for function in funcDir.functions:
+#    func = funcDir.functions[function]
+#    print(func)
+#    print(func['variables'].variables)
 
-print(OperandStack)
-print(TypeStack)
-print(OperatorStack)
+print('Operand stack: {0}'.format(OperandStack))
+print('Type stack: {0}'.format(TypeStack))
+print('Operator stack: {0}'.format(OperatorStack))
+print('Jump stack: {0}'.format(JumpStack))
 
 for quad in quadruples:
     quad.printQuad()
 
-print('current scope: {0}, global scope: {1}'.format(currentScope, globalScope))
+#print('current scope: {0}, global scope: {1}'.format(currentScope, globalScope))
 
 # while True:
 #    try:
