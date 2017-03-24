@@ -52,7 +52,7 @@ def p_expression_create_func_dir(p):
 
 
 def p_expression_vars(p):
-    '''vars : VAR ID array COLON type add_var SEMICOLON masvars
+    '''vars : VAR ID array COLON type add_var SEMICOLON vars
             | empty'''
 
 def p_expression_add_var(p):
@@ -63,9 +63,7 @@ def p_expression_add_var(p):
     varName = p[-4]
     varType = p[-1]
 
-    if funcDir.addFunctionVariable(currentScope, varName, varType):
-        funcDir.addParameterTypes(currentScope, [varType])
-    else:
+    if not funcDir.addFunctionVariable(currentScope, varName, varType):
         print('Error: Variable already declared.')
         sys.exit(ERROR_CODES['variable_already_declared'])
 
@@ -81,25 +79,23 @@ def p_expression_array(p):
     '''array : LARRAY ss_expression RARRAY
              | empty'''
 
-def p_expression_masvars(p):
-    '''masvars : ID COLON type add_masvars SEMICOLON masvars
-                | empty'''
+#def p_expression_masvars(p):
+#    '''masvars : ID COLON type add_masvars SEMICOLON masvars
+#                | empty'''
 
-def p_expression_add_masvars(p):
-    'add_masvars : '
-    global currentScope
-
-    varName = p[-3]
-    varType = p[-1]
-
-    if funcDir.addFunctionVariable(currentScope, varName, varType):
-        funcDir.addParameterTypes(currentScope, [varType])
-    else:
-        print('Error: Variable already declared.')
-        sys.exit(ERROR_CODES['variable_already_declared'])
+#def p_expression_add_masvars(p):
+#    'add_masvars : '
+#    global currentScope
+#
+#    varName = p[-3]
+#    varType = p[-1]
+#
+#    if not funcDir.addFunctionVariable(currentScope, varName, varType):
+#        print('Error: Variable already declared.')
+#        sys.exit(ERROR_CODES['variable_already_declared'])
 
 def p_expression_function(p):
-    '''function : FUNC func_type ID add_to_func_dir LPAREN parameters RPAREN bloque function
+    '''function : FUNC func_type ID add_to_func_dir LPAREN parameters RPAREN vars bloque function
                 | empty'''
 
 def p_expression_func_type(p):
@@ -348,12 +344,9 @@ def p_expression_push_id_operand(p):
         else:
             OperandStack.append(variable[0])
             TypeStack.append(variable[1])
-            print(variable)
     else:
         OperandStack.append(variable[0])
         TypeStack.append(variable[1])
-        print(variable)
-
 
 def p_expression_push_int_operand(p):
     '''push_int_operand : '''
@@ -580,17 +573,17 @@ file = open(fileName, 'r')
 code = file.read()
 
 #Imprimir codigo leido
-print (code)
+#print (code)
 
 #Parsear el codigo leido del archivo
 parser.parse(code)
 
 #print(funcDir.functions)
 
-#for function in funcDir.functions:
-#    func = funcDir.functions[function]
-#    print(func)
-#    print(func['variables'].variables)
+for function in funcDir.functions:
+    func = funcDir.functions[function]
+    print('{0} = {1}'.format(function, func))
+    print(func['variables'].variables)
 
 print('Operand stack: {0}'.format(OperandStack))
 print('Type stack: {0}'.format(TypeStack))
