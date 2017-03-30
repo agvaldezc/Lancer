@@ -13,11 +13,11 @@ var o : string;
     a = b + c;
 }
 
-func int funcion2(int a, int b, int c, string d)
-var q : bool;
-var o : string;
+func int funcion2(int b, int c, string d)
+var j : bool;
+var l : string;
 {
-    a = b + c;
+     b = c;
 }
 
 main {
@@ -26,6 +26,18 @@ main {
     w = x + y / z;
     x = x + 423;
 
+    funcion1(123, 986, y,'hola');
 
+    if (true) {
+        w = y;
+    } else {
+        z = 123 + 1234134;
+    }
+    x = 123 + 1234134;
+
+    while ((x+z) >= 123) {
+        z = 123;
+    }
+    x = y;
 }
 

@@ -1,6 +1,10 @@
 program agvaldezc;
 
-var x : float; z : float; y : int; w : float; t : string;
+var x : float;
+var z : float;
+var y : int;
+var w : float;
+var t : string;
 
 main {
     if (true) {
@@ -13,6 +17,5 @@ main {
     while ((x+z) >= 123) {
         z = 123;
     }
-
     x = y;
 }

@@ -20,9 +20,13 @@ semanticCube = SemanticCubeDict()
 quadruples = []
 tempCont = 0
 quadCont = 1
+FunctionToCall = ""
+ArgumentNumber = 0
+ArgumentStack = []
+ArgumentTypeStack = []
 
 ERROR_CODES = {'func_already_declared': -5, 'variable_already_declared': -6, 'func_not_declared': -7,
-               'variable_not_declared': -8, 'type_mismatch': -9, 'syntax_error': -10}
+               'variable_not_declared': -8, 'type_mismatch': -9, 'syntax_error': -10, 'parameter_type_mismatch': -11}
 
 #Reglas gramaticales expresadas en funciones
 def p_expression_programa(p):
@@ -95,8 +99,18 @@ def p_expression_array(p):
 #        sys.exit(ERROR_CODES['variable_already_declared'])
 
 def p_expression_function(p):
-    '''function : FUNC func_type ID add_to_func_dir LPAREN parameters RPAREN vars bloque function
+    '''function : FUNC func_type ID add_to_func_dir LPAREN parameters RPAREN vars starting_quad bloque end_proc function
                 | empty'''
+
+def p_expression_end_proc(p):
+    'end_proc : '
+    quad = Quadruple(quadCont, 'ENDPROC', None, None, None)
+    quadruples.append(quad)
+
+def p_expression_starting_quad(p):
+    'starting_quad : '
+    funcDir.fillStartingQuad(currentScope, quadCont)
+
 
 def p_expression_func_type(p):
     '''func_type : VOID
@@ -115,7 +129,7 @@ def p_expression_add_to_func_dir(p):
         currentScope = funcName
         funcDir.addFunction(funcName, funcType)
     else:
-        print('Error: Function already declared.')
+        print('Error: Function already declared in line {0}.'.format(p.lexer.lineno))
         sys.exit(ERROR_CODES['func_already_declared'])
 
 def p_expression_parameters(p):
@@ -193,18 +207,66 @@ def p_expression_drawpolygon(p):
     'drawpolygon : DRAWPOLYGON LPAREN ss_expression COMA ss_expression COMA color RPAREN SEMICOLON'
 
 def p_expression_voidfunction(p):
-    '''voidfunction : ID LPAREN call_params RPAREN SEMICOLON'''
+    '''voidfunction : ID validate_function_id LPAREN generate_era call_params RPAREN SEMICOLON argument_validation'''
 
 def p_expression_functioncall(p):
-    '''functioncall : ID LPAREN call_params RPAREN'''
+    '''functioncall : ID validate_function_id LPAREN generate_era call_params RPAREN argument_validation'''
+
+def p_expression_argument_validation(p):
+    'argument_validation : '
+
+    global quadCont
+    global ArgumentNumber
+    global ArgumentStack
+    global ArgumentTypeStack
+    global FunctionToCall
+
+    if funcDir.validateParameters(FunctionToCall, ArgumentTypeStack):
+        for argument in ArgumentStack:
+            quad = Quadruple(quadCont, 'Parameter', argument, None, ArgumentNumber)
+            quadruples.append(quad)
+
+            quadCont += 1
+            ArgumentNumber += 1
+
+        quad = Quadruple(quadCont, 'GoSub', FunctionToCall, None, funcDir.getFunctionStartingQuad(FunctionToCall))
+        quadruples.append(quad)
+
+        quadCont += 1
+
+        ArgumentStack = []
+        ArgumentTypeStack = []
+        FunctionToCall = ""
+        ArgumentNumber = 0
+    else:
+        print('Error: argument type mismatch in line {0} using function {1}.'.format(p.lexer.lineno, FunctionToCall))
+        sys.exit(ERROR_CODES['parameter_type_mismatch'])
+
+def p_expression_generate_era(p):
+    'generate_era : '
+    print('ERA GENERATION PENDING!!!!!')
+
+def p_expression_validate_function_id(p):
+    'validate_function_id : '
+
+    global FunctionToCall
+    FunctionToCall = p[-1]
+
+    if not funcDir.functionExists(FunctionToCall):
+        print('Error: function {0} not declared in line {1}'.format(FunctionToCall, p.lexer.lineno))
+        sys.exit(ERROR_CODES['func_not_declared'])
 
 def p_expression_call_params(p):
-    '''call_params : ss_expression more_call_params
+    '''call_params : ss_expression function_argument_collection more_call_params
                    | empty'''
 
 def p_expression_more_call_params(p):
-    '''more_call_params : COMA ss_expression more_call_params
+    '''more_call_params : COMA ss_expression function_argument_collection more_call_params
                         | empty'''
+
+def p_expression_function_argument_collection(p):
+    'function_argument_collection : '
+    functionArgumentCollection(p)
 
 def p_expression_ciclo(p):
     '''ciclo : WHILE create_while_quad LPAREN ss_expression RPAREN while_expression_evaluation bloque while_end'''
@@ -302,7 +364,6 @@ def p_expression_fact(p):
 
 def p_expression_solve_pending_factor(p):
     'solve_pending_factor : '
-
     if OperatorStack[len(OperatorStack) - 1] == '*' or OperatorStack[len(OperatorStack) - 1] == '/':
         solvePendingOperations(p)
 
@@ -340,7 +401,7 @@ def p_expression_push_id_operand(p):
 
         if variable is None:
             print('Error: variable {0} not declared in line {1}'.format(p[-1], p.lexer.lineno))
-            sys.exit(-2)
+            sys.exit(ERROR_CODES['variable_not_declared'])
         else:
             OperandStack.append(variable[0])
             TypeStack.append(variable[1])
@@ -556,10 +617,23 @@ def whileEndQuad(p):
     end = JumpStack.pop()
     ret = JumpStack.pop()
 
+    global quadCont
+
     endQuad = quadruples[end]
     quad = Quadruple(quadCont, 'GoTo', None, None, ret)
 
+    quadCont += 1
+
+    quadruples.append(quad)
+
     endQuad.fillJumpQuad(quadCont)
+
+def functionArgumentCollection(p):
+    argument = OperandStack.pop()
+    argumentType = TypeStack.pop()
+
+    ArgumentStack.append(argument)
+    ArgumentTypeStack.append(argumentType)
 
 #Construir el parser
 parser = yacc.yacc(debug=1)

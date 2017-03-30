@@ -5,22 +5,22 @@ class FunctionDirectory:
         self.functions = {}
 
     def addFunction(self, functionName, functionType):
-        self.functions[functionName] = {'parameters': [], 'variables': VarTable(), 'type' : functionType }
+        self.functions[functionName] = {'parameters': [], 'variables': VarTable(), 'type' : functionType}
 
     def addParameterTypes(self, functionName, parameterTypeList):
         if self.functionExists(functionName):
             function = self.functions[functionName]
             function['parameters'] += parameterTypeList
 
-    def validateParameters(self, functionName, parameterTypeList):
+    def validateParameters(self, functionName, argumentTypeList):
         function = self.functions[functionName]
 
         if self.functionExists(functionName):
-            if function['parameters'] == parameterTypeList:
-                return True
-            else:
-                print('Error: Parameter type mismatch.')
-                sys.exit(ERROR_CODES['type_mismatch'])
+            return function['parameters'] == argumentTypeList
+
+    def getFunctionStartingQuad(self, functionName):
+        function = self.functions[functionName]
+        return function['starting_quad']
 
     def functionExists(self, functionName):
         return self.functions.has_key(functionName)
@@ -43,3 +43,7 @@ class FunctionDirectory:
         variable = variables.getVariable(variableName)
 
         return variable
+
+    def fillStartingQuad(self, functionName, startingQuad):
+        function = self.functions[functionName]
+        function['starting_quad'] = startingQuad

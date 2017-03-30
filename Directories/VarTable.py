@@ -1,9 +1,10 @@
 class VarTable:
     def __init__(self):
-        self.variables = {}
+        self.variables = {'total': {'int': 0, 'float': 0, 'bool': 0, 'string': 0}}
 
     def addVariable(self, variableName, variableType):
         self.variables[variableName] = variableType
+        self.addVarTotals(variableType)
 
     def variableExists(self, variableName):
         if self.variables.has_key(variableName):
@@ -16,6 +17,14 @@ class VarTable:
             return (variableName, self.variables[variableName])
         else:
             return None
+
+    def getVarTotals(self):
+        return self.variables['total']
+
+    def addVarTotals(self, variableType):
+        totals = self.variables['total']
+        totals[variableType] += 1
+
 
 
 
