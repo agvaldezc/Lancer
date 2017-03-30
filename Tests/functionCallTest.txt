@@ -13,7 +13,7 @@ var o : string;
     a = b + c;
 }
 
-func int funcion2(int b, int c, string d)
+func void funcion2(int b, int c, string d)
 var j : bool;
 var l : string;
 {
@@ -39,5 +39,7 @@ main {
         z = 123;
     }
     x = y;
+
+    x = funcion1(123, 986, y,'hola');
 }
 

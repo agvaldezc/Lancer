@@ -125,6 +125,9 @@ def p_expression_add_to_func_dir(p):
     funcName = p[-1]
     funcType = p[-2]
 
+    if not funcType == 'void':
+        funcDir.addFunctionVariable(globalScope, funcName, funcType)
+
     if not funcDir.functionExists(funcName):
         currentScope = funcName
         funcDir.addFunction(funcName, funcType)
@@ -221,6 +224,9 @@ def p_expression_argument_validation(p):
     global ArgumentTypeStack
     global FunctionToCall
 
+    if FunctionToCall == "":
+        FunctionToCall = OperandStack[len(OperandStack) - 1]
+
     if funcDir.validateParameters(FunctionToCall, ArgumentTypeStack):
         for argument in ArgumentStack:
             quad = Quadruple(quadCont, 'Parameter', argument, None, ArgumentNumber)
@@ -271,7 +277,7 @@ def p_expression_function_argument_collection(p):
 def p_expression_ciclo(p):
     '''ciclo : WHILE create_while_quad LPAREN ss_expression RPAREN while_expression_evaluation bloque while_end'''
 
-def p_exxpression_create_while_quad(p):
+def p_expression_create_while_quad(p):
     'create_while_quad : '
     whileConditionQuads(p)
 
@@ -386,8 +392,11 @@ def p_expression_cteb(p):
 
 def p_expression_id_func_array(p):
     '''id_func_array : LARRAY expr RARRAY
-                     | LPAREN call_params RPAREN
+                     | LPAREN generate_era call_params RPAREN argument_validation add_return_temp_assignment
                      | empty'''
+
+def p_expression_add_return_temp_assignment(p):
+    'add_return_temp_assignment : '
 
 def p_expression_push_id_operand(p):
     '''push_id_operand : '''
