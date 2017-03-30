@@ -83,29 +83,17 @@ def p_expression_array(p):
     '''array : LARRAY ss_expression RARRAY
              | empty'''
 
-#def p_expression_masvars(p):
-#    '''masvars : ID COLON type add_masvars SEMICOLON masvars
-#                | empty'''
-
-#def p_expression_add_masvars(p):
-#    'add_masvars : '
-#    global currentScope
-#
-#    varName = p[-3]
-#    varType = p[-1]
-#
-#    if not funcDir.addFunctionVariable(currentScope, varName, varType):
-#        print('Error: Variable already declared.')
-#        sys.exit(ERROR_CODES['variable_already_declared'])
-
 def p_expression_function(p):
     '''function : FUNC func_type ID add_to_func_dir LPAREN parameters RPAREN vars starting_quad bloque end_proc function
                 | empty'''
 
 def p_expression_end_proc(p):
     'end_proc : '
+    global quadCont
     quad = Quadruple(quadCont, 'ENDPROC', None, None, None)
     quadruples.append(quad)
+
+    quadCont += 1
 
 def p_expression_starting_quad(p):
     'starting_quad : '
@@ -676,13 +664,3 @@ print('Jump stack: {0}'.format(JumpStack))
 for quad in quadruples:
     quad.printQuad()
 
-#print('current scope: {0}, global scope: {1}'.format(currentScope, globalScope))
-
-# while True:
-#    try:
-#        s = raw_input()
-#    except EOFError:
-#        break
-#    if not s: continue
-#    result = parser.parse(code)
-#    print(result)
