@@ -491,6 +491,7 @@ def solvePendingOperations(p):
     semanticResult = semanticCube.getSemanticType(left_type, right_type, operator)
 
     if semanticResult != 'error':
+        funcDir.addTempVariable(currentScope, semanticResult)
         tempVarString = tempVarString + str(tempCont)
         quad = Quadruple(quadCont, operator, left_operand, right_operand, tempVarString)
         quadruples.append(quad)

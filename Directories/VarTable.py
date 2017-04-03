@@ -1,6 +1,6 @@
 class VarTable:
     def __init__(self):
-        self.variables = {'total': {'int': 0, 'float': 0, 'bool': 0, 'string': 0}}
+        self.variables = {'total': {'int': 0, 'float': 0, 'bool': 0, 'string': 0}, 'temp_total': {'int': 0, 'float': 0, 'bool': 0, 'string': 0}}
 
     def addVariable(self, variableName, variableType):
         self.variables[variableName] = variableType
@@ -25,6 +25,9 @@ class VarTable:
         totals = self.variables['total']
         totals[variableType] += 1
 
+    def addTempType(self, variableType):
+        temp_totals = self.variables['temp_total']
+        temp_totals[variableType] += 1
 
 
 

@@ -47,3 +47,7 @@ class FunctionDirectory:
     def fillStartingQuad(self, functionName, startingQuad):
         function = self.functions[functionName]
         function['starting_quad'] = startingQuad
+
+    def addTempVariable(self, functionName, variableType):
+        function = self.functions[functionName]
+        function['variables'].addTempType(variableType)
