@@ -14,10 +14,10 @@ reserved = {
     'float': 'FLOAT_TYPE',
     'print': 'PRINT',
     'bool' : 'BOOL_TYPE',
+    'true' : 'TRUE',
+    'false' : 'FALSE',
     'string' : 'STRING_TYPE',
     'func' : 'FUNC',
-    'false' : 'FALSE',
-    'true' : 'TRUE',
     'while' : 'WHILE',
     'let' : 'CONST',
     'main' : 'MAIN',
@@ -70,10 +70,10 @@ tokens = [
              'DIFFERENT',
              'DOT',
              'ASSIGN',
-             'STRING',
              'CTEI',
              'CTEF',
-             'CTES'
+             'CTES',
+             'CTEB'
          ] + list(reserved.values())
 
 #Expresiones regulares para la definicion de cada token
@@ -95,21 +95,20 @@ t_NOT = r'\!!'
 t_EQUAL = r'\=='
 t_COLON = r'\:'
 t_SEMICOLON = r'\;'
-t_STRING = r'\".*\"'
 t_COMA = r'\,'
 t_AND = r'\&&'
 t_OR = r'\|\|'
 t_DIFFERENT = r'\<>'
 t_DOT = r'\.'
 t_ASSIGN = r'\='
-t_CTES = r'\".*\"'
+t_CTES = r'\".*\" | \'.*\''
 
 # t_BINARY = r'[01]+[bB]'
 # t_INTEGER = r'[0-9]+'
 # t_HEX = '((0[A-Fa-f])|([0-9]))[0-9A-Fa-f]*[Hh]'
 
 #Caracteres a ignorar
-t_ignore = ' \t\n'
+t_ignore = ' \t'
 
 #Definicion de token ID
 def t_ID(t):
@@ -127,6 +126,10 @@ def t_CTEI(t):
     r'[0-9]+'
     return t
 
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
 #Error lexico
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
@@ -136,7 +139,7 @@ def t_error(t):
 lexer = lex.lex()
 
 #Datos para probar el analizador lexico
-data = '||'
+data = 'true'
 
 #Datos como input del analizador lexico
 lexer.input(data)

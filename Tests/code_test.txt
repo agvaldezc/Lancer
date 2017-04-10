@@ -17,7 +17,7 @@ func int funcion1(int a[30], int b, bool c, string d) {
     variable1 = variable2 / variable3 + (variable4 * variable5);
 }
 
-func int funcion2() {
+func void funcion2() {
       if (alan <> andres) {
         print    ("esto es un string");
         al = d+n;
