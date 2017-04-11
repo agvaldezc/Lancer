@@ -25,15 +25,13 @@ class FunctionDirectory:
     def functionExists(self, functionName):
         return self.functions.has_key(functionName)
 
-    def addFunctionVariable(self, functionName, variableName, variableType):
+    def addFunctionVariable(self, functionName, variableName, variableType, address):
         function = self.functions[functionName]
 
         if function['variables'].variableExists(variableName):
-            print('Error: Variable already declared.')
-            sys.exit(ERROR_CODES['variable_already_declared'])
             return False
         else:
-            function['variables'].addVariable(variableName,variableType)
+            function['variables'].addVariable(variableName,variableType, address)
             return True
 
     def getVariable(self, functionName, variableName):

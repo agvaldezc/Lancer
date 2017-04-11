@@ -2,13 +2,19 @@
 #Rafael Manriquez Valdez
 
 import ply.yacc as yacc
-import sys as sys
+import sys
+sys.path.append("../../Lancer")
+
+#Clases definidas por nosotros
 from LancerLex import tokens
 from Directories.FunctionDirectory import FunctionDirectory
 from Directories.Stack import Stack
 from Semantic_Cubes.SemanticCubeDict import SemanticCubeDict
 from Quadruples.Quadruple import Quadruple
+from VirtualMachine.LancerVM import LancerVM
+from Memory.MainMemory import MainMemory
 
+#Variables globales a utilizar
 funcDir = FunctionDirectory()
 currentScope = ""
 globalScope = ""
@@ -24,6 +30,9 @@ FunctionToCall = ""
 ArgumentNumber = 0
 ArgumentStack = []
 ArgumentTypeStack = []
+VM = LancerVM()
+
+trashValues = {'int': 1, 'float': 1.0, 'bool': True, 'string': 'Null'}
 
 ERROR_CODES = {'func_already_declared': -5, 'variable_already_declared': -6, 'func_not_declared': -7,
                'variable_not_declared': -8, 'type_mismatch': -9, 'syntax_error': -10, 'parameter_type_mismatch': -11}
@@ -67,7 +76,12 @@ def p_expression_add_var(p):
     varName = p[-4]
     varType = p[-1]
 
-    if not funcDir.addFunctionVariable(currentScope, varName, varType):
+    if currentScope == globalScope:
+        virtualAddress = VM.memory.addGlobalValue(trashValues[varType], varType)
+    else:
+        virtualAddress = VM.memory.addTempValue(trashValues[varType], varType)
+
+    if not funcDir.addFunctionVariable(currentScope, varName, varType, virtualAddress):
         print('Error: Variable already declared.')
         sys.exit(ERROR_CODES['variable_already_declared'])
 
@@ -75,8 +89,7 @@ def p_expression_type(p):
     '''type : INT_TYPE
             | FLOAT_TYPE
             | STRING_TYPE
-            | BOOL_TYPE
-            | array'''
+            | BOOL_TYPE'''
     p[0] = p[1]
 
 def p_expression_array(p):
@@ -114,7 +127,8 @@ def p_expression_add_to_func_dir(p):
     funcType = p[-2]
 
     if not funcType == 'void':
-        funcDir.addFunctionVariable(globalScope, funcName, funcType)
+        virtualAddress = VM.memory.addGlobalValue(trashValues[funcType], funcType)
+        funcDir.addFunctionVariable(globalScope, funcName, funcType, virtualAddress)
 
     if not funcDir.functionExists(funcName):
         currentScope = funcName
@@ -139,7 +153,12 @@ def p_expression_add_params(p):
     paramName = p[-1]
     paramType = p[-2]
 
-    if funcDir.addFunctionVariable(currentScope, paramName, paramType):
+    if currentScope == globalScope:
+        virtualAddress = VM.memory.addGlobalValue(trashValues[paramType], paramType)
+    else:
+        virtualAddress = VM.memory.addTempValue(trashValues[paramType], paramType)
+
+    if funcDir.addFunctionVariable(currentScope, paramName, paramType, virtualAddress):
         funcDir.addParameterTypes(currentScope, [paramType])
 
 def p_expression_bloque(p):
@@ -400,11 +419,15 @@ def p_expression_push_id_operand(p):
             print('Error: variable {0} not declared in line {1}'.format(p[-1], p.lexer.lineno))
             sys.exit(ERROR_CODES['variable_not_declared'])
         else:
-            OperandStack.append(variable[0])
-            TypeStack.append(variable[1])
+            variableInfo = variable[1]
+
+            OperandStack.append(variableInfo[1])
+            TypeStack.append(variableInfo[0])
     else:
-        OperandStack.append(variable[0])
-        TypeStack.append(variable[1])
+        variableInfo = variable[1]
+
+        OperandStack.append(variableInfo[1])
+        TypeStack.append(variableInfo[0])
 
 def p_expression_push_int_operand(p):
     '''push_int_operand : '''
@@ -412,7 +435,9 @@ def p_expression_push_int_operand(p):
     global OperandStack
     global OperatorStack
 
-    OperandStack.append(p[-1])
+    virtualAddress = VM.memory.addConstantValue(int(p[-1]), 'int')
+
+    OperandStack.append(virtualAddress)
     TypeStack.append('int')
 
 def p_expression_push_float_operand(p):
@@ -421,7 +446,9 @@ def p_expression_push_float_operand(p):
     global OperandStack
     global OperatorStack
 
-    OperandStack.append(p[-1])
+    virtualAddress = VM.memory.addConstantValue(float(p[-1]), 'float')
+
+    OperandStack.append(virtualAddress)
     TypeStack.append('float')
 
 def p_expression_push_string_operand(p):
@@ -430,7 +457,9 @@ def p_expression_push_string_operand(p):
     global OperandStack
     global OperatorStack
 
-    OperandStack.append(p[-1])
+    virtualAddress = VM.memory.addConstantValue(float(p[-1]), 'string')
+
+    OperandStack.append(virtualAddress)
     TypeStack.append('string')
 
 def p_expression_push_bool_operand(p):
@@ -439,7 +468,12 @@ def p_expression_push_bool_operand(p):
     global OperandStack
     global OperatorStack
 
-    OperandStack.append(p[-1])
+    if p[-1] == "true":
+        virtualAddress = VM.memory.addConstantValue(True, 'bool')
+    else:
+        virtualAddress = VM.memory.addConstantValue(False, 'bool')
+
+    OperandStack.append(virtualAddress)
     TypeStack.append('bool')
 
 def p_expression_push_operator(p):
@@ -491,15 +525,18 @@ def solvePendingOperations(p):
     semanticResult = semanticCube.getSemanticType(left_type, right_type, operator)
 
     if semanticResult != 'error':
+
+        virtualTempAddress = VM.memory.addTempValue(trashValues[semanticResult], semanticResult)
+
         funcDir.addTempVariable(currentScope, semanticResult)
-        tempVarString = tempVarString + str(tempCont)
-        quad = Quadruple(quadCont, operator, left_operand, right_operand, tempVarString)
+        # tempVarString = tempVarString + str(tempCont)
+        quad = Quadruple(quadCont, operator, left_operand, right_operand, virtualTempAddress)
         quadruples.append(quad)
 
         quadCont += 1
-        tempCont += 1
+        # tempCont += 1
 
-        OperandStack.append(tempVarString)
+        OperandStack.append(virtualTempAddress)
 
         TypeStack.append(semanticResult)
     else:
@@ -633,35 +670,36 @@ def functionArgumentCollection(p):
     ArgumentStack.append(argument)
     ArgumentTypeStack.append(argumentType)
 
-#Construir el parser
-parser = yacc.yacc(debug=1)
+def initParser():
+    #Construir el parser
+    parser = yacc.yacc(debug=1)
 
-#Escribir el nombre o ruta del archivo a leer
-print("Nombre o ruta del archivo a analizar: ")
-fileName = raw_input()
+    #Escribir el nombre o ruta del archivo a leer
+    print("Nombre o ruta del archivo a analizar: ")
+    fileName = raw_input()
 
-#Abrir archivo
-file = open(fileName, 'r')
-code = file.read()
+    #Abrir archivo
+    file = open(fileName, 'r')
+    code = file.read()
 
-#Imprimir codigo leido
-#print (code)
+    #Parsear el codigo leido del archivo
+    parser.parse(code)
 
-#Parsear el codigo leido del archivo
-parser.parse(code)
+    #print(funcDir.functions)
 
-#print(funcDir.functions)
+    for function in funcDir.functions:
+        func = funcDir.functions[function]
+        print('{0} = {1}'.format(function, func))
+        print(func['variables'].variables)
 
-for function in funcDir.functions:
-    func = funcDir.functions[function]
-    print('{0} = {1}'.format(function, func))
-    print(func['variables'].variables)
+    print('Operand stack: {0}'.format(OperandStack))
+    print('Type stack: {0}'.format(TypeStack))
+    print('Operator stack: {0}'.format(OperatorStack))
+    print('Jump stack: {0}'.format(JumpStack))
 
-print('Operand stack: {0}'.format(OperandStack))
-print('Type stack: {0}'.format(TypeStack))
-print('Operator stack: {0}'.format(OperatorStack))
-print('Jump stack: {0}'.format(JumpStack))
+    VM.getInstructions(quadruples)
 
-for quad in quadruples:
-    quad.printQuad()
+    VM.printInstructions()
+    VM.printMainMemory()
 
+initParser()

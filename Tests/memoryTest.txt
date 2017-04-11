@@ -1,0 +1,11 @@
+program agvaldezc;
+var z : float;
+var y : int;
+var w : float;
+
+main {
+	z = 1;
+	y = 2;
+
+	w = z + y;
+}
