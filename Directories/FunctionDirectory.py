@@ -49,3 +49,7 @@ class FunctionDirectory:
     def addTempVariable(self, functionName, variableType):
         function = self.functions[functionName]
         function['variables'].addTempType(variableType)
+
+    def getFunctionIdByAddress(self, globalScopeName, virtualAddress):
+        function = self.functions[globalScopeName]
+        return function['variables'].getIdByAddress(virtualAddress)

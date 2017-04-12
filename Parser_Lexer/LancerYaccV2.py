@@ -232,7 +232,8 @@ def p_expression_argument_validation(p):
     global FunctionToCall
 
     if FunctionToCall == "":
-        FunctionToCall = OperandStack[len(OperandStack) - 1]
+        virtualAddress = OperandStack[len(OperandStack) - 1]
+        FunctionToCall = funcDir.getFunctionIdByAddress(globalScope, virtualAddress)
 
     if funcDir.validateParameters(FunctionToCall, ArgumentTypeStack):
         for argument in ArgumentStack:
@@ -457,7 +458,7 @@ def p_expression_push_string_operand(p):
     global OperandStack
     global OperatorStack
 
-    virtualAddress = VM.memory.addConstantValue(float(p[-1]), 'string')
+    virtualAddress = VM.memory.addConstantValue(p[-1], 'string')
 
     OperandStack.append(virtualAddress)
     TypeStack.append('string')

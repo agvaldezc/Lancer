@@ -26,5 +26,13 @@ class VarTable:
         temp_totals = self.variables['temp_total']
         temp_totals[variableType] += 1
 
+    def getIdByAddress(self, virtualAddress):
+        for variable in self.variables:
+            if variable != 'total' and variable != 'temp_total':
+                variableInfo = self.variables[variable]
+
+                if virtualAddress in variableInfo:
+                    return variable
+
 
 
