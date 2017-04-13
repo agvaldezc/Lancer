@@ -1,11 +1,12 @@
 from VarTable import VarTable
 
+
 class FunctionDirectory:
     def __init__(self):
         self.functions = {}
 
     def addFunction(self, functionName, functionType):
-        self.functions[functionName] = {'parameters': [], 'variables': VarTable(), 'type' : functionType}
+        self.functions[functionName] = {'parameters': [], 'variables': VarTable(), 'type': functionType}
 
     def addParameterTypes(self, functionName, parameterTypeList):
         if self.functionExists(functionName):
@@ -31,7 +32,7 @@ class FunctionDirectory:
         if function['variables'].variableExists(variableName):
             return False
         else:
-            function['variables'].addVariable(variableName,variableType, address)
+            function['variables'].addVariable(variableName, variableType, address)
             return True
 
     def getVariable(self, functionName, variableName):

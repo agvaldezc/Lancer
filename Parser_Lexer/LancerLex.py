@@ -1,10 +1,10 @@
 # Lancer: Created by Alan Valdez & Rafael Manriquez
 
-#Alan Gustavo Valdez Cascajares A01336955
+# Alan Gustavo Valdez Cascajares A01336955
 
 import ply.lex as lex
 
-#Diccionario de palabras reservadas {palabra : TOKEN}
+# Diccionario de palabras reservadas {palabra : TOKEN}
 reserved = {
     'program': 'PROGRAMA',
     'if': 'IF',
@@ -13,33 +13,33 @@ reserved = {
     'int': 'INT_TYPE',
     'float': 'FLOAT_TYPE',
     'print': 'PRINT',
-    'bool' : 'BOOL_TYPE',
-    'true' : 'TRUE',
-    'false' : 'FALSE',
-    'string' : 'STRING_TYPE',
-    'func' : 'FUNC',
-    'while' : 'WHILE',
-    'let' : 'CONST',
-    'main' : 'MAIN',
-    'return' : 'RETURN',
-    'void' : 'VOID',
-    'drawSquare' : 'DRAWSQUARE',
-    'drawCircle' : 'DRAWCIRCLE',
-    'drawLine' : 'DRAWLINE',
-    'drawPolygon' : 'DRAWPOLYGON',
-    'drawCurve' : 'DRAWCURVE',
-    'input' : 'INPUT',
-    'drawTriangle' : 'DRAWTRIANGLE',
-    'red' : 'RED',
-    'green' : 'GREEN',
-    'blue' : 'BLUE',
-    'yellow' : 'YELLOW',
-    'brown' : 'BROWN',
-    'black' : 'BLACK',
-    'elseIf' : 'ELSEIF'
+    'bool': 'BOOL_TYPE',
+    'true': 'TRUE',
+    'false': 'FALSE',
+    'string': 'STRING_TYPE',
+    'func': 'FUNC',
+    'while': 'WHILE',
+    'let': 'CONST',
+    'main': 'MAIN',
+    'return': 'RETURN',
+    'void': 'VOID',
+    'drawSquare': 'DRAWSQUARE',
+    'drawCircle': 'DRAWCIRCLE',
+    'drawLine': 'DRAWLINE',
+    'drawPolygon': 'DRAWPOLYGON',
+    'drawCurve': 'DRAWCURVE',
+    'input': 'INPUT',
+    'drawTriangle': 'DRAWTRIANGLE',
+    'red': 'RED',
+    'green': 'GREEN',
+    'blue': 'BLUE',
+    'yellow': 'YELLOW',
+    'brown': 'BROWN',
+    'black': 'BLACK',
+    'elseIf': 'ELSEIF'
 }
 
-#Lista de tokens
+# Lista de tokens
 tokens = [
              #	'INTEGER',
              #	'FLOAT',
@@ -76,7 +76,7 @@ tokens = [
              'CTEB'
          ] + list(reserved.values())
 
-#Expresiones regulares para la definicion de cada token
+# Expresiones regulares para la definicion de cada token
 t_PLUS = r'\+'
 t_MINUS = r'\-'
 t_TIMES = r'\*'
@@ -107,48 +107,52 @@ t_CTES = r'\".*\" | \'.*\''
 # t_INTEGER = r'[0-9]+'
 # t_HEX = '((0[A-Fa-f])|([0-9]))[0-9A-Fa-f]*[Hh]'
 
-#Caracteres a ignorar
+# Caracteres a ignorar
 t_ignore = ' \t'
 
-#Definicion de token ID
+
+# Definicion de token ID
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
 
-    #Verificar si el ID es una palabra reservada, si es reservada, cambia el tipo de token al correspondiente
+    # Verificar si el ID es una palabra reservada, si es reservada, cambia el tipo de token al correspondiente
     t.type = reserved.get(t.value, 'ID')  # Check for reserved words
     return t
+
 
 def t_CTEF(t):
     r'[0-9]+\.[0-9][0-9]*'
     return t
 
+
 def t_CTEI(t):
     r'[0-9]+'
     return t
+
 
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-#Error lexico
+
+# Error lexico
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-#Inicializar lex
+
+# Inicializar lex
 lexer = lex.lex()
 
-#Datos para probar el analizador lexico
+# Datos para probar el analizador lexico
 data = 'true'
 
-#Datos como input del analizador lexico
+# Datos como input del analizador lexico
 lexer.input(data)
 
-#Loop que termina al leer todos los caracteres de los datos usados
+# Loop que termina al leer todos los caracteres de los datos usados
 while True:
     tok = lexer.token()
     if not tok:
         break
     print (tok)
-
-

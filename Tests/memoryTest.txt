@@ -4,8 +4,23 @@ var y : int;
 var w : float;
 
 main {
-	z = 1;
+	z = 1.213;
 	y = 2;
 
-	w = z + y;
+	if (true) {
+        w = y;
+        print(w);
+    } else {
+        z = 123 + 1234134;
+        print(z);
+    }
+    z = 123 + 1234134;
+    z = 0;
+
+    while (z <= 10) {
+        print(z);
+        z = z + 1;
+    }
+
+    print(z <> w);
 }

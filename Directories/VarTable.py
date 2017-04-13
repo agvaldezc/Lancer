@@ -1,6 +1,7 @@
 class VarTable:
     def __init__(self):
-        self.variables = {'total': {'int': 0, 'float': 0, 'bool': 0, 'string': 0}, 'temp_total': {'int': 0, 'float': 0, 'bool': 0, 'string': 0}}
+        self.variables = {'total': {'int': 0, 'float': 0, 'bool': 0, 'string': 0},
+                          'temp_total': {'int': 0, 'float': 0, 'bool': 0, 'string': 0}}
 
     def addVariable(self, variableName, variableType, variableVirtualAddress):
         self.variables[variableName] = [variableType, variableVirtualAddress]
@@ -33,6 +34,3 @@ class VarTable:
 
                 if virtualAddress in variableInfo:
                     return variable
-
-
-
