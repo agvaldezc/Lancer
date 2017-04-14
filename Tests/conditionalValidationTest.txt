@@ -11,11 +11,16 @@ main {
 
     y = 0;
 
-    while (y <= 25) {
+    while (y < 25) {
         x[y] = y;
 
-        print(x[y]);
+        print(x[y] + 20);
 
         y = y + 1;
     }
+
+    x[3] = (x[12] / x[11]) / (20.3 + x[21]);
+
+    print("resultado de array");
+    print(x[3]);
 }
