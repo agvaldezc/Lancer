@@ -54,3 +54,11 @@ class FunctionDirectory:
     def getFunctionIdByAddress(self, globalScopeName, virtualAddress):
         function = self.functions[globalScopeName]
         return function['variables'].getIdByAddress(virtualAddress)
+
+    def addDimensionToVariable(self, functionName, variableName, dimension):
+        function = self.functions[functionName]
+        function['variables'].addDimensionToVariable(variableName, dimension)
+
+    def getDimensions(self, functionName, variableName):
+        function = self.functions[functionName]
+        return function['variables'].getDimensionsFromVariable(variableName)

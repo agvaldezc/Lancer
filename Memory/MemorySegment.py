@@ -121,3 +121,68 @@ class MemorySegment:
 
         if realAddress >= self.string_initial_address and realAddress <= self.string_final_address:
             return self.string_segment[realAddress]
+
+    def requestDimensionVariableMemoryAllocation(self, dimensionSize, valueType, value):
+        if valueType == 'int':
+            addressBlock = self.current_int_address + dimensionSize
+
+            if addressBlock >= self.int_initial_address and addressBlock <= self.int_final_address:
+                baseAddress = self.current_int_address + self.offset
+
+                index = 0
+
+                while index <= dimensionSize:
+                    self.int_segment[self.current_int_address] = value
+                    self.current_int_address += 1
+                    index += 1
+                return baseAddress
+            else:
+                return None
+
+        if valueType == 'float':
+            addressBlock = self.current_float_address + dimensionSize
+
+            if addressBlock >= self.float_initial_address and addressBlock <= self.float_final_address:
+                baseAddress = self.current_float_address + self.offset
+
+                index = 0
+
+                while index <= dimensionSize:
+                    self.float_segment[self.current_float_address] = value
+                    self.current_float_address += 1
+                    index += 1
+                return baseAddress
+            else:
+                return None
+
+        if valueType == 'bool':
+            addressBlock = self.current_bool_address + dimensionSize
+
+            if addressBlock >= self.bool_initial_address and addressBlock <= self.bool_final_address:
+                baseAddress = self.current_bool_address + self.offset
+
+                index = 0
+
+                while index <= dimensionSize:
+                    self.bool_segment[self.current_bool_address] = value
+                    self.current_bool_address += 1
+                    index += 1
+                return baseAddress
+            else:
+                return None
+
+        if valueType == 'string':
+            addressBlock = self.current_string_address + dimensionSize
+
+            if addressBlock >= self.string_initial_address and addressBlock <= self.string_final_address:
+                baseAddress = self.current_string_address + self.offset
+
+                index = 0
+
+                while index <= dimensionSize:
+                    self.string_segment[self.current_string_address] = value
+                    self.current_string_address += 1
+                    index += 1
+                return baseAddress
+            else:
+                return None

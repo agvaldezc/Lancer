@@ -161,7 +161,7 @@ class SemanticCubeDict:
                     "-" : "error",
                     "*" : "error",
                     "/" : "error",
-                    "=" : "error",
+                    "=" : "bool",
                     "==" : "bool",
                     "<>" : "bool",
                     ">" : "error",

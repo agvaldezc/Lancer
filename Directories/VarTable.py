@@ -34,3 +34,26 @@ class VarTable:
 
                 if virtualAddress in variableInfo:
                     return variable
+
+    def addDimensionToVariable(self, variableName, dimension):
+
+        # if len(self.variables[variableName]) > 2:
+        #     variableProperties = self.variables[variableName]
+        #
+        #     dimensions = variableProperties[2]
+        #
+        #     dimensions[2] =
+
+        self.variables[variableName].append({
+            'dimensions' : {
+                1: dimension
+            }
+        })
+
+    def getDimensionsFromVariable(self, variableName):
+        if len(self.variables[variableName]) > 2:
+            variableProperties = self.variables[variableName]
+
+            return variableProperties[2]
+        else:
+            return None

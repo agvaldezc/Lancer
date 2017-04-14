@@ -32,11 +32,13 @@ ArgumentNumber = 0
 ArgumentStack = []
 ArgumentTypeStack = []
 VM = LancerVM()
+dimensionVariableName = ""
+dimension = {}
 
 trashValues = {'int': 1, 'float': 1.0, 'bool': True, 'string': 'Null'}
 
 ERROR_CODES = {'func_already_declared': -5, 'variable_already_declared': -6, 'func_not_declared': -7,
-               'variable_not_declared': -8, 'type_mismatch': -9, 'syntax_error': -10, 'parameter_type_mismatch': -11}
+               'variable_not_declared': -8, 'type_mismatch': -9, 'syntax_error': -10, 'parameter_type_mismatch': -11, 'memory_error': 3}
 
 
 # Reglas gramaticales expresadas en funciones
@@ -69,7 +71,7 @@ def p_expression_create_func_dir(p):
 
 
 def p_expression_vars(p):
-    '''vars : VAR ID array COLON type add_var SEMICOLON vars
+    '''vars : VAR ID array_declaration COLON type add_var SEMICOLON vars
             | empty'''
 
 
@@ -77,18 +79,65 @@ def p_expression_add_var(p):
     'add_var : '
 
     global currentScope
+    global dimensionVariableName
+    global dimension
 
     varName = p[-4]
     varType = p[-1]
 
     if currentScope == globalScope:
-        virtualAddress = VM.memory.addGlobalValue(trashValues[varType], varType)
+        if dimensionVariableName != "":
+            virtualAddress = VM.memory.addDimensionGlobalValue(dimension['superior'], trashValues[varType], varType)
+        else:
+            virtualAddress = VM.memory.addGlobalValue(trashValues[varType], varType)
+
     else:
-        virtualAddress = VM.memory.addTempValue(trashValues[varType], varType)
+        if dimensionVariableName != "":
+            virtualAddress = VM.memory.addDimenionTempValue(dimension['superior'], trashValues[varType], varType)
+        else:
+            virtualAddress = VM.memory.addTempValue(trashValues[varType], varType)
+
+    if virtualAddress == None:
+        print('ERROR: Impossible memory allocation, out of memory.')
+        sys.exit(ERROR_CODES['memory_error'])
 
     if not funcDir.addFunctionVariable(currentScope, varName, varType, virtualAddress):
         print('Error: Variable already declared.')
         sys.exit(ERROR_CODES['variable_already_declared'])
+
+    if dimensionVariableName != "":
+        funcDir.addDimensionToVariable(currentScope, varName, dimension)
+        dimensionVariableName = ""
+        dimension = {}
+
+
+
+def p_expression_array_declaration(p):
+    '''array_declaration : LARRAY identify_dimensional_var ss_expression create_dimension RARRAY
+                         | empty'''
+
+
+def p_expression_identify_dimensional_var(p):
+    'identify_dimensional_var : '
+
+    global dimensionVariableName
+
+    dimensionVariableName = p[-2]
+
+def p_expression_create_dimension(p):
+    'create_dimension : '
+
+    global dimension
+
+    indexVirtualAddress = OperandStack.pop()
+    indexType = TypeStack.pop()
+
+    if indexType != 'int':
+        print('ERROR: Expected int index type, found {0} in line {1}'.format(indexType, p.lexer.lineno))
+        sys.exit(ERROR_CODES['parameter_type_mismatch'])
+    else:
+        dimensionSize = VM.memory.getValueFromVirtualAddress(indexVirtualAddress)
+        dimension = {'inferior': 0, 'superior': dimensionSize - 1}
 
 
 def p_expression_type(p):
@@ -100,7 +149,7 @@ def p_expression_type(p):
 
 
 def p_expression_array(p):
-    '''array : LARRAY ss_expression RARRAY
+    '''array : LARRAY identify_dimension ss_expression validate_array_bounds_quad RARRAY
              | empty'''
 
 
@@ -464,7 +513,6 @@ def p_expression_constante(p):
                  | CTES push_string_operand
                  | cteb push_bool_operand'''
 
-
 def p_expression_cteb(p):
     '''cteb : TRUE
             | FALSE'''
@@ -472,10 +520,53 @@ def p_expression_cteb(p):
 
 
 def p_expression_id_func_array(p):
-    '''id_func_array : LARRAY expr RARRAY
+    '''id_func_array : LARRAY identify_dimension ss_expression validate_array_bounds_quad RARRAY
                      | LPAREN generate_era call_params RPAREN argument_validation add_return_temp_assignment
                      | empty'''
 
+def p_expression_identify_dimension(p):
+    'identify_dimension : '
+
+    global dimension
+
+    varName = p[-3]
+
+    dimension = funcDir.getDimensions(currentScope, varName)
+
+    dimension = dimension['dimensions']
+
+    print(dimension)
+
+def p_expression_validate_array_bounds_quad(p):
+    'validate_array_bounds_quad : '
+
+    global quadCont
+
+    indexVirtualAddress = OperandStack.pop()
+    indexType = TypeStack.pop()
+
+    if indexType != 'int':
+        print('ERROR: Expected int index type, found {0} in line {1}'.format(indexType, p.lexer.lineno))
+        sys.exit(ERROR_CODES['parameter_type_mismatch'])
+    else:
+        quad = Quadruple(quadCont, 'validate', indexVirtualAddress, dimension[1]['inferior'], dimension[1]['superior'])
+        quadruples.append(quad)
+
+        quadCont += 1
+
+        arrayBaseAddress = OperandStack.pop()
+        arrayType = TypeStack.pop()
+
+        operationalBaseAddress = VM.memory.addTempValue(arrayBaseAddress, 'int')
+        tempVirtualAddress = VM.memory.addTempValue(arrayBaseAddress, arrayType)
+
+        quad = Quadruple(quadCont, '+', operationalBaseAddress, indexVirtualAddress, tempVirtualAddress)
+        quadruples.append(quad)
+
+        quadCont += 1
+
+        OperandStack.append([tempVirtualAddress])
+        TypeStack.append(arrayType)
 
 def p_expression_add_return_temp_assignment(p):
     'add_return_temp_assignment : '
@@ -835,6 +926,5 @@ def initParser():
     VM.printInstructions()
 #    VM.printMainMemory()
     VM.executeInstructions()
-
 
 initParser()

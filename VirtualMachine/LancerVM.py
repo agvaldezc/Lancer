@@ -1,4 +1,5 @@
 from Memory.MainMemory import MainMemory
+import sys
 
 
 class LancerVM:
@@ -31,6 +32,14 @@ class LancerVM:
             leftOperandVirtualAddress = instruction.left_operand
             rightOperandVirtualAddress = instruction.right_operand
             resultVirtualAddress = instruction.result
+
+            if isinstance(leftOperandVirtualAddress, list):
+                leftOperandVirtualAddress = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress[0])
+            if isinstance(rightOperandVirtualAddress, list):
+                rightOperandVirtualAddress = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress[0])
+            if isinstance(resultVirtualAddress, list):
+                resultVirtualAddress = self.memory.getValueFromVirtualAddress(resultVirtualAddress[0])
+
 
             if instructionCode == '+':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
@@ -131,3 +140,15 @@ class LancerVM:
             elif instructionCode == 'GoTo':
                 jumpPointer = resultVirtualAddress
                 instructionPointer = jumpPointer - 1
+
+            elif instructionCode == 'validate':
+                index = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
+
+                inferiorLimit = rightOperandVirtualAddress
+                superiorLimit = resultVirtualAddress
+
+                if not (index >= inferiorLimit and index <= superiorLimit):
+                    print("ERROR: Array index out of bounds. Index overflow.")
+                    sys.exit(4)
+                else:
+                    instructionPointer += 1

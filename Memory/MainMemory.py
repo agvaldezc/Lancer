@@ -21,6 +21,15 @@ class MainMemory:
     def addConstantValue(self, value, valueType):
         return self.constant_memory.requestMemoryAllocation(value, valueType)
 
+    def addDimensionGlobalValue(self, dimensionSize ,value, valueType):
+        return self.global_memory.requestDimensionVariableMemoryAllocation(dimensionSize, valueType, value)
+
+    def addDimenionTempValue(self, dimensionSize, value, valueType):
+        return self.temp_memory.requestDimensionVariableMemoryAllocation(dimensionSize, valueType, value)
+
+    def addDimensionConstantValue(self, dimensionSize, value, valueType):
+        return self.constant_memory.requestDimensionVariableMemoryAllocation(dimensionSize, valueType, value)
+
     def getValueFromVirtualAddress(self, virtualAddress):
         if virtualAddress >= self.global_memory.initial_address and virtualAddress <= self.global_memory.final_address:
             return self.global_memory.getValueFromVirtualAddress(virtualAddress)
