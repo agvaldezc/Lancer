@@ -62,3 +62,7 @@ class FunctionDirectory:
     def getDimensions(self, functionName, variableName):
         function = self.functions[functionName]
         return function['variables'].getDimensionsFromVariable(variableName)
+
+    def getFunctionType(self, functionName):
+        function = self.functions[functionName]
+        return function['type']

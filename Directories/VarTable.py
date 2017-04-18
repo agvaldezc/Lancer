@@ -46,7 +46,8 @@ class VarTable:
 
         self.variables[variableName].append({
             'dimensions' : {
-                1: dimension
+                1
+                : dimension
             }
         })
 

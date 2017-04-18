@@ -26,7 +26,7 @@ JumpStack = []
 semanticCube = SemanticCubeDict()
 quadruples = []
 tempCont = 0
-quadCont = 1
+quadCont = 0
 FunctionToCall = ""
 ArgumentNumber = 0
 ArgumentStack = []
@@ -34,11 +34,13 @@ ArgumentTypeStack = []
 VM = LancerVM()
 dimensionVariableName = ""
 dimension = {}
+hasReturnStatement = False
 
 trashValues = {'int': 1, 'float': 1.0, 'bool': True, 'string': 'Null'}
 
 ERROR_CODES = {'func_already_declared': -5, 'variable_already_declared': -6, 'func_not_declared': -7,
-               'variable_not_declared': -8, 'type_mismatch': -9, 'syntax_error': -10, 'parameter_type_mismatch': -11, 'memory_error': 3}
+               'variable_not_declared': -8, 'type_mismatch': -9, 'syntax_error': -10, 'parameter_type_mismatch': -11,
+               'memory_error': 3, 'no_return_statement': 4}
 
 
 # Reglas gramaticales expresadas en funciones
@@ -54,7 +56,7 @@ def p_expression_switch_global_scope(p):
     global currentScope
 
     currentScope = globalScope
-
+    funcDir.fillStartingQuad(globalScope, quadCont)
 
 def p_expression_create_func_dir(p):
     'create_func_dir : '
@@ -161,11 +163,18 @@ def p_expression_function(p):
 def p_expression_end_proc(p):
     'end_proc : '
     global quadCont
-    quad = Quadruple(quadCont, 'ENDPROC', None, None, None)
-    quadruples.append(quad)
 
-    quadCont += 1
+    functionType = funcDir.getFunctionType(currentScope)
 
+    if functionType != 'void':
+        if not hasReturnStatement:
+            print('Error: Function {0} of type {1} has no return statement.'.format(currentScope, functionType))
+            sys.exit(ERROR_CODES['no_return_statement'])
+    else:
+        quad = Quadruple(quadCont, 'ENDPROC', None, None, None)
+        quadruples.append(quad)
+
+        quadCont += 1
 
 def p_expression_starting_quad(p):
     'starting_quad : '
@@ -248,6 +257,16 @@ def p_expression_estatuto(p):
 
 def p_expression_return(p):
     'return : RETURN ss_expression SEMICOLON'
+
+    global hasReturnStatement
+    global quadCont
+
+    hasReturnStatement = True
+
+    quad = Quadruple(quadCont, 'ENDPROC', None, None, None)
+    quadruples.append(quad)
+
+    quadCont += 1
 
 
 def p_expression_predefined(p):
@@ -922,9 +941,9 @@ def initParser():
     print('Jump stack: {0}'.format(JumpStack))
 
     VM.getInstructions(quadruples)
-
+    VM.setInitialInstructionPointer(funcDir.getFunctionStartingQuad(globalScope))
     VM.printInstructions()
-#    VM.printMainMemory()
     VM.executeInstructions()
+#    VM.printMainMemory()
 
 initParser()

@@ -8,7 +8,7 @@ class MemorySegment:
 
         self.memory_name = memory_name
         self.offset = offset
-        self.initial_address = 0
+        self.initial_address = offset
         self.final_address = (offset + total_records) - 1
         self.int_initial_address = 0
         self.int_final_address = partitionSize - 1

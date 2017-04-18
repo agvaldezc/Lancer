@@ -12,7 +12,7 @@ main {
     y = 0;
 
     while (y < 25) {
-        x[y] = y;
+        x[y] = y + 20;
 
         print(x[y] + 20);
 

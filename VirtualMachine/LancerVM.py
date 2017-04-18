@@ -6,9 +6,14 @@ class LancerVM:
     def __init__(self):
         self.memory = MainMemory()
         self.instruction_stack = []
+        self.execution_stack = []
+        self.instruction_pointer = 0
 
     def printMainMemory(self):
         self.memory.printMemory()
+
+    def setInitialInstructionPointer(self, startingPointer):
+        self.instruction_pointer = startingPointer
 
     def getInstructions(self, instruction_stack):
         self.instruction_stack = instruction_stack
@@ -22,11 +27,10 @@ class LancerVM:
         print("Started Execution")
         totalInstructions = len(self.instruction_stack)
 
-        instructionPointer = 0
-        savedInstructionPointer = instructionPointer
+        savedInstructionPointer = self.instruction_pointer
 
-        while instructionPointer < totalInstructions:
-            instruction = self.instruction_stack[instructionPointer]
+        while self.instruction_pointer < totalInstructions:
+            instruction = self.instruction_stack[self.instruction_pointer]
 
             instructionCode = instruction.operator
             leftOperandVirtualAddress = instruction.left_operand
@@ -46,100 +50,100 @@ class LancerVM:
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
 
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand + rightOperand))
-                instructionPointer += 1
+                self.instruction_pointer += 1
 
             elif instructionCode == '-':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
 
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand - rightOperand))
-                instructionPointer += 1
+                self.instruction_pointer += 1
 
             elif instructionCode == '*':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
 
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand * rightOperand))
-                instructionPointer += 1
+                self.instruction_pointer += 1
 
             elif instructionCode == '/':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
 
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand / rightOperand))
-                instructionPointer += 1
+                self.instruction_pointer += 1
 
             elif instructionCode == '=':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
 
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, leftOperand)
-                instructionPointer += 1
+                self.instruction_pointer += 1
 
             elif instructionCode == 'print':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
 
                 print(leftOperand)
-                instructionPointer += 1
+                self.instruction_pointer += 1
             elif instructionCode == '<':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
 
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand < rightOperand))
-                instructionPointer += 1
+                self.instruction_pointer += 1
             elif instructionCode == '>':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
 
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand > rightOperand))
-                instructionPointer += 1
+                self.instruction_pointer += 1
             elif instructionCode == '==':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
 
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand == rightOperand))
-                instructionPointer += 1
+                self.instruction_pointer += 1
             elif instructionCode == '<>':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
 
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand != rightOperand))
-                instructionPointer += 1
+                self.instruction_pointer += 1
             elif instructionCode == '<=':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
 
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand <= rightOperand))
-                instructionPointer += 1
+                self.instruction_pointer += 1
             elif instructionCode == '>=':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
 
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand >= rightOperand))
-                instructionPointer += 1
+                self.instruction_pointer += 1
             elif instructionCode == '&&':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
 
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand and rightOperand))
-                instructionPointer += 1
+                self.instruction_pointer += 1
             elif instructionCode == '||':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
 
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand or rightOperand))
-                instructionPointer += 1
+                self.instruction_pointer += 1
             elif instructionCode == 'GoToF':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 jumpPointer = resultVirtualAddress
 
                 if leftOperand:
-                    instructionPointer += 1
+                    self.instruction_pointer += 1
                 else:
-                    instructionPointer = jumpPointer - 1
+                    self.instruction_pointer = jumpPointer - 1
 
             elif instructionCode == 'GoTo':
                 jumpPointer = resultVirtualAddress
-                instructionPointer = jumpPointer - 1
+                self.instruction_pointer = jumpPointer - 1
 
             elif instructionCode == 'validate':
                 index = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
@@ -151,4 +155,4 @@ class LancerVM:
                     print("ERROR: Array index out of bounds. Index overflow.")
                     sys.exit(4)
                 else:
-                    instructionPointer += 1
+                    self.instruction_pointer += 1
