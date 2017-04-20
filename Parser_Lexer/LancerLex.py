@@ -144,15 +144,15 @@ def t_error(t):
 # Inicializar lex
 lexer = lex.lex()
 
-# Datos para probar el analizador lexico
-data = 'true'
-
-# Datos como input del analizador lexico
-lexer.input(data)
-
-# Loop que termina al leer todos los caracteres de los datos usados
-while True:
-    tok = lexer.token()
-    if not tok:
-        break
-    print (tok)
+# # Datos para probar el analizador lexico
+# data = 'true'
+#
+# # Datos como input del analizador lexico
+# lexer.input(data)
+#
+# # Loop que termina al leer todos los caracteres de los datos usados
+# while True:
+#     tok = lexer.token()
+#     if not tok:
+#         break
+#     print (tok)

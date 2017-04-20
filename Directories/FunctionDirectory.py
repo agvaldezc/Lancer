@@ -6,12 +6,21 @@ class FunctionDirectory:
         self.functions = {}
 
     def addFunction(self, functionName, functionType):
-        self.functions[functionName] = {'parameters': [], 'variables': VarTable(), 'type': functionType}
+        self.functions[functionName] = {'parameters': [], 'parameter_addresses': [], 'variables': VarTable(), 'type': functionType}
 
     def addParameterTypes(self, functionName, parameterTypeList):
         if self.functionExists(functionName):
             function = self.functions[functionName]
             function['parameters'] += parameterTypeList
+
+    def addParameterAddress(self, functionName, parameterAddressList):
+        if self.functionExists(functionName):
+            function = self.functions[functionName]
+            function['parameter_addresses'] += parameterAddressList
+
+    def getParameterAddresses(self, functionName):
+        function = self.functions[functionName]
+        return function['parameter_addresses']
 
     def validateParameters(self, functionName, argumentTypeList):
         function = self.functions[functionName]

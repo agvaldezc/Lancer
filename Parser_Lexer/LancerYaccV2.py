@@ -26,7 +26,7 @@ JumpStack = []
 semanticCube = SemanticCubeDict()
 quadruples = []
 tempCont = 0
-quadCont = 0
+quadCont = 1
 FunctionToCall = ""
 ArgumentNumber = 0
 ArgumentStack = []
@@ -40,7 +40,7 @@ trashValues = {'int': 1, 'float': 1.0, 'bool': True, 'string': 'Null'}
 
 ERROR_CODES = {'func_already_declared': -5, 'variable_already_declared': -6, 'func_not_declared': -7,
                'variable_not_declared': -8, 'type_mismatch': -9, 'syntax_error': -10, 'parameter_type_mismatch': -11,
-               'memory_error': 3, 'no_return_statement': 4}
+               'memory_error': 3, 'no_return_statement': 4, 'return_type_mismatch': 5}
 
 
 # Reglas gramaticales expresadas en funciones
@@ -232,6 +232,7 @@ def p_expression_add_params(p):
 
     if funcDir.addFunctionVariable(currentScope, paramName, paramType, virtualAddress):
         funcDir.addParameterTypes(currentScope, [paramType])
+        funcDir.addParameterAddress(currentScope, [virtualAddress])
 
 
 def p_expression_bloque(p):
@@ -263,11 +264,26 @@ def p_expression_return(p):
 
     hasReturnStatement = True
 
-    quad = Quadruple(quadCont, 'ENDPROC', None, None, None)
+    leftOperand = OperandStack.pop()
+    leftOperandType = TypeStack.pop()
+
+    functionType = funcDir.getFunctionType(currentScope)
+    functionVariable = funcDir.getVariable(globalScope, currentScope)
+    functionProperties = functionVariable[1][1]
+
+    if leftOperandType != functionType:
+        print("Return statement is trying to return {0} and function return type is {1}.".format(leftOperandType, functionType))
+        sys.exit()
+
+    quad = Quadruple(quadCont, 'RETURN', leftOperand, None, functionProperties)
     quadruples.append(quad)
 
     quadCont += 1
 
+    quad = Quadruple(quadCont, 'ENDPROC', None, None, None)
+    quadruples.append(quad)
+
+    quadCont += 1
 
 def p_expression_predefined(p):
     '''predefined : drawcircle
@@ -329,12 +345,14 @@ def p_expression_argument_validation(p):
     global FunctionToCall
 
     if FunctionToCall == "":
-        virtualAddress = OperandStack[len(OperandStack) - 1]
+        virtualAddress = OperandStack.pop()
         FunctionToCall = funcDir.getFunctionIdByAddress(globalScope, virtualAddress)
+
+    functionParameterAddresses = funcDir.getParameterAddresses(FunctionToCall)
 
     if funcDir.validateParameters(FunctionToCall, ArgumentTypeStack):
         for argument in ArgumentStack:
-            quad = Quadruple(quadCont, 'Parameter', argument, None, ArgumentNumber)
+            quad = Quadruple(quadCont, 'Parameter', argument, None, functionParameterAddresses[ArgumentNumber])
             quadruples.append(quad)
 
             quadCont += 1
@@ -344,6 +362,22 @@ def p_expression_argument_validation(p):
         quadruples.append(quad)
 
         quadCont += 1
+
+        functionType = funcDir.getFunctionType(FunctionToCall)
+
+        if functionType != 'void':
+            funcDir.addTempVariable(globalScope, functionType)
+            virtualAddress = VM.memory.addTempValue(trashValues[functionType], functionType)
+
+            functionVariable = funcDir.getVariable(globalScope, FunctionToCall)
+
+            quad = Quadruple(quadCont, '=', functionVariable[1][1], None, virtualAddress)
+            quadruples.append(quad)
+
+            quadCont += 1
+
+            OperandStack.append(virtualAddress)
+            TypeStack.append(functionType)
 
         ArgumentStack = []
         ArgumentTypeStack = []
@@ -356,7 +390,15 @@ def p_expression_argument_validation(p):
 
 def p_expression_generate_era(p):
     'generate_era : '
-    print('ERA GENERATION PENDING!!!!!')
+
+    global quadCont
+
+    function = p[-3]
+
+    quad = Quadruple(quadCont, 'ERA', function, None, None)
+    quadruples. append(quad)
+
+    quadCont += 1
 
 
 def p_expression_validate_function_id(p):
@@ -540,7 +582,7 @@ def p_expression_cteb(p):
 
 def p_expression_id_func_array(p):
     '''id_func_array : LARRAY identify_dimension ss_expression validate_array_bounds_quad RARRAY
-                     | LPAREN generate_era call_params RPAREN argument_validation add_return_temp_assignment
+                     | LPAREN generate_era call_params RPAREN argument_validation
                      | empty'''
 
 def p_expression_identify_dimension(p):
@@ -586,10 +628,6 @@ def p_expression_validate_array_bounds_quad(p):
 
         OperandStack.append([tempVirtualAddress])
         TypeStack.append(arrayType)
-
-def p_expression_add_return_temp_assignment(p):
-    'add_return_temp_assignment : '
-
 
 def p_expression_push_id_operand(p):
     '''push_id_operand : '''
@@ -930,10 +968,10 @@ def initParser():
 
     # print(funcDir.functions)
 
-    for function in funcDir.functions:
-        func = funcDir.functions[function]
-        print('{0} = {1}'.format(function, func))
-        print(func['variables'].variables)
+    # for function in funcDir.functions:
+    #     func = funcDir.functions[function]
+    #     print('{0} = {1}'.format(function, func))
+    #     print(func['variables'].variables)
 
     print('Operand stack: {0}'.format(OperandStack))
     print('Type stack: {0}'.format(TypeStack))
@@ -941,6 +979,7 @@ def initParser():
     print('Jump stack: {0}'.format(JumpStack))
 
     VM.getInstructions(quadruples)
+    VM.setFuncDir(funcDir)
     VM.setInitialInstructionPointer(funcDir.getFunctionStartingQuad(globalScope))
     VM.printInstructions()
     VM.executeInstructions()

@@ -6,19 +6,28 @@ var y : int;
 var w : float;
 var t[3] : string;
 
-func int funcion1(int a, int b, int c, string d)
-var q : bool;
+func bool funcion1(int a, int b, int c, string d)
+
 var o : string;
 {
-    a = b + c;
     if (a >= 12) {
-        return a;
-    } else {
-        return 123;
+        return true;
     }
 }
 
+func void funcion2(int a, int b, int c, string d)
+{
+    if (a >= 12) {
+        print("a is greater than 12.");
+    } else {
+        print("a is less than 12.");
+    }
+}
+
+
+
 main {
-    print("Hello, world");
+    print(funcion1(13,2,3,"hola"));
+    funcion2(12,3,2,'hola');
 }
 
