@@ -30,4 +30,6 @@ main {
     drawOval(432 , 620, w[3] , 5, red);
     drawRectangle(10, 10, 40, 40, green);
     drawTriangle(10, 10, 10, 90, 90, 90, blue);
+
+    print(factorial(10));
 }

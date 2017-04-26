@@ -18,6 +18,30 @@ class LancerVM:
     def printMainMemory(self):
         self.memory.printMemory()
 
+    def isInt(self, value):
+        try:
+            return int(value)
+        except (ValueError, TypeError):
+            return False
+
+    def isFloat(self, value):
+        try:
+            return float(value)
+        except (ValueError, TypeError):
+            return False
+
+    def isBool(self, value):
+        try:
+            return bool(value)
+        except (ValueError, TypeError):
+            return False
+
+    def isString(self, value):
+        try:
+            return str(value)
+        except (ValueError, TypeError):
+            return False
+
     def setMainName(self, mainName):
         self.main_name = mainName
 
@@ -335,6 +359,38 @@ class LancerVM:
                 line.setFill(rightOperandVirtualAddress)
                 line.setWidth(2)
                 line.draw(window)
+
+                self.instruction_pointer += 1
+
+            elif instructionCode == 'input':
+
+                value = raw_input()
+
+                if self.isInt(value):
+                    if leftOperandVirtualAddress == 'int':
+                        self.memory.editValueFromVirtualAddress(resultVirtualAddress, int(value))
+                    else:
+                        print('Error: Input type mismatch, expected {0} and got int'.format(leftOperandVirtualAddress))
+                        sys.exit(15)
+                elif self.isFloat(value):
+                    if leftOperandVirtualAddress == 'float':
+                        self.memory.editValueFromVirtualAddress(resultVirtualAddress, float(value))
+                    else:
+                        print('Error: Input type mismatch, expected {0} and got float'.format(leftOperandVirtualAddress))
+                        sys.exit(15)
+                elif value == 'true' or value == 'false':
+                    if leftOperandVirtualAddress == 'bool':
+                        self.memory.editValueFromVirtualAddress(resultVirtualAddress, bool(value))
+                    else:
+                        print('Error: Input type mismatch, expected {0} and got bool'.format(leftOperandVirtualAddress))
+                        sys.exit(15)
+                else:
+                    if leftOperandVirtualAddress == 'string':
+                        self.memory.editValueFromVirtualAddress(resultVirtualAddress, str(value))
+                    else:
+                        print('Error: Input type mismatch, expected {0} and got string'.format(leftOperandVirtualAddress))
+                        sys.exit(15)
+
 
                 self.instruction_pointer += 1
 

@@ -1,0 +1,19 @@
+program agvaldezc;
+
+var x[20] : float;
+var z : float;
+var y : int;
+var w : string;
+var t[3] : string;
+
+main {
+
+    print("enter circle radius:");
+    z = input;
+    print("draw circle? (yes/no)");
+    w = input;
+
+    if (w == 'yes') {
+        drawCircle(120,120, z, yellow);
+    }
+}

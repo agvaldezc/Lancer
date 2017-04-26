@@ -555,15 +555,13 @@ def p_expression_ss_not(p):
     '''ss_not : NOT push_operator
               | empty'''
 
-# def p_expression_solve_not_operation(p):
-#     'solve_not_operation : '
-#
-#     if OperatorStack[len(OperatorStack) - 1] == '!!':
-#         solveNotOperation(p)
+def p_expression_solve_not_operation(p):
+    'solve_not_operation : '
+    if OperatorStack[len(OperatorStack) - 1] == '!!':
+        solveNotOperation(p)
 
 def p_expression_s_expression(p):
     's_expression : expresion s_and_or'
-
 
 def p_expression_s_and_or(p):
     '''s_and_or : AND push_operator s_expression solve_pending_andor
@@ -577,7 +575,6 @@ def p_expression_solve_pending_andor(p):
 
     if OperatorStack[len(OperatorStack) - 1] in andor:
         solvePendingOperations(p)
-
 
 def p_expression_expresion(p):
     'expresion : expr exp'
@@ -615,7 +612,6 @@ def p_expression_term(p):
         | MINUS push_operator termino solve_pending_term term
         | empty'''
 
-
 def p_expression_solve_pending_term(p):
     'solve_pending_term : '
 
@@ -627,6 +623,25 @@ def p_expression_factor(p):
     '''factor : LPAREN create_false_bottom ss_expression RPAREN delete_false_bottom
               | signo constante'''
 
+
+def p_expression_solve_negatives(p):
+    'solve_negatives : '
+
+    global quadCont
+
+    if OperandStack[len(OperandStack) - 1] == '-':
+        rightOperand = OperandStack.pop()
+        rightType = TypeStack.pop()
+        operator = OperatorStack.pop()
+
+        if rightType == 'int' or rightType == 'float':
+
+            virtualAddress = VM.memory.addTempValue(trashValues[rightType], rightType)
+
+            quad = Quadruple(quadCont, 'negative', 0, rightOperand, virtualAddress)
+            quadruples.append(quad)
+
+            quadCont += 1
 
 def p_expression_create_false_bottom(p):
     'create_false_bottom : '
@@ -894,6 +909,7 @@ def assignQuad(p):
 
     semanticResult = semanticCube.getSemanticType(left_type, right_type, operator)
 
+    print("{0} {1} {2} = {3}".format(left_type, operator, right_type, semanticResult))
     if semanticResult != 'error':
         quad = Quadruple(quadCont, operator, right_operand, None, left_operand)
         quadruples.append(quad)
@@ -933,29 +949,14 @@ def inputAssignment(p):
     global tempCont
     global quadCont
 
-    tempVar = 't' + str(tempCont)
+    right_operand = OperandStack.pop()
+    right_type = TypeStack.pop()
+    operator = OperatorStack.pop()
 
-    inputQuad = Quadruple(quadCont, 'input', None, None, tempVar)
+    inputQuad = Quadruple(quadCont, 'input', right_type, None, right_operand)
     quadruples.append(inputQuad)
 
     quadCont += 1
-
-    OperandStack.append(tempVar)
-    TypeStack.append('InputType')
-
-    right_operand = OperandStack.pop()
-    right_type = TypeStack.pop()
-    left_operand = OperandStack.pop()
-    left_type = TypeStack.pop()
-    operator = OperatorStack.pop()
-
-    tempCont = tempCont + 1
-
-    assignInputQuad = Quadruple(quadCont, operator, right_operand, None, left_operand)
-    quadruples.append(assignInputQuad)
-
-    quadCont += 1
-
 
 def conditionQuads(p):
     expressionType = TypeStack.pop()
@@ -1071,6 +1072,7 @@ def initParser():
 
     VM.getInstructions(quadruples)
     VM.setFuncDir(funcDir)
+    VM.setMainName(globalScope)
     VM.setInitialInstructionPointer(funcDir.getFunctionStartingQuad(globalScope))
 #    VM.printInstructions()
     VM.executeInstructions()
