@@ -23,6 +23,7 @@ OperandStack = []
 OperatorStack = []
 TypeStack = []
 JumpStack = []
+ReturnStack = []
 semanticCube = SemanticCubeDict()
 quadruples = []
 tempCont = 0
@@ -35,6 +36,8 @@ VM = LancerVM()
 dimensionVariableName = ""
 dimension = {}
 hasReturnStatement = False
+drawParameters = []
+drawColor = ""
 
 trashValues = {'int': 1, 'float': 1.0, 'bool': True, 'string': 'Null'}
 
@@ -163,6 +166,7 @@ def p_expression_function(p):
 def p_expression_end_proc(p):
     'end_proc : '
     global quadCont
+    global ReturnStack
 
     functionType = funcDir.getFunctionType(currentScope)
 
@@ -170,9 +174,21 @@ def p_expression_end_proc(p):
         if not hasReturnStatement:
             print('Error: Function {0} of type {1} has no return statement.'.format(currentScope, functionType))
             sys.exit(ERROR_CODES['no_return_statement'])
+        else:
+            quad = Quadruple(quadCont, 'ENDPROC', None, None, None)
+            quadruples.append(quad)
+
+            for i in ReturnStack:
+                quadruples[i - 1].fillJumpQuad(quadCont)
+
+            ReturnStack = []
+
+            quadCont += 1
     else:
         quad = Quadruple(quadCont, 'ENDPROC', None, None, None)
         quadruples.append(quad)
+
+        ReturnStack = []
 
         quadCont += 1
 
@@ -280,18 +296,19 @@ def p_expression_return(p):
 
     quadCont += 1
 
-    quad = Quadruple(quadCont, 'ENDPROC', None, None, None)
+    quad = Quadruple(quadCont, 'GoTo', None, None, None)
     quadruples.append(quad)
+
+    ReturnStack.append(quadCont)
 
     quadCont += 1
 
 def p_expression_predefined(p):
     '''predefined : drawcircle
-                  | drawsquare
+                  | drawrectangle
                   | drawtriangle
                   | drawline
-                  | drawpolygon
-                  | drawcurve'''
+                  | drawoval'''
 
 
 def p_expression_color(p):
@@ -301,31 +318,105 @@ def p_expression_color(p):
              | YELLOW
              | BROWN
              | BLACK'''
-
+    p[0] = p[1]
 
 def p_expression_drawline(p):
-    'drawline : DRAWLINE LPAREN ss_expression COMA ss_expression COMA ss_expression COMA ss_expression COMA color RPAREN SEMICOLON'
+    'drawline : DRAWLINE LPAREN ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA color collect_draw_color RPAREN SEMICOLON'
 
+    global quadCont
+    global drawColor
+    global drawParameters
 
-def p_expression_drawsquare(p):
-    'drawsquare : DRAWSQUARE LPAREN ss_expression COMA ss_expression COMA color RPAREN SEMICOLON'
+    quad = Quadruple(quadCont, 'DRAWLINE', drawParameters, drawColor, None)
+    quadruples.append(quad)
+
+    quadCont += 1
+
+    drawColor = ""
+    drawParameters = []
+
+def p_expression_collect_draw_argument(p):
+    'collect_draw_argument : '
+
+    operand = OperandStack.pop()
+    operandType = TypeStack.pop()
+
+    if operandType != 'int' and operandType != 'float':
+        print('Error: Argument type mismatch. Expected float or int, got {0} in line {1}'.format(operandType, p.lexer.lineno))
+        sys.exit(ERROR_CODES['parameter_type_mismatch'])
+    else:
+        drawParameters.append(operand)
+
+def p_expression_collect_draw_color(p):
+    'collect_draw_color : '
+
+    global drawColor
+
+    drawColor = p[-1]
+    print drawColor
+
+def p_expression_drawrectangle(p):
+    '''drawrectangle : DRAWRECTANGLE LPAREN ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA color collect_draw_color RPAREN SEMICOLON'''
+
+    global quadCont
+    global drawColor
+    global drawParameters
+
+    quad = Quadruple(quadCont, 'DRAWRECTANGLE', drawParameters, drawColor, None)
+    quadruples.append(quad)
+
+    quadCont += 1
+
+    drawColor = ""
+    drawParameters = []
 
 
 def p_expression_drawcircle(p):
-    'drawcircle : DRAWCIRCLE LPAREN ss_expression COMA ss_expression COMA color RPAREN SEMICOLON'
+    'drawcircle : DRAWCIRCLE LPAREN ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA color collect_draw_color RPAREN SEMICOLON'
+
+    global quadCont
+    global drawColor
+    global drawParameters
+
+    quad = Quadruple(quadCont, 'DRAWCIRCLE', drawParameters, drawColor, None)
+    quadruples.append(quad)
+
+    quadCont += 1
+
+    drawColor = ""
+    drawParameters = []
 
 
 def p_expression_drawtriangle(p):
-    'drawtriangle : DRAWTRIANGLE LPAREN ss_expression COMA ss_expression COMA color RPAREN SEMICOLON'
+    'drawtriangle : DRAWTRIANGLE LPAREN ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA color collect_draw_color RPAREN SEMICOLON'
+
+    global quadCont
+    global drawColor
+    global drawParameters
+
+    quad = Quadruple(quadCont, 'DRAWTRIANGLE', drawParameters, drawColor, None)
+    quadruples.append(quad)
+
+    quadCont += 1
+
+    drawColor = ""
+    drawParameters = []
 
 
-def p_expression_drawcurve(p):
-    'drawcurve : DRAWCURVE LPAREN ss_expression COMA color RPAREN SEMICOLON'
+def p_expression_drawoval(p):
+    'drawoval : DRAWOVAL LPAREN ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA color collect_draw_color RPAREN SEMICOLON'
 
+    global quadCont
+    global drawColor
+    global drawParameters
 
-def p_expression_drawpolygon(p):
-    'drawpolygon : DRAWPOLYGON LPAREN ss_expression COMA ss_expression COMA color RPAREN SEMICOLON'
+    quad = Quadruple(quadCont, 'DRAWOVAL', drawParameters, drawColor, None)
+    quadruples.append(quad)
 
+    quadCont += 1
+
+    drawColor = ""
+    drawParameters = []
 
 def p_expression_voidfunction(p):
     '''voidfunction : ID validate_function_id LPAREN generate_era call_params RPAREN SEMICOLON argument_validation'''
@@ -968,10 +1059,10 @@ def initParser():
 
     # print(funcDir.functions)
 
-    # for function in funcDir.functions:
-    #     func = funcDir.functions[function]
-    #     print('{0} = {1}'.format(function, func))
-    #     print(func['variables'].variables)
+    #for function in funcDir.functions:
+    #    func = funcDir.functions[function]
+    #    print('{0} = {1}'.format(function, func))
+    #    print(func['variables'].variables)
 
     print('Operand stack: {0}'.format(OperandStack))
     print('Type stack: {0}'.format(TypeStack))
@@ -981,7 +1072,7 @@ def initParser():
     VM.getInstructions(quadruples)
     VM.setFuncDir(funcDir)
     VM.setInitialInstructionPointer(funcDir.getFunctionStartingQuad(globalScope))
-    VM.printInstructions()
+#    VM.printInstructions()
     VM.executeInstructions()
 #    VM.printMainMemory()
 

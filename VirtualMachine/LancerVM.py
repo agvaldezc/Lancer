@@ -1,19 +1,25 @@
 from Memory.MainMemory import MainMemory
 from Directories.FunctionDirectory import FunctionDirectory
 import sys
+from graphics import *
 
 
 class LancerVM:
     def __init__(self):
         self.memory = MainMemory()
         self.instruction_stack = []
-        self.execution_stack = []
         self.instruction_pointer = 0
         self.funcDir = FunctionDirectory()
         self.execution_stack = []
+        self.window_width = 640
+        self.window_height = 480
+        self.main_name = ""
 
     def printMainMemory(self):
         self.memory.printMemory()
+
+    def setMainName(self, mainName):
+        self.main_name = mainName
 
     def setFuncDir(self, funcDir):
         self.funcDir = funcDir
@@ -33,22 +39,29 @@ class LancerVM:
         print("Started Execution")
         totalInstructions = len(self.instruction_stack)
 
-        savedInstructionPointer = self.instruction_pointer
+        savedInstructionPointer = []
+
+        window = GraphWin(self.main_name, self.window_width, self.window_height)
 
         while self.instruction_pointer < totalInstructions:
             instruction = self.instruction_stack[self.instruction_pointer]
-            #print(instruction.printQuad())
+
+            print(instruction.printQuad())
+
             instructionCode = instruction.operator
             leftOperandVirtualAddress = instruction.left_operand
             rightOperandVirtualAddress = instruction.right_operand
             resultVirtualAddress = instruction.result
 
             if isinstance(leftOperandVirtualAddress, list):
-                leftOperandVirtualAddress = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress[0])
+                if len(leftOperandVirtualAddress) == 1:
+                    leftOperandVirtualAddress = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress[0])
             if isinstance(rightOperandVirtualAddress, list):
-                rightOperandVirtualAddress = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress[0])
+                if len(rightOperandVirtualAddress) == 1:
+                    rightOperandVirtualAddress = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress[0])
             if isinstance(resultVirtualAddress, list):
-                resultVirtualAddress = self.memory.getValueFromVirtualAddress(resultVirtualAddress[0])
+                if len(resultVirtualAddress) == 1:
+                    resultVirtualAddress = self.memory.getValueFromVirtualAddress(resultVirtualAddress[0])
 
 
             if instructionCode == '+':
@@ -190,15 +203,19 @@ class LancerVM:
                 self.execution_stack.append(backupMemoryState)
                 self.instruction_pointer += 1
 
+                #print(self.execution_stack)
+
             elif instructionCode == 'ENDPROC':
                 backupMemoryState = self.execution_stack.pop()
-
+                #print("backup state: {0}".format(backupMemoryState))
+                print("execution stack: {0}".format(self.execution_stack))
                 for state in backupMemoryState:
                     virtualAddress = state.keys()
                     virtualAddress = virtualAddress[0]
                     self.memory.editValueFromVirtualAddress(virtualAddress, state[virtualAddress])
 
-                self.instruction_pointer = savedInstructionPointer + 1
+                #print("saved IP: {0}". format(savedInstructionPointer))
+                self.instruction_pointer = savedInstructionPointer.pop() + 1
 
             elif instructionCode == 'Parameter':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
@@ -208,5 +225,119 @@ class LancerVM:
                 self.instruction_pointer += 1
 
             elif instructionCode == 'GoSub':
-                savedInstructionPointer = self.instruction_pointer
+                savedInstructionPointer.append(self.instruction_pointer)
                 self.instruction_pointer = resultVirtualAddress - 1
+            elif instructionCode == 'DRAWLINE':
+
+                values = []
+
+                for numberAddress in leftOperandVirtualAddress:
+                    if isinstance(numberAddress, list):
+                        numberAddress = self.memory.getValueFromVirtualAddress(numberAddress[0])
+                        value = self.memory.getValueFromVirtualAddress(numberAddress)
+
+                        values.append(value)
+                    else:
+                        value = self.memory.getValueFromVirtualAddress(numberAddress)
+
+                        values.append(value)
+
+                line = Line(Point(values[0], values[1]), Point(values[2], values[3]))
+
+                line.setFill(rightOperandVirtualAddress)
+                line.setWidth(2)
+                line.draw(window)
+
+                self.instruction_pointer += 1
+            elif instructionCode == 'DRAWCIRCLE':
+
+                values = []
+
+                for numberAddress in leftOperandVirtualAddress:
+                    if isinstance(numberAddress, list):
+                        numberAddress = self.memory.getValueFromVirtualAddress(numberAddress[0])
+                        value = self.memory.getValueFromVirtualAddress(numberAddress)
+
+                        values.append(value)
+                    else:
+                        value = self.memory.getValueFromVirtualAddress(numberAddress)
+
+                        values.append(value)
+
+                line = Circle(Point(values[0], values[1]), values[2])
+
+                line.setFill(rightOperandVirtualAddress)
+                line.setWidth(2)
+                line.draw(window)
+
+                self.instruction_pointer += 1
+            elif instructionCode == 'DRAWOVAL':
+
+                values = []
+
+                for numberAddress in leftOperandVirtualAddress:
+                    if isinstance(numberAddress, list):
+                        numberAddress = self.memory.getValueFromVirtualAddress(numberAddress[0])
+                        value = self.memory.getValueFromVirtualAddress(numberAddress)
+
+                        values.append(value)
+                    else:
+                        value = self.memory.getValueFromVirtualAddress(numberAddress)
+
+                        values.append(value)
+
+                line = Oval(Point(values[0], values[1]), Point(values[2], values[3]))
+
+                line.setFill(rightOperandVirtualAddress)
+                line.setWidth(2)
+                line.draw(window)
+
+                self.instruction_pointer += 1
+            elif instructionCode == 'DRAWRECTANGLE':
+
+                values = []
+
+                for numberAddress in leftOperandVirtualAddress:
+                    if isinstance(numberAddress, list):
+                        numberAddress = self.memory.getValueFromVirtualAddress(numberAddress[0])
+                        value = self.memory.getValueFromVirtualAddress(numberAddress)
+
+                        values.append(value)
+                    else:
+                        value = self.memory.getValueFromVirtualAddress(numberAddress)
+
+                        values.append(value)
+
+                line = Rectangle(Point(values[0], values[1]), Point(values[2], values[3]))
+
+                line.setFill(rightOperandVirtualAddress)
+                line.setWidth(2)
+                line.draw(window)
+
+                self.instruction_pointer += 1
+            elif instructionCode == 'DRAWTRIANGLE':
+
+                values = []
+
+                for numberAddress in leftOperandVirtualAddress:
+                    if isinstance(numberAddress, list):
+                        numberAddress = self.memory.getValueFromVirtualAddress(numberAddress[0])
+                        value = self.memory.getValueFromVirtualAddress(numberAddress)
+
+                        values.append(value)
+                    else:
+                        value = self.memory.getValueFromVirtualAddress(numberAddress)
+
+                        values.append(value)
+
+                line = Polygon(Point(values[0], values[1]), Point(values[2], values[3]), Point(values[4], values[5]))
+
+                line.setFill(rightOperandVirtualAddress)
+                line.setWidth(2)
+                line.draw(window)
+
+                self.instruction_pointer += 1
+
+            #End of while
+
+        window.getMouse()
