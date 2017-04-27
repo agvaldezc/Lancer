@@ -6,14 +6,19 @@ var y : int;
 var w : string;
 var t[3] : string;
 
-main {
+func int factorial(int n) {
+    if (n == 0 || n == 1) {
+        return 1;
+    } else {
+        return n * factorial(n - 1);
+    }
+}
 
-    print("enter circle radius:");
+main {
+    print('Type circle radius');
     z = input;
-    print("draw circle? (yes/no)");
+    print('Type cicle color: ');
     w = input;
 
-    if (w == 'yes') {
-        drawCircle(120,120, z, yellow);
-    }
+    drawCircle(320, 240, z, red);
 }

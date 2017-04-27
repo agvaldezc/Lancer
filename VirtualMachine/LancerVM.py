@@ -70,7 +70,7 @@ class LancerVM:
         while self.instruction_pointer < totalInstructions:
             instruction = self.instruction_stack[self.instruction_pointer]
 
-            print(instruction.printQuad())
+            #print(instruction.printQuad())
 
             instructionCode = instruction.operator
             leftOperandVirtualAddress = instruction.left_operand
@@ -212,6 +212,12 @@ class LancerVM:
 
                 varTable = function['variables']
                 variables = varTable.variables
+
+                # functionData = self.funcDir.getVariable(self.main_name, leftOperandVirtualAddress)
+                # functionVirtualAddress = functionData[1][1]
+                # functionValue =  self.memory.getValueFromVirtualAddress(functionVirtualAddress)
+                #
+                # backupMemoryState = [{functionVirtualAddress: functionValue}]
 
                 backupMemoryState = []
 

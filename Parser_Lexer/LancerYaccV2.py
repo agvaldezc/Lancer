@@ -353,7 +353,6 @@ def p_expression_collect_draw_color(p):
     global drawColor
 
     drawColor = p[-1]
-    print drawColor
 
 def p_expression_drawrectangle(p):
     '''drawrectangle : DRAWRECTANGLE LPAREN ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA ss_expression collect_draw_argument COMA color collect_draw_color RPAREN SEMICOLON'''
@@ -702,7 +701,7 @@ def p_expression_identify_dimension(p):
 
     dimension = dimension['dimensions']
 
-    print(dimension)
+    #print(dimension)
 
 def p_expression_validate_array_bounds_quad(p):
     'validate_array_bounds_quad : '
@@ -790,7 +789,10 @@ def p_expression_push_string_operand(p):
     global OperandStack
     global OperatorStack
 
-    virtualAddress = VM.memory.addConstantValue(p[-1], 'string')
+    oldString = p[-1]
+    newString = oldString[1:-1]
+
+    virtualAddress = VM.memory.addConstantValue(newString, 'string')
 
     OperandStack.append(virtualAddress)
     TypeStack.append('string')
@@ -1065,10 +1067,10 @@ def initParser():
     #    print('{0} = {1}'.format(function, func))
     #    print(func['variables'].variables)
 
-    print('Operand stack: {0}'.format(OperandStack))
-    print('Type stack: {0}'.format(TypeStack))
-    print('Operator stack: {0}'.format(OperatorStack))
-    print('Jump stack: {0}'.format(JumpStack))
+    #print('Operand stack: {0}'.format(OperandStack))
+    #print('Type stack: {0}'.format(TypeStack))
+    #print('Operator stack: {0}'.format(OperatorStack))
+    #print('Jump stack: {0}'.format(JumpStack))
 
     VM.getInstructions(quadruples)
     VM.setFuncDir(funcDir)
