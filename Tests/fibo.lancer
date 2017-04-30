@@ -1,0 +1,23 @@
+program fibo;
+
+func int fibonacci(int n)
+var fibo1 : int;
+var fibo2 : int;
+{
+    if (n == 0) {
+        return 0;
+    }
+
+    if (n == 1) {
+        return 1;
+    }
+
+    fibo1 = fibonacci(n - 1);
+    fibo2 = fibonacci(n - 2);
+
+    return fibo1 + fibo2;
+}
+
+main {
+    print(fibonacci(10));
+}
