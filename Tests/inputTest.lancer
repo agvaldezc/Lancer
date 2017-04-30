@@ -19,6 +19,4 @@ main {
     z = input;
     print('Type cicle color: ');
     w = input;
-
-    drawCircle(320, 240, z, red);
 }

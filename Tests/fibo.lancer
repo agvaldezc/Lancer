@@ -1,4 +1,7 @@
 program fibo;
+var negInt : int;
+var negFloat : float;
+var negBool : bool;
 
 func int fibonacci(int n)
 var fibo1 : int;
@@ -15,9 +18,31 @@ var fibo2 : int;
     fibo1 = fibonacci(n - 1);
     fibo2 = fibonacci(n - 2);
 
-    return fibo1 + fibo2;
+    return (fibo1 + fibo2);
+}
+
+func void negate(bool value) {
+    if (value) {
+        print('the value is true');
+    } else {
+        print("the value is false");
+    }
 }
 
 main {
-    print(fibonacci(10));
+
+    print(fibonacci(7));
+
+    negBool = input;
+
+    negate(!!negBool);
+
+    negInt = 10;
+    negFloat = 123.5;
+
+    print(negInt);
+    print(negFloat);
+
+    print(9823.23 + negFloat);
+
 }

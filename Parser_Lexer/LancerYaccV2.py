@@ -467,7 +467,6 @@ def p_expression_argument_validation(p):
             quadCont += 1
 
             OperandStack.append(virtualAddress)
-            TypeStack.append(functionType)
 
         ArgumentStack = []
         ArgumentTypeStack = []
@@ -547,7 +546,7 @@ def p_expression_asignacion(p):
 
 
 def p_expression_ss_expression(p):
-    '''ss_expression : ss_not s_expression'''
+    '''ss_expression : ss_not s_expression solve_not_operation'''
 
 
 def p_expression_ss_not(p):
@@ -556,8 +555,10 @@ def p_expression_ss_not(p):
 
 def p_expression_solve_not_operation(p):
     'solve_not_operation : '
-    if OperatorStack[len(OperatorStack) - 1] == '!!':
-        solveNotOperation(p)
+
+    if len(OperatorStack) > 0:
+        if OperatorStack[len(OperatorStack) - 1] == '!!':
+            solveNotOperation(p)
 
 def p_expression_s_expression(p):
     's_expression : expresion s_and_or'
@@ -620,7 +621,7 @@ def p_expression_solve_pending_term(p):
 
 def p_expression_factor(p):
     '''factor : LPAREN create_false_bottom ss_expression RPAREN delete_false_bottom
-              | signo constante'''
+              | constante'''
 
 
 def p_expression_solve_negatives(p):
@@ -628,19 +629,21 @@ def p_expression_solve_negatives(p):
 
     global quadCont
 
-    if OperandStack[len(OperandStack) - 1] == '-':
-        rightOperand = OperandStack.pop()
-        rightType = TypeStack.pop()
-        operator = OperatorStack.pop()
+    if len(OperatorStack) > 0:
+        if OperatorStack[len(OperatorStack) - 1] == '-' and len(OperandStack) > 2:
+            rightOperand = OperandStack.pop()
+            rightType = TypeStack.pop()
+            operator = OperatorStack.pop()
 
-        if rightType == 'int' or rightType == 'float':
+            if rightType == 'int' or rightType == 'float':
 
-            virtualAddress = VM.memory.addTempValue(trashValues[rightType], rightType)
+                quad = Quadruple(quadCont, 'negative', 0, rightOperand, rightOperand)
+                quadruples.append(quad)
 
-            quad = Quadruple(quadCont, 'negative', 0, rightOperand, virtualAddress)
-            quadruples.append(quad)
+                quadCont += 1
 
-            quadCont += 1
+                OperandStack.append(rightOperand)
+                TypeStack.append(rightType)
 
 def p_expression_create_false_bottom(p):
     'create_false_bottom : '
@@ -667,9 +670,8 @@ def p_expression_solve_pending_factor(p):
 
 
 def p_expression_signo(p):
-    '''signo : PLUS push_operator
-            | MINUS push_operator
-            | empty'''
+    '''signo : MINUS push_operator
+             | empty'''
 
 
 def p_expression_constante(p):
@@ -911,7 +913,7 @@ def assignQuad(p):
 
     semanticResult = semanticCube.getSemanticType(left_type, right_type, operator)
 
-    print("{0} {1} {2} = {3}".format(left_type, operator, right_type, semanticResult))
+    #print("{0} {1} {2} = {3}".format(left_type, operator, right_type, semanticResult))
     if semanticResult != 'error':
         quad = Quadruple(quadCont, operator, right_operand, None, left_operand)
         quadruples.append(quad)
@@ -922,6 +924,7 @@ def assignQuad(p):
         sys.exit(ERROR_CODES['type_mismatch'])
 
 def solveNotOperation(p):
+
     right_operand = OperandStack.pop()
     right_type = TypeStack.pop()
     operator = OperatorStack.pop()
@@ -940,6 +943,9 @@ def solveNotOperation(p):
 
         quad = Quadruple(quadCont, operator, right_operand, None, virtualTempAddress)
         quadruples.append(quad)
+
+        OperandStack.append(virtualTempAddress)
+        TypeStack.append(semanticResult)
 
         quadCont += 1
     else:
@@ -1067,16 +1073,16 @@ def initParser():
     #    print('{0} = {1}'.format(function, func))
     #    print(func['variables'].variables)
 
-    #print('Operand stack: {0}'.format(OperandStack))
-    #print('Type stack: {0}'.format(TypeStack))
-    #print('Operator stack: {0}'.format(OperatorStack))
-    #print('Jump stack: {0}'.format(JumpStack))
+    print('Operand stack: {0}'.format(OperandStack))
+    print('Type stack: {0}'.format(TypeStack))
+    print('Operator stack: {0}'.format(OperatorStack))
+    print('Jump stack: {0}'.format(JumpStack))
 
     VM.getInstructions(quadruples)
     VM.setFuncDir(funcDir)
     VM.setMainName(globalScope)
     VM.setInitialInstructionPointer(funcDir.getFunctionStartingQuad(globalScope))
-#    VM.printInstructions()
+    VM.printInstructions()
     VM.executeInstructions()
 #    VM.printMainMemory()
 

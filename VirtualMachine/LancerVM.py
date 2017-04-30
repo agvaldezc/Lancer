@@ -102,6 +102,12 @@ class LancerVM:
                 self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand - rightOperand))
                 self.instruction_pointer += 1
 
+            elif instructionCode == 'negative':
+                rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
+
+                self.memory.editValueFromVirtualAddress(resultVirtualAddress, (0 - rightOperand))
+                self.instruction_pointer += 1
+
             elif instructionCode == '*':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
@@ -131,6 +137,13 @@ class LancerVM:
 
                 print(leftOperand)
                 self.instruction_pointer += 1
+
+            elif instructionCode == '!!':
+                leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
+
+                self.memory.editValueFromVirtualAddress(resultVirtualAddress, (not leftOperand))
+                self.instruction_pointer += 1
+
             elif instructionCode == '<':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
@@ -388,9 +401,15 @@ class LancerVM:
                     else:
                         print('Error: Input type mismatch, expected {0} and got float'.format(leftOperandVirtualAddress))
                         sys.exit(15)
-                elif value == 'true' or value == 'false':
+                elif value == 'true':
                     if leftOperandVirtualAddress == 'bool':
-                        self.memory.editValueFromVirtualAddress(resultVirtualAddress, bool(value))
+                        self.memory.editValueFromVirtualAddress(resultVirtualAddress, True)
+                    else:
+                        print('Error: Input type mismatch, expected {0} and got bool'.format(leftOperandVirtualAddress))
+                        sys.exit(15)
+                elif value == 'false':
+                    if leftOperandVirtualAddress == 'bool':
+                        self.memory.editValueFromVirtualAddress(resultVirtualAddress, False)
                     else:
                         print('Error: Input type mismatch, expected {0} and got bool'.format(leftOperandVirtualAddress))
                         sys.exit(15)
