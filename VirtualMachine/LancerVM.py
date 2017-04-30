@@ -113,8 +113,12 @@ class LancerVM:
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
                 rightOperand = self.memory.getValueFromVirtualAddress(rightOperandVirtualAddress)
 
-                self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand / rightOperand))
-                self.instruction_pointer += 1
+                if (rightOperand == 0):
+                    print("Error: Detected division by 0. Math error!")
+                    sys.exit(8)
+                else:
+                    self.memory.editValueFromVirtualAddress(resultVirtualAddress, (leftOperand / rightOperand))
+                    self.instruction_pointer += 1
 
             elif instructionCode == '=':
                 leftOperand = self.memory.getValueFromVirtualAddress(leftOperandVirtualAddress)
@@ -238,7 +242,7 @@ class LancerVM:
             elif instructionCode == 'ENDPROC':
                 backupMemoryState = self.execution_stack.pop()
                 #print("backup state: {0}".format(backupMemoryState))
-                print("execution stack: {0}".format(self.execution_stack))
+                #print("execution stack: {0}".format(self.execution_stack))
                 for state in backupMemoryState:
                     virtualAddress = state.keys()
                     virtualAddress = virtualAddress[0]

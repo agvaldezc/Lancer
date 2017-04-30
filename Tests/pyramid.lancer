@@ -1,0 +1,65 @@
+program drawPyrmid;
+var niveles : int;
+var color1 : string;
+var color2 : string;
+var color3 : string;
+func float promedio(float a, float b) {
+    return (a + b) / 2;
+}
+
+func void pyramid(float x1, float y1, float x2, float y2, float x3, float y3, int niveles, string color)
+var x12 : float;
+var y12 : float;
+var x13 : float;
+var y13 : float;
+var x23 : float;
+var y23 : float;
+{
+    if (niveles <= 1) {
+        if (color == "red") {
+            drawTriangle(x1, y1, x2, y2, x3, y3, red);
+        }
+
+        if (color == "blue") {
+            drawTriangle(x1, y1, x2, y2, x3, y3, blue);
+        }
+
+        if (color == "green") {
+            drawTriangle(x1, y1, x2, y2, x3, y3, green);
+        }
+
+        if (color == "yellow") {
+            drawTriangle(x1, y1, x2, y2, x3, y3, yellow);
+        }
+    } else {
+        x12 = promedio(x1, x2);
+        y12 = promedio(y1, y2);
+        x13 = promedio(x1, x3);
+        y13 = promedio(y1, y3);
+        x23 = promedio(x2, x3);
+        y23 = promedio(y2, y3);
+
+        niveles = niveles - 1;
+
+        pyramid(x1, y1, x12, y12, x13, y13, niveles, color);
+        pyramid(x12, y12, x2, y2, x23, y23, niveles, color);
+        pyramid(x13, y13, x23, y23, x3, y3, niveles, color);
+    }
+}
+
+main {
+
+    print("Niveles: ");
+    niveles = input;
+
+    print("Color: ");
+    color1 = input;
+    print("Color: ");
+    color2 = input;
+    print("Color: ");
+    color3 = input;
+
+    pyramid(0.0, 0.0, (640.0/2), 0.0, 0.0, 480.0, niveles, color1);
+    pyramid((640.0/2), 0.0, 0.0, 480.0, 640.0, 480.0, niveles, color2);
+    pyramid(640.0, 0.0, (640.0/2), 0.0, 640.0, 480.0, niveles, color3);
+}
