@@ -19,7 +19,6 @@ reserved = {
     'string': 'STRING_TYPE',
     'func': 'FUNC',
     'while': 'WHILE',
-    'let': 'CONST',
     'main': 'MAIN',
     'return': 'RETURN',
     'void': 'VOID',
@@ -34,8 +33,7 @@ reserved = {
     'blue': 'BLUE',
     'yellow': 'YELLOW',
     'brown': 'BROWN',
-    'black': 'BLACK',
-    'elseIf': 'ELSEIF'
+    'black': 'BLACK'
 }
 
 # Lista de tokens
@@ -67,12 +65,10 @@ tokens = [
              'AND',
              'OR',
              'DIFFERENT',
-             'DOT',
              'ASSIGN',
              'CTEI',
              'CTEF',
-             'CTES',
-             'CTEB'
+             'CTES'
          ] + list(reserved.values())
 
 # Expresiones regulares para la definicion de cada token
@@ -98,7 +94,6 @@ t_COMA = r'\,'
 t_AND = r'\&&'
 t_OR = r'\|\|'
 t_DIFFERENT = r'\<>'
-t_DOT = r'\.'
 t_ASSIGN = r'\='
 t_CTES = r'\".*\" | \'.*\''
 

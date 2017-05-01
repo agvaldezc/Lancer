@@ -623,27 +623,27 @@ def p_expression_factor(p):
     '''factor : LPAREN create_false_bottom ss_expression RPAREN delete_false_bottom
               | constante'''
 
-
-def p_expression_solve_negatives(p):
-    'solve_negatives : '
-
-    global quadCont
-
-    if len(OperatorStack) > 0:
-        if OperatorStack[len(OperatorStack) - 1] == '-' and len(OperandStack) > 2:
-            rightOperand = OperandStack.pop()
-            rightType = TypeStack.pop()
-            operator = OperatorStack.pop()
-
-            if rightType == 'int' or rightType == 'float':
-
-                quad = Quadruple(quadCont, 'negative', 0, rightOperand, rightOperand)
-                quadruples.append(quad)
-
-                quadCont += 1
-
-                OperandStack.append(rightOperand)
-                TypeStack.append(rightType)
+#
+# def p_expression_solve_negatives(p):
+#     'solve_negatives : '
+#
+#     global quadCont
+#
+#     if len(OperatorStack) > 0:
+#         if OperatorStack[len(OperatorStack) - 1] == '-' and len(OperandStack) > 2:
+#             rightOperand = OperandStack.pop()
+#             rightType = TypeStack.pop()
+#             operator = OperatorStack.pop()
+#
+#             if rightType == 'int' or rightType == 'float':
+#
+#                 quad = Quadruple(quadCont, 'negative', 0, rightOperand, rightOperand)
+#                 quadruples.append(quad)
+#
+#                 quadCont += 1
+#
+#                 OperandStack.append(rightOperand)
+#                 TypeStack.append(rightType)
 
 def p_expression_create_false_bottom(p):
     'create_false_bottom : '
@@ -669,9 +669,9 @@ def p_expression_solve_pending_factor(p):
         solvePendingOperations(p)
 
 
-def p_expression_signo(p):
-    '''signo : MINUS push_operator
-             | empty'''
+# def p_expression_signo(p):
+#     '''signo : MINUS push_operator
+#              | empty'''
 
 
 def p_expression_constante(p):
