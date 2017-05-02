@@ -39,6 +39,8 @@ hasReturnStatement = False
 drawParameters = []
 drawColor = ""
 
+debug_mode = 0;
+
 trashValues = {'int': 1, 'float': 1.0, 'bool': True, 'string': 'Null'}
 
 ERROR_CODES = {'func_already_declared': -5, 'variable_already_declared': -6, 'func_not_declared': -7,
@@ -1066,24 +1068,30 @@ def initParser():
     # Parsear el codigo leido del archivo
     parser.parse(code)
 
-    # print(funcDir.functions)
-
-    #for function in funcDir.functions:
-    #    func = funcDir.functions[function]
-    #    print('{0} = {1}'.format(function, func))
-    #    print(func['variables'].variables)
-
-    print('Operand stack: {0}'.format(OperandStack))
-    print('Type stack: {0}'.format(TypeStack))
-    print('Operator stack: {0}'.format(OperatorStack))
-    print('Jump stack: {0}'.format(JumpStack))
-
     VM.getInstructions(quadruples)
     VM.setFuncDir(funcDir)
     VM.setMainName(globalScope)
     VM.setInitialInstructionPointer(funcDir.getFunctionStartingQuad(globalScope))
-    VM.printInstructions()
+    VM.setDebugMode(debug_mode)
+
+    if debug_mode == 1:
+        print(funcDir.functions)
+
+        for function in funcDir.functions:
+            func = funcDir.functions[function]
+            print('{0} = {1}'.format(function, func))
+            print(func['variables'].variables)
+
+        print('Operand stack: {0}'.format(OperandStack))
+        print('Type stack: {0}'.format(TypeStack))
+        print('Operator stack: {0}'.format(OperatorStack))
+        print('Jump stack: {0}'.format(JumpStack))
+
+        VM.printInstructions()
+
     VM.executeInstructions()
-#    VM.printMainMemory()
+
+    if debug_mode == 1:
+        VM.printMainMemory()
 
 initParser()

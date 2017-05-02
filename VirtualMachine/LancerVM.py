@@ -14,9 +14,13 @@ class LancerVM:
         self.window_width = 640
         self.window_height = 480
         self.main_name = ""
+        self.debug_mode = 0;
 
     def printMainMemory(self):
         self.memory.printMemory()
+
+    def setDebugMode(self, debug_mode):
+        self.debug_mode = debug_mode
 
     def isInt(self, value):
         try:
@@ -70,7 +74,8 @@ class LancerVM:
         while self.instruction_pointer < totalInstructions:
             instruction = self.instruction_stack[self.instruction_pointer]
 
-            #print(instruction.printQuad())
+            if (self.debug_mode == 1):
+                print(instruction.printQuad())
 
             instructionCode = instruction.operator
             leftOperandVirtualAddress = instruction.left_operand
@@ -230,12 +235,6 @@ class LancerVM:
                 varTable = function['variables']
                 variables = varTable.variables
 
-                # functionData = self.funcDir.getVariable(self.main_name, leftOperandVirtualAddress)
-                # functionVirtualAddress = functionData[1][1]
-                # functionValue =  self.memory.getValueFromVirtualAddress(functionVirtualAddress)
-                #
-                # backupMemoryState = [{functionVirtualAddress: functionValue}]
-
                 backupMemoryState = []
 
                 for variable in variables:
@@ -250,18 +249,18 @@ class LancerVM:
                 self.execution_stack.append(backupMemoryState)
                 self.instruction_pointer += 1
 
-                #print(self.execution_stack)
-
             elif instructionCode == 'ENDPROC':
                 backupMemoryState = self.execution_stack.pop()
-                #print("backup state: {0}".format(backupMemoryState))
-                #print("execution stack: {0}".format(self.execution_stack))
+
+                if (self.debug_mode == 1):
+                    print("backup state: {0}".format(backupMemoryState))
+                    print("execution stack: {0}".format(self.execution_stack))
+
                 for state in backupMemoryState:
                     virtualAddress = state.keys()
                     virtualAddress = virtualAddress[0]
                     self.memory.editValueFromVirtualAddress(virtualAddress, state[virtualAddress])
 
-                #print("saved IP: {0}". format(savedInstructionPointer))
                 self.instruction_pointer = savedInstructionPointer.pop() + 1
 
             elif instructionCode == 'Parameter':
