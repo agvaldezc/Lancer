@@ -5,10 +5,41 @@ var cont : int;
 var swapped : bool;
 var j : int;
 var temp : int;
+var n : int;
+var findInt : int;
+
+func int intBinarySearch(int first, int last, int number)
+var mid : int;
+{
+        if (first <= last) {
+                mid = (first + last) / 2;
+
+                if (number == intArray[mid]) {
+                        return mid;
+                }
+
+                if (number < intArray[mid]) {
+                        return intBinarySearch(first, (mid - 1), number);
+                } else {
+                        return intBinarySearch((mid + 1), last, number);
+                }
+        }
+
+        return -1;
+}
+
+
+
 
 main {
-    cont = 0;
+    print("Number of elements in array?");
+    n = input;
+	
+    print("Int to find?");
+    findInt = input;
 
+    cont = 0;
+	
     while (cont < 5) {
         intArray[cont] = input;
 
@@ -50,4 +81,6 @@ main {
 
         cont = cont + 1;
     }
+
+    print(intBinarySearch(0, (n - 1), findInt));
 }

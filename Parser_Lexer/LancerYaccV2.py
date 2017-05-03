@@ -1,5 +1,5 @@
 # Alan Gustavo Valdez Cascajares A01336955
-# Rafael Manriquez Valdez
+# Rafael Manriquez Valdez A01196010
 
 import ply.yacc as yacc
 import sys
@@ -39,7 +39,7 @@ hasReturnStatement = False
 drawParameters = []
 drawColor = ""
 
-debug_mode = 1;
+debug_mode = 0;
 
 trashValues = {'int': 1, 'float': 1.0, 'bool': True, 'string': 'Null'}
 
