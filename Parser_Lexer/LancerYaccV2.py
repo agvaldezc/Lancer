@@ -703,7 +703,17 @@ def p_expression_identify_dimension(p):
 
     dimension = funcDir.getDimensions(currentScope, varName)
 
-    dimension = dimension['dimensions']
+    if dimension is None:
+        dimension = funcDir.getDimensions(globalScope, varName)
+
+        if dimension is None:
+            print('Error: variable {0} is not an indexed variable in line {1}'.format(p[-1], p.lexer.lineno))
+            sys.exit(ERROR_CODES['variable_not_declared'])
+        else:
+            dimension = dimension['dimensions']
+
+    else:
+        dimension = dimension['dimensions']
 
     #print(dimension)
 
