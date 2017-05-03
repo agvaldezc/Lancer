@@ -1,0 +1,22 @@
+program agvaldezc;
+
+var x[20] : float;
+var z : float;
+var y : int;
+var w : string;
+var t[3] : string;
+
+func int factorial(int n) {
+    if (n == 0 || n == 1) {
+        return 1;
+    } else {
+        return n * factorial(n - 1);
+    }
+}
+
+main {
+    print('Type circle radius');
+    z = input;
+    print('Type cicle color: ');
+    w = input;
+}

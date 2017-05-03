@@ -1,16 +1,26 @@
 from VarTable import VarTable
 
+
 class FunctionDirectory:
     def __init__(self):
         self.functions = {}
 
     def addFunction(self, functionName, functionType):
-        self.functions[functionName] = {'parameters': [], 'variables': VarTable(), 'type' : functionType}
+        self.functions[functionName] = {'parameters': [], 'parameter_addresses': [], 'variables': VarTable(), 'type': functionType}
 
     def addParameterTypes(self, functionName, parameterTypeList):
         if self.functionExists(functionName):
             function = self.functions[functionName]
             function['parameters'] += parameterTypeList
+
+    def addParameterAddress(self, functionName, parameterAddressList):
+        if self.functionExists(functionName):
+            function = self.functions[functionName]
+            function['parameter_addresses'] += parameterAddressList
+
+    def getParameterAddresses(self, functionName):
+        function = self.functions[functionName]
+        return function['parameter_addresses']
 
     def validateParameters(self, functionName, argumentTypeList):
         function = self.functions[functionName]
@@ -25,15 +35,13 @@ class FunctionDirectory:
     def functionExists(self, functionName):
         return self.functions.has_key(functionName)
 
-    def addFunctionVariable(self, functionName, variableName, variableType):
+    def addFunctionVariable(self, functionName, variableName, variableType, address):
         function = self.functions[functionName]
 
         if function['variables'].variableExists(variableName):
-            print('Error: Variable already declared.')
-            sys.exit(ERROR_CODES['variable_already_declared'])
             return False
         else:
-            function['variables'].addVariable(variableName,variableType)
+            function['variables'].addVariable(variableName, variableType, address)
             return True
 
     def getVariable(self, functionName, variableName):
@@ -51,3 +59,19 @@ class FunctionDirectory:
     def addTempVariable(self, functionName, variableType):
         function = self.functions[functionName]
         function['variables'].addTempType(variableType)
+
+    def getFunctionIdByAddress(self, globalScopeName, virtualAddress):
+        function = self.functions[globalScopeName]
+        return function['variables'].getIdByAddress(virtualAddress)
+
+    def addDimensionToVariable(self, functionName, variableName, dimension):
+        function = self.functions[functionName]
+        function['variables'].addDimensionToVariable(variableName, dimension)
+
+    def getDimensions(self, functionName, variableName):
+        function = self.functions[functionName]
+        return function['variables'].getDimensionsFromVariable(variableName)
+
+    def getFunctionType(self, functionName):
+        function = self.functions[functionName]
+        return function['type']

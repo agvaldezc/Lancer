@@ -25,7 +25,5 @@ main {
     y = input;
     w = x + y / z;
     x = x + 423;
-
-
 }
 

@@ -1,0 +1,35 @@
+program agvaldezc;
+var y : int;
+var w[5] : float;
+
+func int factorial(int n) {
+    if (n > 1) {
+        return n * factorial(n - 1);
+    } else {
+        return 1;
+    }
+}
+
+func int fibonacci(int n) {
+    if (n == 0) {
+        return 0;
+    } else {
+        if (n == 1) {
+            return 1;
+        } else {
+            return (fibonacci(n - 1) + fibonacci(n - 2));
+        }
+    }
+}
+
+main {
+    w[3] = 12.1;
+
+    drawLine(432 , 620, w[3] , 5, red);
+    drawCircle(320, 280, w[3], blue);
+    drawOval(432 , 620, w[3] , 5, red);
+    drawRectangle(10, 10, 40, 40, green);
+    drawTriangle(10, 10, 10, 90, 90, 90, blue);
+
+    print(factorial(10));
+}

@@ -6,40 +6,28 @@ var y : int;
 var w : float;
 var t[3] : string;
 
-func int funcion1(int a, int b, int c, string d)
-var q : bool;
+func bool funcion1(int a, int b, int c, string d)
+
 var o : string;
 {
-    a = b + c;
+    if (a >= 12) {
+        return true;
+    }
 }
 
-func void funcion2(int b, int c, string d)
-var j : bool;
-var l : string;
+func void funcion2(int a, int b, int c, string d)
 {
-     b = c;
+    if (a >= 12) {
+        print("a is greater than 12.");
+    } else {
+        print("a is less than 12.");
+    }
 }
+
+
 
 main {
-    x = (z * (y - w));
-    y = input;
-    w = x + y / z;
-    x = x + 423;
-
-    funcion1(123, 986, y,'hola');
-
-    if (true) {
-        w = y;
-    } else {
-        z = 123 + 1234134;
-    }
-    x = 123 + 1234134;
-
-    while ((x+z) >= 123) {
-        z = 123;
-    }
-    x = y;
-
-    x = funcion1(123, 986, y,'hola');
+    print(funcion1(13,2,3,"hola"));
+    funcion2(12,3,2,'hola');
 }
 

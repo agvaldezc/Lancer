@@ -1,21 +1,26 @@
 program agvaldezc;
 
-var x : float;
+var x[25] : float;
 var z : float;
 var y : int;
 var w : float;
 var t : string;
+var boolean : bool;
 
 main {
-    if (true) {
-        w = y;
-    } else {
-        z = 123 + 1234134;
-    }
-    x = 123 + 1234134;
 
-    while ((x+z) >= 123) {
-        z = 123;
+    y = 0;
+
+    while (y < 25) {
+        x[y] = y + 20;
+
+        print(x[y] + 20);
+
+        y = y + 1;
     }
-    x = y;
+
+    x[3] = (x[12] / x[11]) / (20.3 + x[21]);
+
+    print("resultado de array");
+    print(x[3]);
 }
