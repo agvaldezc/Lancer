@@ -427,4 +427,5 @@ class LancerVM:
 
             #End of while
 
+        print('Click on the {0} window to end execution.'.format(self.main_name))
         window.getMouse()
