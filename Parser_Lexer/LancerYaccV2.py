@@ -39,7 +39,7 @@ hasReturnStatement = False
 drawParameters = []
 drawColor = ""
 
-debug_mode = 0;
+debug_mode = 1;
 
 trashValues = {'int': 1, 'float': 1.0, 'bool': True, 'string': 'Null'}
 

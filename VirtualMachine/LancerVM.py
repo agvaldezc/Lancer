@@ -24,25 +24,29 @@ class LancerVM:
 
     def isInt(self, value):
         try:
-            return int(value)
+            int(value)
+            return True
         except (ValueError, TypeError):
             return False
 
     def isFloat(self, value):
         try:
-            return float(value)
+            float(value)
+            return True
         except (ValueError, TypeError):
             return False
 
     def isBool(self, value):
         try:
-            return bool(value)
+            bool(value)
+            return True
         except (ValueError, TypeError):
             return False
 
     def isString(self, value):
         try:
-            return str(value)
+            str(value)
+            return True
         except (ValueError, TypeError):
             return False
 
@@ -387,7 +391,6 @@ class LancerVM:
             elif instructionCode == 'input':
 
                 value = raw_input()
-
                 if self.isInt(value):
                     if leftOperandVirtualAddress == 'int':
                         self.memory.editValueFromVirtualAddress(resultVirtualAddress, int(value))
@@ -424,4 +427,5 @@ class LancerVM:
 
             #End of while
 
+        print('Click on the {0} window to end execution.'.format(self.main_name))
         window.getMouse()

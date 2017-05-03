@@ -1,0 +1,10 @@
+program negatives;
+var negFloat :float;
+var negInt : int;
+
+main {
+    negInt = -123;
+    negFloat = input;
+
+    print(negInt - negFloat);
+}

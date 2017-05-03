@@ -1,0 +1,53 @@
+program sort;
+var intArray[5] : int;
+var floatArray[5] : float;
+var cont : int;
+var swapped : bool;
+var j : int;
+var temp : int;
+
+main {
+    cont = 0;
+
+    while (cont < 5) {
+        intArray[cont] = input;
+
+        cont = cont + 1;
+    }
+
+    cont = 0;
+    print('Not sorted array');
+    while (cont < 5) {
+        print(intArray[cont]);
+
+        cont = cont + 1;
+    }
+
+    swapped = true;
+    j = 0;
+
+    while (swapped) {
+        cont = 0;
+        swapped = false;
+        j = j + 1;
+
+        while (cont < (5 - j)) {
+            if (intArray[cont] > intArray[cont + 1]) {
+                temp = intArray[cont];
+                intArray[cont] = intArray[cont + 1];
+                intArray[cont + 1] = temp;
+                swapped = true;
+            }
+
+            cont = cont + 1;
+        }
+    }
+
+    cont = 0;
+    print('Sorted array');
+    while (cont < 5) {
+        print(intArray[cont]);
+
+        cont = cont + 1;
+    }
+}

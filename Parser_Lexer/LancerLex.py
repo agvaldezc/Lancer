@@ -115,12 +115,12 @@ def t_ID(t):
 
 
 def t_CTEF(t):
-    r'[0-9]+\.[0-9][0-9]*'
+    r'-?[0-9]+\.[0-9][0-9]*'
     return t
 
 
 def t_CTEI(t):
-    r'[0-9]+'
+    r'-?[0-9]+'
     return t
 
 
@@ -139,7 +139,7 @@ def t_error(t):
 lexer = lex.lex()
 
 # # Datos para probar el analizador lexico
-# data = 'true'
+# data = ''
 #
 # # Datos como input del analizador lexico
 # lexer.input(data)
