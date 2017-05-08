@@ -52,6 +52,11 @@ class VarTable:
         })
 
     def getDimensionsFromVariable(self, variableName):
+        try:
+            variable = self.variables[variableName]
+        except (KeyError):
+            return None
+        
         if len(self.variables[variableName]) > 2:
             variableProperties = self.variables[variableName]
 

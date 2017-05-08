@@ -1,5 +1,5 @@
 # Alan Gustavo Valdez Cascajares A01336955
-# Rafael Manriquez Valdez
+# Rafael Manriquez Valdez A01196010
 
 import ply.yacc as yacc
 import sys
@@ -39,7 +39,7 @@ hasReturnStatement = False
 drawParameters = []
 drawColor = ""
 
-debug_mode = 1;
+debug_mode = 0;
 
 trashValues = {'int': 1, 'float': 1.0, 'bool': True, 'string': 'Null'}
 
@@ -703,7 +703,17 @@ def p_expression_identify_dimension(p):
 
     dimension = funcDir.getDimensions(currentScope, varName)
 
-    dimension = dimension['dimensions']
+    if dimension is None:
+        dimension = funcDir.getDimensions(globalScope, varName)
+
+        if dimension is None:
+            print('Error: variable {0} is not an indexed variable in line {1}'.format(p[-1], p.lexer.lineno))
+            sys.exit(ERROR_CODES['variable_not_declared'])
+        else:
+            dimension = dimension['dimensions']
+
+    else:
+        dimension = dimension['dimensions']
 
     #print(dimension)
 
